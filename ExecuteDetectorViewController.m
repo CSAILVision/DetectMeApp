@@ -198,8 +198,8 @@
      //single class detection
     if(self.detectors.count == 1){
         DetectorWrapper *detectorWrapper = [self.detectors objectAtIndex:0];
-        float detectionThreshold = -1 + 2*detectorWrapper.detectionThreshold.floatValue;
-        
+        float detectionThreshold = 0; //-1 + 2*detectorWrapper.detectionThreshold.floatValue; //in [-1,1]
+
         [nmsArray addObject:[detectorWrapper detect:image
                                    minimumThreshold:detectionThreshold
                                            pyramids:_numPyramids
@@ -223,7 +223,6 @@
             });
         });
     }
-    
     return [NSArray arrayWithArray:nmsArray];
 }
 
@@ -244,7 +243,7 @@
     NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];
     
     //DISPLAY BOXES
-//    [self.detectView drawBoxes:detectedBoxes];
+    [self.detectView drawBoxes:detectedBoxes];
     
     //SEND TO THE SEVER
     if(_sendBoxesToServer){

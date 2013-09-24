@@ -81,7 +81,9 @@
     detector.updatedAt = [NSDate date];;
     detector.weights = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.weights];
     detector.sizes = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.sizes];
+    detector.scaleFactor = detectorWrapper.scaleFactor;
     NSLog(@"sizes:%@", detectorWrapper.sizes);
+    NSLog(@"scale factor: %@", detector.scaleFactor);
     
     self.imageView.image = _detectorTrainer.averageImage;
     
