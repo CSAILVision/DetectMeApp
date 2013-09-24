@@ -12,6 +12,8 @@
 #import "Detector.h"
 #import "Author+Create.h"
 #import "UIImage+ImageAveraging.h"
+#import "ManagedDocumentHelper.h"
+
 
 
 @interface TrainingViewController()
@@ -37,23 +39,8 @@
 {
     [super viewWillAppear:animated];
     
-    if(!self.detectorDatabase){
-        NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-        url = [url URLByAppendingPathComponent:@"Default Detector Database"];
-        self.detectorDatabase = [[UIManagedDocument alloc] initWithFileURL:url];
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-            [self.detectorDatabase openWithCompletionHandler:^(BOOL success) {
-                if (success) [self documentIsReady];
-                if (!success) NSLog(@"couldn't open document at %@", url);
-            }];
-        } else {
-            [self.detectorDatabase saveToURL:url forSaveOperation:UIDocumentSaveForCreating
-              completionHandler:^(BOOL success) {
-                  if (success) [self documentIsReady];
-                  if (!success) NSLog(@"couldn't create document at %@", url);
-              }]; }
-    }
+    if(!self.detectorDatabase)
+        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:nil];
 }
 
 - (void) documentIsReady
@@ -88,8 +75,6 @@
     self.imageView.image = _detectorTrainer.averageImage;
     
     [self.activityIndicator stopAnimating];
-    
-    NSLog(@"detector weights: %@", detectorWrapper.weights);
 }
 
 @end

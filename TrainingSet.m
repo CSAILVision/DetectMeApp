@@ -35,24 +35,13 @@
 #pragma mark
 #pragma mark - Initialization
 
-- (void) initialize
-{
-    self.images = [[NSMutableArray alloc] init];
-    self.groundTruthBoundingBoxes = [[NSMutableArray alloc] init];
-}
-
-- (id) init
-{
-    if (self = [super init]) [self initialize];
-    
-    return self;
-}
 
 - (id) initWithBoxes:(NSArray *)boxes forImages:(NSArray *)images
 {
     if(self = [super init]){
         
-        [self initialize];
+        self.images = [[NSMutableArray alloc] init];
+        self.groundTruthBoundingBoxes = [[NSMutableArray alloc] init];
         
         for(int i=0; i<boxes.count; i++){
         
@@ -91,7 +80,8 @@
 
 -(float) areaRatio
 {
-    if (_areaRatio == 0.0) [self setInternals];
+    if (_areaRatio == 0.0)
+        [self setInternals];
     
     return _areaRatio;
 }

@@ -12,6 +12,7 @@
 #import "Author.h"
 #import "Detector+Server.h"
 #import "ExecuteDetectorViewController.h"
+#import "ManagedDocumentHelper.h"
 
 
 @implementation GalleryViewController
@@ -31,24 +32,19 @@
     [super viewWillAppear:animated];
     
     if(!self.detectorDatabase){
-        NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-        url = [url URLByAppendingPathComponent:@"Default Detector Database"];
-        self.detectorDatabase = [[UIManagedDocument alloc] initWithFileURL:url];
+        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
+            [self useDocument:document];
+        }];
     }
 }
 
-
-#pragma mark -
-#pragma mark Getters and Setters
-
-
-- (void) setDetectorDatabase:(UIManagedDocument *)detectorDatabase
+- (void) useDocument:(UIManagedDocument *)document
 {
-    if(_detectorDatabase != detectorDatabase){
-        _detectorDatabase = detectorDatabase;
-        [self useDocument]; //Populate the database.
-    }
+    [self fetchAll];
+    [self fetchDetectorsDataIntoDocument:self.detectorDatabase];
+    
 }
+
 
 
 #pragma mark -
@@ -138,7 +134,7 @@
 {
     // Everything that happens in this context is automatically hooked to the table
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
-    if(predicate){ request.predicate = predicate; NSLog(@"predicate");}
+    if(predicate) request.predicate = predicate;
     request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
@@ -151,7 +147,6 @@
 {
     [self fetchResultsForPredicate:nil];
 }
-
 
 - (void) fetchDetectorsDataIntoDocument:(UIManagedDocument *) document
 {
@@ -171,28 +166,8 @@
 }
 
 
-- (void) useDocument
+- (void)viewDidUnload
 {
-    // create DB if it does not exist in disk
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.detectorDatabase.fileURL path]]){
-        [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-            [self fetchAll];
-            [self fetchDetectorsDataIntoDocument:self.detectorDatabase];
-        }];
-        
-    }else if (self.detectorDatabase.documentState == UIDocumentStateClosed){ //open DB if it was close
-        [self.detectorDatabase openWithCompletionHandler:^(BOOL success) {
-            [self fetchAll];
-            [self fetchDetectorsDataIntoDocument:self.detectorDatabase];
-        }];
-        
-    }else if (self.detectorDatabase.documentState == UIDocumentStateNormal){
-        [self fetchAll]; //
-        [self fetchDetectorsDataIntoDocument:self.detectorDatabase];
-    }
-}
-
-- (void)viewDidUnload {
     [self setCollectionView:nil];
     [super viewDidUnload];
 }

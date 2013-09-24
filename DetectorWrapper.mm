@@ -380,13 +380,6 @@ using namespace cv;
         });
     });
     
-//    int i=0;
-//    for(HogFeature* imageHog in pyramid.hogFeatures){
-//        [candidateBoundingBoxes addObjectsFromArray:[self getBoundingBoxesIn:imageHog forPyramid:i+self.iniPyramid forIndex:0]];
-//        i++;
-//    }
-    
-    
     //sort array of bounding boxes by score
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"score" ascending:NO];
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
@@ -549,26 +542,35 @@ using namespace cv;
 }
 
 
--(void) addExample:(BoundingBox *)p to:(TrainingSet *)trainingSet
+-(void) addExample:(BoundingBox *)boundingBox to:(TrainingSet *)trainingSet
 {
-    int index = _numberOfTrainingExamples;
-    HogFeature *imageHog = [_imagesHogPyramid objectAtIndex:p.imageHogIndex];
-    
-    //label
-    _trainingImageLabels[index] = p.label;
-    
-    //features
-    int boundingBoxPosition = p.locationOnImageHog.y + p.locationOnImageHog.x*imageHog.numBlocksY;
-    for(int f=0; f<_sizesP[2]; f++)
-        for(int i=0; i<_sizesP[1]; i++)
-            for(int j=0; j<_sizesP[0]; j++){
-                int sweeping1 = j + i*_sizesP[0] + f*_sizesP[0]*_sizesP[1];
-                int sweeping2 = j + i*imageHog.numBlocksY + f*imageHog.numBlocksX*imageHog.numBlocksY;
-                _trainingImageFeatures[index*_numOfFeatures + sweeping1] = (float) imageHog.features[boundingBoxPosition + sweeping2];
-            }
+    // Adds a BoundingBox to the C array _trainingImageFeatures, container of all the features
+    //   and its values
+    // Note: be sure to run it on the main thread to avoid collision
+    //   when called from the concurrent |getBoundingBoxesForTrainingSet:trainingSet|
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        if (boundingBox.label != 0 && _numberOfTrainingExamples+1 < MAX_NUMBER_EXAMPLES) {
+            
+            int index = _numberOfTrainingExamples;
+            HogFeature *imageHog = [_imagesHogPyramid objectAtIndex:boundingBox.imageHogIndex];
+            
+            //label
+            _trainingImageLabels[index] = boundingBox.label;
+            
+            //features
+            int boundingBoxPosition = boundingBox.locationOnImageHog.y + boundingBox.locationOnImageHog.x*imageHog.numBlocksY;
+            for(int f=0; f<_sizesP[2]; f++)
+                for(int i=0; i<_sizesP[1]; i++)
+                    for(int j=0; j<_sizesP[0]; j++){
+                        int sweeping1 = j + i*_sizesP[0] + f*_sizesP[0]*_sizesP[1];
+                        int sweeping2 = j + i*imageHog.numBlocksY + f*imageHog.numBlocksX*imageHog.numBlocksY;
+                        _trainingImageFeatures[index*_numOfFeatures + sweeping1] = (float) imageHog.features[boundingBoxPosition + sweeping2];
+                    }
 
-    
-    _numberOfTrainingExamples++;
+            
+            _numberOfTrainingExamples++;
+        }
+    });
 }
 
 - (void) getBoundingBoxesForTrainingSet:(TrainingSet *)trainingSet
@@ -613,15 +615,11 @@ using namespace cv;
                 if (overlapArea > 0.8 && overlapArea<1){
                     detectedBB.label = 1;
                     positives++;
+                    [self addExample:detectedBB to:trainingSet];
                 }else if(overlapArea < 0.25 && quota>0){
                     quota--;
                     detectedBB.label = -1;
-                }
-                
-                if (detectedBB.label != 0 && _numberOfTrainingExamples+1 < MAX_NUMBER_EXAMPLES) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [self addExample:detectedBB to:trainingSet];
-                    });
+                    [self addExample:detectedBB to:trainingSet];
                 }
             }
         }
@@ -707,20 +705,7 @@ using namespace cv;
     return sqrt(_diff);
 }
 
-- (void) printListHogFeatures:(float *) listOfHogFeaturesFloat
-{
-    //Print unoriented hog features for debugging purposes
-    for(int y=0; y<_sizesP[0]; y++){
-        for(int x=0; x<_sizesP[1]; x++){
-            for(int f = 18; f<27; f++){
-                printf("%f ", listOfHogFeaturesFloat[y + x*7 + f*7*5]);
-                //                if(f==17 || f==26) printf("  |  ");
-            }
-            printf("\n");
-        }
-        printf("\n*************************************************************************\n");
-    }
-}
+
 
 - (void) printListHogFeatures
 {
