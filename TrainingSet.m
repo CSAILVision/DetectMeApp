@@ -12,7 +12,7 @@
 #import "BoundingBox.h"
 #import "Box.h"
 
-#define TEMPLATE_SCALE_FACTOR 0.1 //resize template to obtain a reasonable number of blocks for the hog features
+#define TEMPLATE_SCALE_FACTOR 0.5 //resize template to obtain a reasonable number of blocks for the hog features
 
 #define MAX_NUMBER_EXAMPLES 20000
 #define MAX_NUMBER_FEATURES 2000
@@ -39,8 +39,6 @@
 {
     self.images = [[NSMutableArray alloc] init];
     self.groundTruthBoundingBoxes = [[NSMutableArray alloc] init];
-    self.boundingBoxes = [[NSMutableArray alloc] init];
-    self.imagesNames = [[NSMutableArray alloc] init];
 }
 
 - (id) init
@@ -49,53 +47,6 @@
     
     return self;
 }
-
-//- (id) initForTargetClasses:(NSArray *)targetClasses
-//             forImagesNames:(NSArray *)imagesNames
-//            withFileHandler:(DetectorResourceHandler *) detectorResourceHandler;
-//{
-//    
-//    if(self = [super init]){
-//    
-//        [self initialize];
-//        
-//        //training set construction
-//        for(NSString *imageName in imagesNames){
-//            BOOL containedClass = NO;
-//            
-//            NSMutableArray *boxes = [detectorResourceHandler getBoxesForImageName:imageName];
-//            
-//            for(Box *box in boxes){
-//                for(NSString *class in targetClasses)
-//                    if([box.label isEqualToString:class]){ //add bounding box
-//                        containedClass = YES;
-//                        BoundingBox *cp = [[BoundingBox alloc] init];
-//                        cp.xmin = box.upperLeft.x/box.imageSize.width;
-//                        cp.ymin = box.upperLeft.y/box.imageSize.height;
-//                        cp.xmax = box.lowerRight.x/box.imageSize.width;
-//                        cp.ymax = box.lowerRight.y/box.imageSize.height;
-//                        cp.imageIndex = self.images.count;
-//                        cp.label = 1;
-//                        [self.groundTruthBoundingBoxes addObject:cp];
-//                    }
-//            }
-//            if(containedClass){ //add image
-//                UIImage *image = [detectorResourceHandler getImageWithImageName:imageName];
-//                [self.images addObject:image];
-//                [self.imagesNames addObject:imageName];
-//            }
-//        }
-//        
-//        //Add abstract pictures to the training set to generate false positives when the bb is very big.
-//        //guess the relationship with the artists...
-//        [self.images addObject:[UIImage imageNamed:@"picaso.jpg"]];
-//        [self.images addObject:[UIImage imageNamed:@"dali.jpg"]];
-//        [self.images addObject:[UIImage imageNamed:@"miro.jpg"]];
-//            
-//    }
-//    
-//    return self;
-//}
 
 - (id) initWithBoxes:(NSArray *)boxes forImages:(NSArray *)images
 {
@@ -127,7 +78,6 @@
         [self.images addObject:[UIImage imageNamed:@"dali.jpg"]];
         [self.images addObject:[UIImage imageNamed:@"miro.jpg"]];
     }
-    
     return self;
 }
 
@@ -190,7 +140,7 @@
 
 - (NSArray *) getImagesOfBoundingBoxes
 {
-    NSMutableArray *listOfImages = [[NSMutableArray alloc] initWithCapacity:self.boundingBoxes.count];
+    NSMutableArray *listOfImages = [[NSMutableArray alloc] initWithCapacity:self.groundTruthBoundingBoxes.count];
     for(BoundingBox *cp in self.groundTruthBoundingBoxes){
         UIImage *wholeImage = [self.images objectAtIndex:cp.imageIndex];
         UIImage *croppedImage = [wholeImage croppedImage:[[cp increaseSizeByFactor:0.2] rectangleForImage:wholeImage]];

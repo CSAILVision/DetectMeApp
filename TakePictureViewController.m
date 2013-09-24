@@ -103,9 +103,7 @@
 
         [_images addObject:image];
         [_boxes addObject:self.tagView.box];
-        
-        NSLog(@"Added box: %@", [_boxes lastObject]);
-        
+    
     }
     //DETECTION
 //    NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];

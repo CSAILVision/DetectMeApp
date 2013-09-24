@@ -11,10 +11,7 @@
 
 @interface InputDetailsViewController : UIViewController <UITextFieldDelegate>
 
-
-
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
-@property BOOL isPublic;
 
 - (IBAction)isPublicAction:(UISegmentedControl *)sender;
 

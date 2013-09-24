@@ -7,17 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "BoundingBox.h"
 
 
 @class DetectorResourceHandler;
 
 @interface TrainingSet : NSObject
 
-@property (strong, nonatomic) NSMutableArray *images; //UIImage
-@property (strong, nonatomic) NSMutableArray *groundTruthBoundingBoxes; //BoundingBox
-@property (strong, nonatomic) NSMutableArray *boundingBoxes; //BoundingBox
-@property (strong, nonatomic) NSMutableArray *imagesNames;
+@property (strong, nonatomic) NSMutableArray *images;
+@property (strong, nonatomic) NSMutableArray *groundTruthBoundingBoxes;
 
 @property CGSize templateSize;
 //ratio between the average area of the bounding boxes inside the images
@@ -28,19 +26,13 @@
 - (void) unifyGroundTruthBoundingBoxes;
 
 
-//// Given some images names, constructs the training set extracting the target
-//// classes from it.
-//- (id) initForTargetClasses:(NSArray *)targetClasses
-//             forImagesNames:(NSArray *)imagesNames
-//            withFileHandler:(DetectorResourceHandler *)detectorResourceHandler;
-
 - (id) initWithBoxes:(NSArray *)boxes forImages:(NSArray *)images;
-
 
 
 // Get the images result of cropping with the bounding boxes
 // Needed by when making the average image for the detector
 - (NSArray *) getImagesOfBoundingBoxes;
+
 
 @end
 
