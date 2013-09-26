@@ -10,9 +10,19 @@
 #import <UIKit/UIKit.h>
 #import "Box.h"
 
+@protocol TagViewDelegate <NSObject>
+
+// send when and object is: moved, resized or changed the label
+- (void)objectModified;
+
+
+@end
 
 @interface TagView : UIView <UITextFieldDelegate>
 
+
+// Responsible to handle when the box has been modified
+@property (nonatomic, weak) id <TagViewDelegate> delegate;
 @property (strong, nonatomic) Box *box;
 
 @end

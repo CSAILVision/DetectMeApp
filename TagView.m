@@ -48,7 +48,7 @@ UIViewAutoresizingFlexibleHeight
     _touchIsResizing = NO;
     
     [self addBoxInVisibleRect:self.frame];
-
+    
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -76,7 +76,7 @@ UIViewAutoresizingFlexibleHeight
     
     Box *newBox = [[Box alloc] initWithUpperLeft:newUpperLeft lowerRight:newLowerRight forImageSize:self.frame.size];
     self.box = newBox;
-
+    
 }
 
 
@@ -135,14 +135,14 @@ UIViewAutoresizingFlexibleHeight
         _touchIsResizing = YES;
         [self.box resizeBeginAtPoint:location];
     }
-        
+    
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:touch.view];
-
+    
     Box *currentBox = self.box;
     if (_touchIsMoving) [currentBox moveToPoint:location];
     else if (_touchIsResizing) [currentBox resizeToPoint:location];
@@ -152,9 +152,10 @@ UIViewAutoresizingFlexibleHeight
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if ((_touchIsMoving) || (_touchIsResizing)) [self.delegate objectModified];
     _touchIsMoving = NO;
     _touchIsResizing = NO;
-
+    
     [self setNeedsDisplay];
 }
 

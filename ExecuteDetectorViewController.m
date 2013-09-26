@@ -76,8 +76,6 @@
     _numMax = 1;
     _numPyramids = 15;
     _maxDetectionScore = -0.9;
-    
-    NSLog(@"%@", NSStringFromCGRect(self.view.frame));
 }
 
 

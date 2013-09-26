@@ -10,6 +10,7 @@
 #import "Box.h"
 #import "DetectorWrapper.h"
 #import "Detector.h"
+#import "AnnotatedImage.h"
 #import "Author+Create.h"
 #import "UIImage+ImageAveraging.h"
 #import "ManagedDocumentHelper.h"
@@ -57,8 +58,9 @@
     
     // Create entity
     NSManagedObjectContext *context = self.detectorDatabase.managedObjectContext;
-    Detector *detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
     
+    // Detector
+    Detector *detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
     detector.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
@@ -69,8 +71,28 @@
     detector.weights = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.weights];
     detector.sizes = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.sizes];
     detector.scaleFactor = detectorWrapper.scaleFactor;
-    NSLog(@"sizes:%@", detectorWrapper.sizes);
-    NSLog(@"scale factor: %@", detector.scaleFactor);
+    
+    // AnnotatedImages
+    NSArray *images = self.detectorTrainer.images;
+    NSArray *boxes = self.detectorTrainer.boxes;
+    for(int i=0; i<images.count; i++){
+        AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
+        UIImage *image = [images objectAtIndex:i];
+        Box *box = [boxes objectAtIndex:i];
+        
+        annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
+        annotatedImage.imageHeight = @(image.size.height);
+        annotatedImage.imageWidth = @(image.size.width);
+        
+        CGRect boxRect = [box getRectangleForBox];
+        annotatedImage.boxHeight = @(boxRect.size.height);
+        annotatedImage.boxWidth = @(boxRect.size.width);
+        annotatedImage.boxX = @(boxRect.origin.x);
+        annotatedImage.boxY = @(boxRect.origin.y);
+        annotatedImage.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
+        annotatedImage.detector = detector;
+        
+    }
     
     self.imageView.image = _detectorTrainer.averageImage;
     

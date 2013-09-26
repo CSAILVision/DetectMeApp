@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+
 - (IBAction)privateAction:(UISegmentedControl *)segmentedControl;
 
 @end

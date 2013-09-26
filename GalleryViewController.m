@@ -12,6 +12,7 @@
 #import "Author.h"
 #import "Detector+Server.h"
 #import "ExecuteDetectorViewController.h"
+#import "DetailViewController.h"
 #import "ManagedDocumentHelper.h"
 
 
@@ -117,13 +118,20 @@
 //    return UIEdgeInsetsMake(0,0,0,0);//(50, 10, 50, 10);
 //}
 
+#pragma mark -
+#pragma mark Segue
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"ExecuteDetector"]) {
         NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
         [(ExecuteDetectorViewController *)segue.destinationViewController setDetector:detector];
+        
+    }else if([[segue identifier] isEqualToString:@"ShowDetail"]){
+        NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
+        Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        [(DetailViewController *)segue.destinationViewController setDetector:detector];
     }
 }
 

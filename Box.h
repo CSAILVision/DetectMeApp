@@ -25,6 +25,10 @@
 // Returns the position of the touch with respect the box.
 - (int) touchAtPoint:(CGPoint)point;
 
+
+- (Box *) makeCopy;
+
+
 // Box Resize
 // Indicate the touch point that initiates the resizing. This method fixes
 // the |_cornerResizing| that stores the corner being used to resize

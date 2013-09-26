@@ -50,6 +50,11 @@
     return self;
 }
 
+- (Box *) makeCopy
+{
+    return [[Box alloc] initWithUpperLeft:self.upperLeft lowerRight:self.lowerRight forImageSize:self.imageSize];
+}
+
 #pragma mark -
 #pragma mark Touch Handling
 - (int) touchAtPoint:(CGPoint)point

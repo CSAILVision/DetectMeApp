@@ -102,7 +102,7 @@
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
 
         [_images addObject:image];
-        [_boxes addObject:self.tagView.box];
+        [_boxes addObject:[self.tagView.box makeCopy]];
     
     }
     //DETECTION
