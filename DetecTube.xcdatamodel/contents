@@ -8,6 +8,7 @@
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="imageHeight" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="imageWidth" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="isSent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Author" inverseName="annotatedImages" inverseEntity="Author" syncable="YES"/>
         <relationship name="detector" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="annotatedImages" inverseEntity="Detector" syncable="YES"/>
     </entity>
@@ -23,6 +24,7 @@
         <attribute name="detectionThreshold" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="isPublic" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="isSent" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="precisionRecall" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="0.0" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="Float" minValueString="0" maxValueString="5" defaultValueString="0.0" syncable="YES"/>
@@ -38,8 +40,8 @@
         <relationship name="author" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Author" inverseName="detectors" inverseEntity="Author" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AnnotatedImage" positionX="-1269" positionY="-900" width="128" height="178"/>
+        <element name="AnnotatedImage" positionX="-1269" positionY="-900" width="128" height="193"/>
         <element name="Author" positionX="-1055" positionY="-1008" width="128" height="118"/>
-        <element name="Detector" positionX="-866" positionY="-1017" width="128" height="298"/>
+        <element name="Detector" positionX="-866" positionY="-1017" width="128" height="313"/>
     </elements>
 </model>

@@ -21,6 +21,7 @@
 @interface ShareDetector : NSObject <NSURLConnectionDataDelegate>
 
 - (void) shareDetector:(Detector *) detector;
+- (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
 
 @property (strong, nonatomic) id<ShareDectorDelegate> delegate;
 

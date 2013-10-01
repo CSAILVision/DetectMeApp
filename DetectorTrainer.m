@@ -83,7 +83,7 @@
 
 - (void) updateProgress:(float) prog
 {
-    
+    [self.delegate updateProgess:prog];
 }
 
 

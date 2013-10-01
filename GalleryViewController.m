@@ -12,7 +12,6 @@
 #import "Author.h"
 #import "Detector+Server.h"
 #import "ExecuteDetectorViewController.h"
-#import "DetailViewController.h"
 #import "ManagedDocumentHelper.h"
 
 
@@ -41,9 +40,8 @@
 
 - (void) useDocument:(UIManagedDocument *)document
 {
+    [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
     [self fetchAll];
-    [self fetchDetectorsDataIntoDocument:self.detectorDatabase];
-    
 }
 
 
@@ -82,7 +80,7 @@
 {
     DetectorCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"DetectorCell" forIndexPath:indexPath];
     Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [cell.label setText:detector.name];
+    [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
     cell.imageView.image = [UIImage imageWithData:detector.image];
     
     
@@ -131,8 +129,20 @@
     }else if([[segue identifier] isEqualToString:@"ShowDetail"]){
         NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        [(DetailViewController *)segue.destinationViewController setDetector:detector];
+        
+        DetailViewController *detailVC = (DetailViewController *) segue.destinationViewController;
+        detailVC.detector = detector;
+        detailVC.delegate = self;
     }
+}
+
+#pragma mark -
+#pragma mark DetailViewControllerDelegate
+
+- (void) deleteDetector:(Detector *) detector
+{
+    [self.detectorDatabase.managedObjectContext deleteObject:detector];
+    [self.collectionView reloadData];
 }
 
 #pragma mark -
@@ -156,7 +166,7 @@
     [self fetchResultsForPredicate:nil];
 }
 
-- (void) fetchDetectorsDataIntoDocument:(UIManagedDocument *) document
+- (void) fetchDetectorsFromServerIntoDocument:(UIManagedDocument *) document
 {
     // Populate the table if not
     // |document| as an argument for thread safe: someone could change the propertie in parallel
@@ -164,7 +174,9 @@
     dispatch_async(fetchQ, ^{
         NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
         [document.managedObjectContext performBlock:^{
-            [Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
+            if (detectors.count>0) {
+                [Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
+            }
             for(NSDictionary *detectorInfo in detectors){
                 //start creating objects in document's context
                 [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];

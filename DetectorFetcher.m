@@ -8,6 +8,8 @@
 
 #import "DetectorFetcher.h"
 #import "Detector.h"
+#import "ConstantsServer.h"
+
 
 @interface DetectorFetcher()
 {
@@ -26,7 +28,7 @@
 
 + (NSURLRequest *) createRequest
 {
-    NSString *requestURLString = [NSString stringWithFormat:@"%@/detectors/api/",SERVER_ADDRESS];
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestURLString]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:10];

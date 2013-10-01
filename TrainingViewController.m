@@ -14,12 +14,14 @@
 #import "Author+Create.h"
 #import "UIImage+ImageAveraging.h"
 #import "ManagedDocumentHelper.h"
+#import "ShareDetector.h"
 
 
 
 @interface TrainingViewController()
 {
     DetectorTrainer *_detectorTrainer;
+    ShareDetector *_shareDetector;
 }
 
 @end
@@ -32,6 +34,7 @@
 {
     [super viewDidLoad];
     [self.activityIndicator startAnimating];
+    [self.progressView setProgress:0];
     [_detectorTrainer trainDetector];
     _detectorTrainer.delegate = self;
 }
@@ -60,7 +63,10 @@
     NSManagedObjectContext *context = self.detectorDatabase.managedObjectContext;
     
     // Detector
-    Detector *detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+    Detector *detector;
+    if (!detector) {
+        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+    }
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
     detector.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
@@ -71,6 +77,7 @@
     detector.weights = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.weights];
     detector.sizes = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.sizes];
     detector.scaleFactor = detectorWrapper.scaleFactor;
+    
     
     // AnnotatedImages
     NSArray *images = self.detectorTrainer.images;
@@ -94,9 +101,19 @@
         
     }
     
+    // send detector
+    _shareDetector = [[ShareDetector alloc] init];
+    [_shareDetector shareDetector:detector];
+    
     self.imageView.image = _detectorTrainer.averageImage;
     
     [self.activityIndicator stopAnimating];
 }
+
+- (void) updateProgess:(float) progress
+{
+    [self.progressView setProgress:progress];
+}
+
 
 @end

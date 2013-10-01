@@ -1,8 +1,8 @@
 //
 //  AnnotatedImage.h
-//  DetectTube
+//  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 23/09/13.
+//  Created by Josep Marc Mingot Hidalgo on 01/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSNumber * imageHeight;
 @property (nonatomic, retain) NSNumber * imageWidth;
+@property (nonatomic, retain) NSNumber * isSent;
 @property (nonatomic, retain) Author *author;
 @property (nonatomic, retain) Detector *detector;
 

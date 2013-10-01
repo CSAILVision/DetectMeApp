@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CoreDataCollectionViewController.h"
+#import "DetailViewController.h"
 
-@interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
+@interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate, DetailViewControllerDelegate>
 
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;

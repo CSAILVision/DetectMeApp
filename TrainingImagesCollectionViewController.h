@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Detector.h"
+#import "TakePictureViewController.h"
 
-@interface TrainingImagesCollectionViewController : UICollectionViewController 
+@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate>
 
-@property (strong, nonatomic) NSMutableArray *images;
-@property (strong, nonatomic) NSMutableArray *boxes;
+@property (strong, nonatomic) Detector *detector;
+
 - (IBAction)deleteAction:(UIButton *)sender;
 
 @end

@@ -8,13 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define SERVER_ADDRESS @"http://128.30.99.160:8000"
-#define SERVER_DETECTOR_ID @"id"
-#define SERVER_DETECTOR_NAME @"name"
-#define SERVER_DETECTOR_CLASS @"object_class"
-#define SERVER_DETECTOR_PUBLIC @"public"
-#define SERVER_DETECTOR_IMAGE @"average_image"
-#define SERVER_DETECTOR_HASH @"hash_value"
+
 
 @protocol DetectorFetcherDelegate <NSObject>
 

@@ -124,7 +124,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Detector";
 //    _boxSender = [[BoxSender alloc] init];
     
     DetectorWrapper *detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];

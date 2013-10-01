@@ -23,6 +23,7 @@
 @protocol DetectorTrainerDelegate <NSObject>
 
 - (void) trainDidEndWithDetector:(DetectorWrapper *)detector;
+- (void) updateProgess:(float) progress;
 
 @end
 

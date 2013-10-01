@@ -54,22 +54,7 @@
         
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         TrainingImagesCollectionViewController *vc = (TrainingImagesCollectionViewController *)segue.destinationViewController;
-        NSArray *annotatedImages = [self.detector.annotatedImages allObjects];
-        NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
-        NSMutableArray *boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
-        for(AnnotatedImage *annotatedImage in annotatedImages){
-            
-            UIImage *image = [UIImage imageWithData:annotatedImage.image];
-            [images addObject:image];
-            
-            CGPoint upperLeft = CGPointMake(annotatedImage.boxX.floatValue, annotatedImage.boxY.floatValue);
-            CGPoint lowerRight = CGPointMake(annotatedImage.boxX.floatValue + annotatedImage.boxWidth.floatValue,
-                                             annotatedImage.boxY.floatValue + annotatedImage.boxHeight.floatValue);
-            [boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight forImageSize:image.size]];
-        }
-        
-        vc.images = images;
-        vc.boxes = boxes;
+        vc.detector = self.detector;
     }
 }
 
@@ -78,6 +63,8 @@
 
 - (IBAction)deleteAction:(id)sender
 {
+    [self.delegate deleteDetector:self.detector];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

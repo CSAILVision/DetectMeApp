@@ -11,11 +11,14 @@
 
 @interface TrainingViewController : UIViewController<DetectorTrainerDelegate>
 
-
+//model
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
+@property (strong, nonatomic) Detector *detector;
+
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *label;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
 @end

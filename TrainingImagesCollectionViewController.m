@@ -9,35 +9,52 @@
 #import "TrainingImagesCollectionViewController.h"
 #import "TrainingImageCell.h"
 #import "TagViewController.h"
+#import "DetectorTrainer.h"
+#import "TrainingViewController.h"
+#import "AnnotatedImage.h"
 
 @interface TrainingImagesCollectionViewController ()
+{
+    DetectorTrainer *_detectorTrainer;
+    NSMutableArray *_images;
+    NSMutableArray *_boxes;
+}
 
 @end
 
 @implementation TrainingImagesCollectionViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark -
+#pragma mark initialization
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //detector trainner initilization
+    _detectorTrainer = [[DetectorTrainer alloc] init];
+    _detectorTrainer.name = self.detector.name;
+    _detectorTrainer.targetClass = self.detector.targetClass;
+    _detectorTrainer.isPublic = self.detector.isPublic.boolValue;
+    
+    //
+    NSArray *annotatedImages = [self.detector.annotatedImages allObjects];
+    _images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
+    _boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
+    for(AnnotatedImage *annotatedImage in annotatedImages){
+        
+        UIImage *image = [UIImage imageWithData:annotatedImage.image];
+        [_images addObject:image];
+        
+        CGPoint upperLeft = CGPointMake(annotatedImage.boxX.floatValue, annotatedImage.boxY.floatValue);
+        CGPoint lowerRight = CGPointMake(annotatedImage.boxX.floatValue + annotatedImage.boxWidth.floatValue,
+                                         annotatedImage.boxY.floatValue + annotatedImage.boxHeight.floatValue);
+        [_boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight forImageSize:image.size]];
+    }
+    
 	// Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-// REUSE IDENTIFIER FOR CELL: trainingCell
 
 #pragma mark -
 #pragma mark Data Source
@@ -45,13 +62,13 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.images.count;
+    return _images.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     TrainingImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"trainingCell" forIndexPath:indexPath];
-    cell.imageView.image = [self.images objectAtIndex:indexPath.row];
+    cell.imageView.image = [_images objectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -61,8 +78,18 @@
 {
     CGPoint buttonPosition = [sender convertPoint:CGPointZero fromView:self.collectionView];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:buttonPosition];
-    [self.images removeObjectAtIndex:indexPath.row];
-    [self.boxes removeObjectAtIndex:indexPath.row];
+    [_images removeObjectAtIndex:indexPath.row];
+    [_boxes removeObjectAtIndex:indexPath.row];
+    [self.collectionView reloadData];
+}
+
+#pragma mark -
+#pragma mark TakePictureViewControllerDelegate
+
+- (void) takenImages:(NSArray *)images withBoxes:(NSArray *)boxes
+{
+    [_images addObjectsFromArray:images];
+    [_boxes addObjectsFromArray:boxes];
     [self.collectionView reloadData];
 }
 
@@ -75,9 +102,22 @@
         NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
         
         TagViewController *tagVC = (TagViewController *) segue.destinationViewController;
-        tagVC.images = self.images;
-        tagVC.boxes = self.boxes;
+        tagVC.images = _images;
+        tagVC.boxes = _boxes;
         tagVC.currentIndex = indexPath.row;
+        
+    }else if([[segue identifier] isEqualToString:@"Retrain"]){
+        _detectorTrainer.images = _images;
+        _detectorTrainer.boxes = _boxes;
+        TrainingViewController *trainingVC = segue.destinationViewController;
+        trainingVC.detectorTrainer = _detectorTrainer;
+        trainingVC.detector = self.detector;
+        
+    }else if([[segue identifier] isEqualToString:@"TakePicture"]){
+        TakePictureViewController *takePictureVC = (TakePictureViewController *) segue.destinationViewController;
+        takePictureVC.delegate = self;
+        takePictureVC.hideNextButton = YES;
+        
     }
 }
 

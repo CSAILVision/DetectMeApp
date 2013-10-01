@@ -9,6 +9,7 @@
 #import "Detector+Server.h"
 #import "Author+Create.h"
 #import "DetectorFetcher.h"
+#import "ConstantsServer.h"
 
 @implementation Detector (Server)
 
@@ -30,7 +31,7 @@
         detector.serverDatabaseID = [detectorInfo objectForKey:SERVER_DETECTOR_ID];
         detector.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
         
-        NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@/media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
+        NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
         detector.image = [NSData dataWithContentsOfURL:imageURL];
         
         

@@ -1,8 +1,8 @@
 //
 //  Detector.h
-//  DetectTube
+//  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 23/09/13.
+//  Created by Josep Marc Mingot Hidalgo on 30/09/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -20,14 +20,15 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * precisionRecall;
 @property (nonatomic, retain) NSNumber * rating;
+@property (nonatomic, retain) NSNumber * scaleFactor;
 @property (nonatomic, retain) NSNumber * serverDatabaseID;
+@property (nonatomic, retain) id sizes;
 @property (nonatomic, retain) id targetClass;
 @property (nonatomic, retain) NSNumber * timeLearning;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) id weights;
-@property (nonatomic, retain) id sizes;
-@property (nonatomic, retain) NSNumber * scaleFactor;
+@property (nonatomic, retain) NSNumber * isSent;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) Author *author;
 @end

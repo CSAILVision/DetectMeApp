@@ -1,8 +1,8 @@
 //
 //  Detector.m
-//  DetectTube
+//  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 23/09/13.
+//  Created by Josep Marc Mingot Hidalgo on 30/09/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -20,14 +20,15 @@
 @dynamic name;
 @dynamic precisionRecall;
 @dynamic rating;
+@dynamic scaleFactor;
 @dynamic serverDatabaseID;
+@dynamic sizes;
 @dynamic targetClass;
 @dynamic timeLearning;
 @dynamic type;
 @dynamic updatedAt;
 @dynamic weights;
-@dynamic sizes;
-@dynamic scaleFactor;
+@dynamic isSent;
 @dynamic annotatedImages;
 @dynamic author;
 

@@ -1,8 +1,8 @@
 //
 //  AnnotatedImage.m
-//  DetectTube
+//  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 23/09/13.
+//  Created by Josep Marc Mingot Hidalgo on 01/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -20,6 +20,7 @@
 @dynamic image;
 @dynamic imageHeight;
 @dynamic imageWidth;
+@dynamic isSent;
 @dynamic author;
 @dynamic detector;
 

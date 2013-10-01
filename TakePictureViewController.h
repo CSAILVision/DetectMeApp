@@ -15,13 +15,23 @@
 
 
 
+@protocol TakePictureViewControllerDelegate <NSObject>
+
+- (void) takenImages:(NSArray *) images withBoxes:(NSArray *)boxes;
+@end
 
 @interface TakePictureViewController : CameraVideoViewController
 
+@property (strong, nonatomic) id<TakePictureViewControllerDelegate> delegate;
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
+@property BOOL hideNextButton;
+
+//views
 @property (weak, nonatomic) IBOutlet TagView *tagView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet AYUIButton *switchButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
+
 - (IBAction)switchCameras:(id)sender;
 - (IBAction)takePictureAction:(id)sender;
 
