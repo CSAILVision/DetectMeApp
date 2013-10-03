@@ -37,6 +37,10 @@
 @property (strong, nonatomic) UIImage *averageImage;
 @property BOOL isPublic;
 
+// when updating a classifier, it stores the indexes of
+// the images that have already been used
+@property (strong, nonatomic) NSArray *usedImagesIndexes;
+
 @property (strong, nonatomic) id<DetectorTrainerDelegate> delegate;
 
 - (void) trainDetector;

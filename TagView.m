@@ -136,6 +136,8 @@ UIViewAutoresizingFlexibleHeight
         [self.box resizeBeginAtPoint:location];
     }
     
+    [self.delegate isObjectMoving:YES];
+    
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -152,7 +154,9 @@ UIViewAutoresizingFlexibleHeight
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if ((_touchIsMoving) || (_touchIsResizing)) [self.delegate objectModified];
+    if ((_touchIsMoving) || (_touchIsResizing)){
+        [self.delegate isObjectMoving:NO];
+    }
     _touchIsMoving = NO;
     _touchIsResizing = NO;
     

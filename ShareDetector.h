@@ -22,6 +22,7 @@
 
 - (void) shareDetector:(Detector *) detector;
 - (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
+- (void) deletedetector:(Detector *) detector;
 
 @property (strong, nonatomic) id<ShareDectorDelegate> delegate;
 

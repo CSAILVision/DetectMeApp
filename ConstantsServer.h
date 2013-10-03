@@ -9,7 +9,7 @@
 #ifndef DetectMe_ConstantsServer_h
 #define DetectMe_ConstantsServer_h
 
-#define SERVER_ADDRESS @"http://128.30.99.183:8000/"
+#define SERVER_ADDRESS @"http://128.30.99.152:8000/"
 
 #define SERVER_DETECTOR_ID @"id"
 #define SERVER_DETECTOR_NAME @"name"
@@ -23,6 +23,7 @@
 #define SERVER_DETECTOR_SIZES @"sizes"
 #define SERVER_DETECTOR_SUPPORT_VECTORS @"support_vectors"
 #define SERVER_DETECTOR_HASH @"hash_value"
+#define SERVER_DETECTOR_DELETED @"is_deleted"
 
 #define SERVER_AIMAGE_IMAGE @"image_jpeg"
 #define SERVER_AIMAGE_BOX_X @"box_x"

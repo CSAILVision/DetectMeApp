@@ -9,6 +9,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="yZ7-Nb-NjB" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Gallery" id="6GR-uR-82l"/>
+                    <navigationItem key="navigationItem" id="trX-K3-7sM"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LBi-NI-fAM">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -40,7 +41,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DetectorCell" id="Avg-Jw-jMn" customClass="DetectorCell">
-                                        <rect key="frame" x="46" y="64" width="229" height="238"/>
+                                        <rect key="frame" x="46" y="0.0" width="229" height="238"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="229" height="238"/>
@@ -222,7 +223,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="trainingCell" id="ypN-ZW-m1T" customClass="TrainingImageCell">
-                                <rect key="frame" x="0.0" y="64" width="121" height="177"/>
+                                <rect key="frame" x="0.0" y="0.0" width="121" height="177"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="121" height="177"/>
@@ -501,12 +502,23 @@
                                 <rect key="frame" x="20" y="189" width="280" height="2"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aRK-l0-f8p">
+                                <rect key="frame" x="140" y="269" width="41" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Finish">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="gzV-tb-nhM" kind="push" id="5bx-2V-D5v"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="FJi-DC-DNJ"/>
                     <connections>
                         <outlet property="activityIndicator" destination="itZ-S8-Jki" id="WbX-sj-oRQ"/>
+                        <outlet property="finishButton" destination="aRK-l0-f8p" id="wT7-cN-YUg"/>
                         <outlet property="imageView" destination="DHc-Np-1aV" id="xyN-X6-hIV"/>
                         <outlet property="label" destination="zw2-sD-mBQ" id="atU-VY-KnR"/>
                         <outlet property="progressView" destination="nzn-yf-vTY" id="HBY-MR-e9C"/>
@@ -536,6 +548,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="5bx-2V-D5v"/>
         <segue reference="qoV-C6-q3a"/>
         <segue reference="iBb-Sq-DZc"/>
     </inferredMetricsTieBreakers>

@@ -21,12 +21,6 @@
     NSMutableSet *_recentLabels; //buffer with the recent labels for keyboard word suggestion
 }
 
-
-
-// Save thumbnail and boxes
-// Notify the delegate to reload
-- (void) saveStateOnDisk;
-
 // Just enable the scroll of pages in the infinite loop if: (1) no box selected and (2) not zoom in
 - (void) updateScrollPersmission;
 
@@ -61,8 +55,6 @@
 }
 
 
-
-
 - (void) initializeLabelsSet
 {
 //    _recentLabels = [NSMutableSet setWithArray:[_labelsResourceHandler getClassesNames]];
@@ -82,6 +74,11 @@
     [self initializeBottomToolbar];
     self.infiniteLoopView.delegate = self;
     self.infiniteLoopView.dataSource = self;
+    
+    // disable back swipe of iOS 7
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    self.navigationController.navigationBar.hidden = YES;
+    self.navigationController.tabBarController.tabBar.hidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -95,6 +92,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self initializeLabelsSet];
         [self.infiniteLoopView initializeAtIndex:self.currentIndex];
+        [self.view performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:NO];
     });
 }
 
@@ -103,8 +101,7 @@
 {
 	[super viewWillDisappear:animated];
     
-    //save thumbnail and dictionary
-    [self saveStateOnDisk];
+    [self.delegate finishEditingWithBoxes:self.boxes];
     
     [self.infiniteLoopView reset];
 
@@ -116,17 +113,10 @@
 #pragma mark -
 #pragma mark TagViewDelegate Methods
 
--(void)objectModified
+- (void) isObjectMoving:(BOOL) isMoving;
 {
-//    // if the box was sent, update 
-//    Box *selectedBox = [self.tagImageView.tagView getSelectedBox];
-//    [_recentLabels addObject:selectedBox.label];
-//    if(selectedBox && selectedBox.sent){
-//        selectedBox.sent = NO;
-//        self.labelsResourceHandler.boxesNotSent ++;
-//    }
-//    
-//    [self saveStateOnDisk];
+    [self.infiniteLoopView disableScrolling:isMoving];
+    
 }
 
 
@@ -152,8 +142,8 @@
 - (UIView *) viewForIndex:(int)index
 {
     //construct the view
-    TagImageView *requestedView = [[TagImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 460)];
-    requestedView.image = [self.images objectAtIndex:index];
+    TagImageView *requestedView = [[TagImageView alloc] initWithFrame:self.view.frame];
+    requestedView.image = [self.images objectAtIndex:index]; 
     requestedView.tagView.box = [self.boxes objectAtIndex:index];
     
     return requestedView;
@@ -172,8 +162,8 @@
     //hook current view with the delegate
     self.tagImageView = (TagImageView *)view;
     self.tagImageView.delegate = self;
+    self.tagImageView.tagView.delegate = self;
     [self.tagImageView reloadForRotation];
-    
     
     [self.view setNeedsDisplay];
 }
@@ -213,10 +203,6 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void) saveStateOnDisk
-{
-    [self.delegate reloadTable];
-}
 
 - (void) updateScrollPersmission
 {

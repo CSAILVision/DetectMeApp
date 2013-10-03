@@ -8,7 +8,6 @@
 
 #import "TrainingImagesCollectionViewController.h"
 #import "TrainingImageCell.h"
-#import "TagViewController.h"
 #import "DetectorTrainer.h"
 #import "TrainingViewController.h"
 #import "AnnotatedImage.h"
@@ -31,13 +30,14 @@
 {
     [super viewDidLoad];
     
+    NSLog(@"loading");
     //detector trainner initilization
     _detectorTrainer = [[DetectorTrainer alloc] init];
     _detectorTrainer.name = self.detector.name;
     _detectorTrainer.targetClass = self.detector.targetClass;
     _detectorTrainer.isPublic = self.detector.isPublic.boolValue;
     
-    //
+    
     NSArray *annotatedImages = [self.detector.annotatedImages allObjects];
     _images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
     _boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
@@ -54,6 +54,7 @@
     
 	// Do any additional setup after loading the view.
 }
+
 
 
 #pragma mark -
@@ -91,7 +92,17 @@
     [_images addObjectsFromArray:images];
     [_boxes addObjectsFromArray:boxes];
     [self.collectionView reloadData];
+
 }
+
+#pragma mark -
+#pragma mark TagViewControllerDelegate
+
+- (void) finishEditingWithBoxes:(NSMutableArray *)boxes
+{
+    _boxes = boxes;
+}
+
 
 #pragma mark -
 #pragma mark Segue
@@ -105,6 +116,7 @@
         tagVC.images = _images;
         tagVC.boxes = _boxes;
         tagVC.currentIndex = indexPath.row;
+        tagVC.delegate = self;
         
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         _detectorTrainer.images = _images;

@@ -33,6 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.finishButton.hidden = YES;
     [self.activityIndicator startAnimating];
     [self.progressView setProgress:0];
     [_detectorTrainer trainDetector];
@@ -47,9 +48,16 @@
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:nil];
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.detector = nil;
+}
+
 - (void) documentIsReady
 {
 }
+
 
 #pragma mark -
 #pragma mark DetectorTrainnerDelegate
@@ -63,10 +71,15 @@
     NSManagedObjectContext *context = self.detectorDatabase.managedObjectContext;
     
     // Detector
-    Detector *detector;
-    if (!detector) {
+    Detector *detector = self.detector;
+    if (!self.detector) { //if it is not an update
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+    }else{
+        // delete previously annotated images
+        for(AnnotatedImage *annotatedImage in self.detector.annotatedImages)
+            [context deleteObject:annotatedImage];
     }
+    
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
     detector.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
@@ -82,11 +95,14 @@
     // AnnotatedImages
     NSArray *images = self.detectorTrainer.images;
     NSArray *boxes = self.detectorTrainer.boxes;
+    
     for(int i=0; i<images.count; i++){
         AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
+        
         UIImage *image = [images objectAtIndex:i];
         Box *box = [boxes objectAtIndex:i];
         
+
         annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
         annotatedImage.imageHeight = @(image.size.height);
         annotatedImage.imageWidth = @(image.size.width);
@@ -98,7 +114,7 @@
         annotatedImage.boxY = @(boxRect.origin.y);
         annotatedImage.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
         annotatedImage.detector = detector;
-        
+
     }
     
     // send detector
@@ -108,6 +124,7 @@
     self.imageView.image = _detectorTrainer.averageImage;
     
     [self.activityIndicator stopAnimating];
+    self.finishButton.hidden = NO;
 }
 
 - (void) updateProgess:(float) progress

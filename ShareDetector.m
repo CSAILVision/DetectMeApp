@@ -37,7 +37,7 @@
         _requestConstructor = [[PostHTTPConstructor alloc] init];
     }
     return self;
-}
+} 
 
 #pragma mark -
 #pragma mark Public methods
@@ -50,7 +50,7 @@
     
     // select between create or update of objects
     NSString *httpMethod;
-    if(!detector.serverDatabaseID>0){
+    if(detector.serverDatabaseID.intValue > 0){
         httpMethod =  @"PUT";
         urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
     }else httpMethod = @"POST";
@@ -76,8 +76,8 @@
     _responseData = [[NSMutableData alloc] init];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[_requestConstructor getRequest] delegate:self];
     [conn start];
-    
 }
+
 
 - (void) shareAnnotatedImage:(AnnotatedImage *)annotatedImage
 {
@@ -92,7 +92,6 @@
     [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
     
     NSDictionary *dict = [self getDictionaryFromAnnotatedImage:annotatedImage];
-    NSLog(@"dictionary: %@", dict);
     
     // construct the request adding the fields from the dictionary and the images
     for(NSString *key in dict)
@@ -109,6 +108,27 @@
     [conn start];
 }
 
+
+- (void) deletedetector:(Detector *)detector
+{
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
+    urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
+    
+    // initiate creation of the request
+    [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
+    
+    // authenticate
+    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+    
+    [_requestConstructor addFieldWithTitle:SERVER_DETECTOR_DELETED forValue:@"True"];
+    
+    // URL Connection
+    _responseData = [[NSMutableData alloc] init];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[_requestConstructor getRequest] delegate:self];
+    [conn start];
+}
+
+
 #pragma mark -
 #pragma mark NSURLConnectionDataDelegate
 
@@ -121,6 +141,7 @@
     }
     
 }
+
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
@@ -144,18 +165,26 @@
     // update the detectorID field that stores the id of the detector on the webserver database
     if (error != nil) [self.delegate errorReceive:@"Error parsing JSON."];
     else {
+        
         if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // it is a detector
             _detector.serverDatabaseID = [objectJSON objectForKey:SERVER_DETECTOR_ID];
             _detector.isSent = @(TRUE);
-            NSLog(@"recived id: %@",_detector.serverDatabaseID);
             [self.delegate finishedUploadingDetecor:objectJSON];
+            
             for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
                 [self shareAnnotatedImage:annotatedImage];
-        }else{
+            
+            NSLog(@"sending this images:%@",_detector.annotatedImages);
+            
+        }else if([objectJSON objectForKey:SERVER_AIMAGE_AUTHOR]){
+            _annotatedImage.isSent = @(TRUE);
             NSLog(@"Image sent!!");
+        }else{
+            NSLog(@"Error received with:%@",objectJSON);
         }
     }
 }
+
 
 #pragma	mark -
 #pragma mark Private methods
@@ -213,7 +242,6 @@
     
     return [NSDictionary dictionaryWithDictionary:dict];
 }
-
 
 
 @end

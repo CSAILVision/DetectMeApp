@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Detector.h"
 #import "TakePictureViewController.h"
+#import "TagViewController.h"
 
-@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate>
+@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate, TagViewControllerDelegate>
 
 @property (strong, nonatomic) Detector *detector;
 

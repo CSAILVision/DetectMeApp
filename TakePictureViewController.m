@@ -85,6 +85,7 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    self.imageView.image = nil;
     [self.delegate takenImages:_images withBoxes:_boxes];
 }
 
@@ -110,7 +111,6 @@
 
         [_images addObject:image];
         [_boxes addObject:[self.tagView.box makeCopy]];
-    
     }
     //DETECTION
 //    NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];

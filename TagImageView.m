@@ -49,7 +49,7 @@
     self.containerView = [[UIView alloc] initWithFrame:self.frame];
     
     self.imageView = [[UIImageView alloc] initWithFrame:self.frame];
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     self.tagView = [[TagView alloc] initWithFrame:self.frame];
     
@@ -158,6 +158,7 @@
 //    self.tagView.boxes = nil;
 //    self.tagView.boxes = boxesAux;
 }
+
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate

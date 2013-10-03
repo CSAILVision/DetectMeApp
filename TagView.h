@@ -12,9 +12,9 @@
 
 @protocol TagViewDelegate <NSObject>
 
-// send when and object is: moved, resized or changed the label
-- (void)objectModified;
-
+@optional
+// inform when the moving is done to disable swipe scrolling
+- (void) isObjectMoving:(BOOL) isMoving;
 
 @end
 

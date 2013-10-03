@@ -18,7 +18,7 @@
 
 @protocol TagViewControllerDelegate <NSObject>
 
-- (void) reloadTable;
+- (void) finishEditingWithBoxes:(NSMutableArray *)boxes;
 
 @end
 
