@@ -19,6 +19,11 @@
 @property CGPoint lowerRight;
 @property CGFloat lineWidth;
 
+// magnitude in [0,1]x[0,1]
+// makes it agnostic to the image size
+@property CGPoint unitaryUpperLeft;
+@property CGPoint unitaryLowerRight;
+
 
 - (id) initWithUpperLeft:(CGPoint)upper lowerRight:(CGPoint)lower forImageSize:(CGSize)imageSize;
 

@@ -44,7 +44,7 @@
         self.groundTruthBoundingBoxes = [[NSMutableArray alloc] init];
         
         for(int i=0; i<boxes.count; i++){
-        
+
             // add box
             Box *box = [boxes objectAtIndex:i];
             BoundingBox *cp = [[BoundingBox alloc] init];

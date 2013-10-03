@@ -117,6 +117,19 @@
 }
 
 
+//- (Box *) convertBoundingBoxForDetectView:(Box *) box
+//{
+//    Box *newBox = [box makeCopy];
+//    
+//    CGPoint upperLeft = [_prevLayer pointForCaptureDevicePointOfInterest:CGPointMake(cp.ymin, 1 - cp.xmin)];
+//    CGPoint lowerRight = [_prevLayer pointForCaptureDevicePointOfInterest:CGPointMake(cp.ymax, 1 - cp.xmax)];
+//    CGPoint unitaryLowerRight
+//    CGPoint unitaryUpperLeft
+//    
+//    
+//    return newBox;
+//}
+
 #pragma mark -
 #pragma mark IBActions
 

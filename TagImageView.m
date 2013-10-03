@@ -49,7 +49,7 @@
     self.containerView = [[UIView alloc] initWithFrame:self.frame];
     
     self.imageView = [[UIImageView alloc] initWithFrame:self.frame];
-    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
     self.tagView = [[TagView alloc] initWithFrame:self.frame];
     
@@ -151,7 +151,6 @@
 {
     
     [self.imageView setImage:self.image];
-    self.tagView.frame = [self getImageFrameFromImageView:self.imageView];
     
     //reset boxes to force them to reajust to the new frame
 //    NSArray *boxesAux = self.tagView.boxes;

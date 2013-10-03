@@ -77,8 +77,8 @@
     
     // disable back swipe of iOS 7
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    self.navigationController.navigationBar.hidden = YES;
-    self.navigationController.tabBarController.tabBar.hidden = YES;
+//    self.navigationController.navigationBar.hidden = YES;
+//    self.navigationController.tabBarController.tabBar.hidden = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -94,6 +94,8 @@
         [self.infiniteLoopView initializeAtIndex:self.currentIndex];
         [self.view performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:NO];
     });
+    
+    self.navigationController.tabBarController.tabBar.hidden = YES;
 }
 
 
@@ -106,6 +108,7 @@
     [self.infiniteLoopView reset];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.navigationController.tabBarController.tabBar.hidden = NO;
 }
 
 
@@ -115,8 +118,7 @@
 
 - (void) isObjectMoving:(BOOL) isMoving;
 {
-    [self.infiniteLoopView disableScrolling:isMoving];
-    
+    [self.infiniteLoopView disableScrolling:isMoving];    
 }
 
 

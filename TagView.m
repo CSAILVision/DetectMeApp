@@ -90,25 +90,25 @@ UIViewAutoresizingFlexibleHeight
     self.box.lineWidth = kLineWidth;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGPoint upperRight = CGPointMake([self.box lowerRight].x, [self.box upperLeft].y);
-    CGPoint lowerLeft = CGPointMake([self.box upperLeft].x, [self.box lowerRight].y);
+    CGPoint upperRight = CGPointMake(self.box.lowerRight.x, self.box.upperLeft.y);
+    CGPoint lowerLeft = CGPointMake(self.box.upperLeft.x, self.box.lowerRight.y);
     
     // DRAW RECT
     CGContextSetLineWidth(context, kLineWidth);
-    CGRect boxRect = CGRectMake([self.box upperLeft].x, [self.box upperLeft].y, [self.box lowerRight].x-[self.box upperLeft].x, [self.box lowerRight].y-[self.box upperLeft].y);
+    CGRect boxRect = CGRectMake(self.box.upperLeft.x, self.box.upperLeft.y, self.box.lowerRight.x - self.box.upperLeft.x, self.box.lowerRight.y-self.box.upperLeft.y);
     const CGFloat *components = CGColorGetComponents([[UIColor redColor] CGColor]);
     CGContextSetRGBStrokeColor(context, components[0] ,components[1],components[2], 1);
     CGContextStrokeRect(context, boxRect);
     
     // DRAW CORNERS
-    CGContextStrokeEllipseInRect(context, CGRectMake([self.box upperLeft].x-kLineWidth, [self.box upperLeft].y-kLineWidth, 2*kLineWidth, 2*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake([self.box lowerRight].x-kLineWidth, [self.box lowerRight].y-kLineWidth, 2*kLineWidth, 2*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake(upperRight.x-kLineWidth, upperRight.y-kLineWidth, 2*kLineWidth, 2*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake(lowerLeft.x-kLineWidth, lowerLeft.y-kLineWidth, 2*kLineWidth, 2*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.upperLeft.x - kLineWidth, self.box.upperLeft.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.lowerRight.x - kLineWidth, self.box.lowerRight.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(upperRight.x-kLineWidth, upperRight.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(lowerLeft.x-kLineWidth, lowerLeft.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
     CGContextSetRGBStrokeColor(context, 255, 255, 255, 1);
     CGContextSetLineWidth(context, 1);
-    CGContextStrokeEllipseInRect(context, CGRectMake([self.box upperLeft].x-1.5*kLineWidth, [self.box upperLeft].y-1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake([self.box lowerRight].x-1.5*kLineWidth, [self.box lowerRight].y-1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.upperLeft.x - 1.5*kLineWidth, self.box.upperLeft.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.lowerRight.x - 1.5*kLineWidth, self.box.lowerRight.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
     CGContextStrokeEllipseInRect(context, CGRectMake(upperRight.x-1.5*kLineWidth, upperRight.y-1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
     CGContextStrokeEllipseInRect(context, CGRectMake(lowerLeft.x-1.5*kLineWidth, lowerLeft.y-1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
     
