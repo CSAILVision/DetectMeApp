@@ -101,8 +101,6 @@
         
         UIImage *image = [images objectAtIndex:i];
         Box *box = [boxes objectAtIndex:i];
-        
-        NSLog(@"detector trainer boxes: %@", NSStringFromCGSize(box.imageSize));
 
         annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
         annotatedImage.imageHeight = @(image.size.height);

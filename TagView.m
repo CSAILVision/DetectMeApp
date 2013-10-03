@@ -47,7 +47,8 @@ UIViewAutoresizingFlexibleHeight
     _touchIsMoving = NO;
     _touchIsResizing = NO;
     
-    [self addBoxInVisibleRect:self.frame];
+    NSLog(@"bounding box: %@",self.box);
+    NSLog(@"frame: %@", NSStringFromCGRect(self.frame));
     
 }
 
@@ -69,14 +70,17 @@ UIViewAutoresizingFlexibleHeight
 #pragma mark Public Methods
 
 
-- (void) addBoxInVisibleRect:(CGRect)visibleRect
+- (void) addBoxInView
 {
-    CGPoint newUpperLeft = CGPointMake(visibleRect.origin.x + 0.3*visibleRect.size.width, visibleRect.origin.y + 0.3*visibleRect.size.height);
-    CGPoint newLowerRight = CGPointMake(visibleRect.origin.x + 0.7*visibleRect.size.width, visibleRect.origin.y + 0.7*visibleRect.size.height);
+//    CGPoint newUpperLeft = CGPointMake(visibleRect.origin.x + 0.3*visibleRect.size.width, visibleRect.origin.y + 0.3*visibleRect.size.height);
+//    CGPoint newLowerRight = CGPointMake(visibleRect.origin.x + 0.7*visibleRect.size.width, visibleRect.origin.y + 0.7*visibleRect.size.height);
+//    
+    CGPoint newUpperLeft = CGPointMake(0.3, 0.3);
+    CGPoint newLowerRight = CGPointMake(0.7, 0.7);
     
-    Box *newBox = [[Box alloc] initWithUpperLeft:newUpperLeft lowerRight:newLowerRight forImageSize:self.frame.size];
+    
+    Box *newBox = [[Box alloc] initWithUpperLeft:newUpperLeft lowerRight:newLowerRight];// forImageSize:self.frame.size];
     self.box = newBox;
-    
 }
 
 
@@ -87,30 +91,32 @@ UIViewAutoresizingFlexibleHeight
 
 - (void) drawRect:(CGRect)rect
 {
-    self.box.lineWidth = kLineWidth;
+    self.box.lineWidth = kLineWidth/self.frame.size.height;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGPoint upperRight = CGPointMake(self.box.lowerRight.x, self.box.upperLeft.y);
-    CGPoint lowerLeft = CGPointMake(self.box.upperLeft.x, self.box.lowerRight.y);
+    CGPoint upperLeft = CGPointMake(self.box.upperLeft.x*self.frame.size.width, self.box.upperLeft.y*self.frame.size.height);
+    CGPoint lowerRight = CGPointMake(self.box.lowerRight.x*self.frame.size.width, self.box.lowerRight.y*self.frame.size.height);
+    CGPoint upperRight = CGPointMake(self.box.lowerRight.x*self.frame.size.width, self.box.upperLeft.y*self.frame.size.height);
+    CGPoint lowerLeft = CGPointMake(self.box.upperLeft.x*self.frame.size.width, self.box.lowerRight.y*self.frame.size.height);
     
     // DRAW RECT
     CGContextSetLineWidth(context, kLineWidth);
-    CGRect boxRect = CGRectMake(self.box.upperLeft.x, self.box.upperLeft.y, self.box.lowerRight.x - self.box.upperLeft.x, self.box.lowerRight.y-self.box.upperLeft.y);
+    CGRect boxRect = CGRectMake(upperLeft.x, upperLeft.y, lowerRight.x - upperLeft.x, lowerRight.y - upperLeft.y);
     const CGFloat *components = CGColorGetComponents([[UIColor redColor] CGColor]);
     CGContextSetRGBStrokeColor(context, components[0] ,components[1],components[2], 1);
     CGContextStrokeRect(context, boxRect);
     
     // DRAW CORNERS
-    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.upperLeft.x - kLineWidth, self.box.upperLeft.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.lowerRight.x - kLineWidth, self.box.lowerRight.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(upperLeft.x - kLineWidth, upperLeft.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(lowerRight.x - kLineWidth, lowerRight.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
     CGContextStrokeEllipseInRect(context, CGRectMake(upperRight.x-kLineWidth, upperRight.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
     CGContextStrokeEllipseInRect(context, CGRectMake(lowerLeft.x-kLineWidth, lowerLeft.y - kLineWidth, 2*kLineWidth, 2*kLineWidth));
     CGContextSetRGBStrokeColor(context, 255, 255, 255, 1);
     CGContextSetLineWidth(context, 1);
-    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.upperLeft.x - 1.5*kLineWidth, self.box.upperLeft.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake(self.box.lowerRight.x - 1.5*kLineWidth, self.box.lowerRight.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake(upperRight.x-1.5*kLineWidth, upperRight.y-1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
-    CGContextStrokeEllipseInRect(context, CGRectMake(lowerLeft.x-1.5*kLineWidth, lowerLeft.y-1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(upperLeft.x - 1.5*kLineWidth, upperLeft.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(lowerRight.x - 1.5*kLineWidth, lowerRight.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(upperRight.x - 1.5*kLineWidth, upperRight.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
+    CGContextStrokeEllipseInRect(context, CGRectMake(lowerLeft.x - 1.5*kLineWidth, lowerLeft.y - 1.5*kLineWidth, 3*kLineWidth, 3*kLineWidth));
     
 }
 
@@ -121,6 +127,7 @@ UIViewAutoresizingFlexibleHeight
 {
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:touch.view];
+    location = [self unitaryPointForPoint:location insideFrame:self.frame];
     
     int corner = [self.box touchAtPoint:location];
     
@@ -144,6 +151,7 @@ UIViewAutoresizingFlexibleHeight
 {
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:touch.view];
+    location = [self unitaryPointForPoint:location insideFrame:self.frame];
     
     Box *currentBox = self.box;
     if (_touchIsMoving) [currentBox moveToPoint:location];
@@ -164,6 +172,14 @@ UIViewAutoresizingFlexibleHeight
 }
 
 
+#pragma mark -
+#pragma mark Private Methods
+
+- (CGPoint) unitaryPointForPoint:(CGPoint)point insideFrame:(CGRect)frame
+{
+    CGPoint unitaryPoint = CGPointMake(point.x/frame.size.width, point.y/frame.size.height);
+    return unitaryPoint;
+}
 
 
 @end

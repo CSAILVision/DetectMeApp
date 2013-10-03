@@ -11,7 +11,6 @@
 
 
 #define DET 2 //Factor that represents the touchable area of the box corners
-#define kLineWidth 6
 
 #define kExteriorBox 0
 #define kUpperLeft 1
@@ -40,10 +39,9 @@
 @synthesize upperLeft = _upperLeft;
 @synthesize lowerRight = _lowerRight;
 
-- (id) initWithUpperLeft:(CGPoint)upper lowerRight:(CGPoint)lower forImageSize:(CGSize)imageSize
+- (id) initWithUpperLeft:(CGPoint)upper lowerRight:(CGPoint)lower
 {
     if (self = [super init]) {
-        self.imageSize = imageSize;
         self.upperLeft = upper;
         self.lowerRight = lower;
     }
@@ -52,7 +50,7 @@
 
 - (Box *) makeCopy
 {
-    return [[Box alloc] initWithUpperLeft:self.upperLeft lowerRight:self.lowerRight forImageSize:self.imageSize];
+    return [[Box alloc] initWithUpperLeft:self.upperLeft lowerRight:self.lowerRight];
 }
 
 #pragma mark -
@@ -194,13 +192,12 @@
 
 - (void) moveToPoint:(CGPoint)end
 {
-    
     if (self.upperLeft.y + end.y - _firstLocation.y < 0 + self.lineWidth/2) {
         end.y = 0 + self.lineWidth/2 - self.upperLeft.y + _firstLocation.y;
         
     }
-    if (self.lowerRight.y + end.y - _firstLocation.y > self.imageSize.height - self.lineWidth/2) {
-        end.y = self.imageSize.height - self.lineWidth/2 - self.lowerRight.y + _firstLocation.y;
+    if (self.lowerRight.y + end.y - _firstLocation.y > 1 - self.lineWidth/2) {
+        end.y = 1 - self.lineWidth/2 - self.lowerRight.y + _firstLocation.y;
         
         
     }
@@ -208,10 +205,11 @@
         end.x = 0 + self.lineWidth/2 - self.upperLeft.x + _firstLocation.x;
         
     }
-    if (self.lowerRight.x + end.x - _firstLocation.x > self.imageSize.width - self.lineWidth/2) {
-        end.x = self.imageSize.width - self.lineWidth/2 - self.lowerRight.x + _firstLocation.x;
+    if (self.lowerRight.x + end.x - _firstLocation.x > 1 - self.lineWidth/2) {
+        end.x = 1 - self.lineWidth/2 - self.lowerRight.x + _firstLocation.x;
         
     }
+    
     
     self.upperLeft = CGPointMake((self.upperLeft.x + end.x - _firstLocation.x), (self.upperLeft.y + end.y - _firstLocation.y));
     self.lowerRight = CGPointMake((self.lowerRight.x + end.x - _firstLocation.x), (self.lowerRight.y + end.y - _firstLocation.y));
@@ -229,16 +227,10 @@
     return rectangle;
 }
 
-- (void) setBoxDimensionsForFrameSize:(CGSize) size
-{    
-    self.upperLeft = CGPointMake(self.upperLeft.x*size.width*1.0/self.imageSize.width, self.upperLeft.y*size.height*1.0/self.imageSize.height);
-    self.lowerRight = CGPointMake(self.lowerRight.x*size.width*1.0/self.imageSize.width, self.lowerRight.y*size.height*1.0/self.imageSize.height);
-    self.imageSize = size;
-}
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"upperLeft = (%.1f,%.1f), lowerRight = (%.1f,%.1f). Upper, lower, left and right bounds = (%.1f,%.1f,%.1f,%.1f)",self.upperLeft.x, self.upperLeft.y, self.lowerRight.x,self.lowerRight.y, 0.0, self.imageSize.height, 0.0, self.imageSize.width];
+    return [NSString stringWithFormat:@"upperLeft = (%.3f,%.3f), lowerRight = (%.3f,%.3f)",self.upperLeft.x, self.upperLeft.y, self.lowerRight.x,self.lowerRight.y];
 }
 
 

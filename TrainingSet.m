@@ -48,10 +48,10 @@
             // add box
             Box *box = [boxes objectAtIndex:i];
             BoundingBox *cp = [[BoundingBox alloc] init];
-            cp.xmin = box.upperLeft.x/box.imageSize.width;
-            cp.ymin = box.upperLeft.y/box.imageSize.height;
-            cp.xmax = box.lowerRight.x/box.imageSize.width;
-            cp.ymax = box.lowerRight.y/box.imageSize.height;
+            cp.xmin = box.upperLeft.x;///box.imageSize.width;
+            cp.ymin = box.upperLeft.y;///box.imageSize.height;
+            cp.xmax = box.lowerRight.x;///box.imageSize.width;
+            cp.ymax = box.lowerRight.y;///box.imageSize.height;
             cp.imageIndex = self.images.count;
             cp.label = 1;
             [self.groundTruthBoundingBoxes addObject:cp];

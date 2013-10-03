@@ -58,6 +58,7 @@
     
     [self initializeButtons];
     [self initializeAnnotations];
+    [self.tagView addBoxInView];
     
     _images = [[NSMutableArray alloc] init];
     
@@ -110,25 +111,38 @@
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
 
         [_images addObject:image];
-        [_boxes addObject:[self.tagView.box makeCopy]];
+        [_boxes addObject:[self convertBoxForView:self.tagView.box]];
+        NSLog(@"added image: %@", [_boxes lastObject]);
     }
     //DETECTION
 //    NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];
 }
 
 
-//- (Box *) convertBoundingBoxForDetectView:(Box *) box
-//{
-//    Box *newBox = [box makeCopy];
-//    
-//    CGPoint upperLeft = [_prevLayer pointForCaptureDevicePointOfInterest:CGPointMake(cp.ymin, 1 - cp.xmin)];
-//    CGPoint lowerRight = [_prevLayer pointForCaptureDevicePointOfInterest:CGPointMake(cp.ymax, 1 - cp.xmax)];
-//    CGPoint unitaryLowerRight
-//    CGPoint unitaryUpperLeft
-//    
-//    
-//    return newBox;
-//}
+- (Box *) convertBoxForView:(Box *) box
+{
+    // The image show in the camera is an "aspect fit" of the actual image taken
+    // To solve it, we need to convert the box to the "camera" reference system
+
+    CGPoint upperLeft = [_prevLayer captureDevicePointOfInterestForPoint:CGPointMake(box.upperLeft.x*self.tagView.frame.size.width,
+                                                                                     box.upperLeft.y*self.tagView.frame.size.height)];
+    CGPoint lowerRight = [_prevLayer captureDevicePointOfInterestForPoint:CGPointMake(box.lowerRight.x*self.tagView.frame.size.width,
+                                                                                      box.lowerRight.y*self.tagView.frame.size.height)];
+    
+    
+    // We have to rotate the output obtained 90 degrees
+    CGPoint upperLeftRotated = CGPointZero;
+    CGPoint lowerRightRotated = CGPointZero;
+    
+    upperLeftRotated.x = 1 - upperLeft.y;
+    upperLeftRotated.y = upperLeft.x;
+    lowerRightRotated.x = 1 - lowerRight.y;
+    lowerRightRotated.y = lowerRight.x;
+    
+    Box *newBox = [[Box alloc] initWithUpperLeft:upperLeftRotated lowerRight:lowerRightRotated];
+    
+    return newBox;
+}
 
 #pragma mark -
 #pragma mark IBActions

@@ -49,7 +49,7 @@
         CGPoint upperLeft = CGPointMake(annotatedImage.boxX.floatValue, annotatedImage.boxY.floatValue);
         CGPoint lowerRight = CGPointMake(annotatedImage.boxX.floatValue + annotatedImage.boxWidth.floatValue,
                                          annotatedImage.boxY.floatValue + annotatedImage.boxHeight.floatValue);
-        [_boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight forImageSize:image.size]];
+        [_boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight]];
     }
     
 	// Do any additional setup after loading the view.
@@ -117,6 +117,7 @@
         tagVC.boxes = _boxes;
         tagVC.currentIndex = indexPath.row;
         tagVC.delegate = self;
+        NSLog(@"%@", _boxes);
         
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         _detectorTrainer.images = _images;

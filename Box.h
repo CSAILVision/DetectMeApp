@@ -14,18 +14,12 @@
 
 @interface Box : NSObject
 
-@property CGSize imageSize;
 @property CGPoint upperLeft;
 @property CGPoint lowerRight;
 @property CGFloat lineWidth;
 
-// magnitude in [0,1]x[0,1]
-// makes it agnostic to the image size
-@property CGPoint unitaryUpperLeft;
-@property CGPoint unitaryLowerRight;
 
-
-- (id) initWithUpperLeft:(CGPoint)upper lowerRight:(CGPoint)lower forImageSize:(CGSize)imageSize;
+- (id) initWithUpperLeft:(CGPoint)upper lowerRight:(CGPoint)lower;// forImageSize:(CGSize)imageSize;
 
 // Returns the position of the touch with respect the box.
 - (int) touchAtPoint:(CGPoint)point;
@@ -50,11 +44,6 @@
 
 // When needed returns a CGRect from the box
 - (CGRect) getRectangleForBox;
-
-// When loading, adjusts the box size to the iamgeSize provided. Used when
-// rotating the phone that the boxes need to reajust to the new image size.
-- (void) setBoxDimensionsForFrameSize:(CGSize) size;
-
 
 
 
