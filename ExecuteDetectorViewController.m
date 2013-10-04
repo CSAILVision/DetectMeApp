@@ -9,7 +9,7 @@
 #import "ExecuteDetectorViewController.h"
 #import "BoundingBox.h"
 #import "ConvolutionHelper.h"
-//#import "BoxSender.h"
+#import "BoxSender.h"
 #import "UIImage+HOG.h"
 #import "UIImage+Resize.h"
 
@@ -32,7 +32,7 @@
     BOOL _sendBoxesToServer;
     
     const NSArray *_settingsStrings;
-//    BoxSender *_boxSender;
+    BoxSender *_boxSender;
     
 }
 
@@ -124,10 +124,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    _boxSender = [[BoxSender alloc] init];
+    _boxSender = [[BoxSender alloc] init];
     
     DetectorWrapper *detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];
-    [detectorWrapper printListHogFeatures];
     self.detectors = [NSArray arrayWithObject: detectorWrapper];
     
     [self initializeConstants];
@@ -244,9 +243,9 @@
     
     //SEND TO THE SEVER
     if(_sendBoxesToServer){
-//        [_boxSender sendBoxes:detectedBoxes];
-//        [_boxSender sendImage:image];
-//        [_boxSender sendBoxes:detectedBoxes forImage:image];
+        [_boxSender sendBoxes:detectedBoxes];
+        [_boxSender sendImage:image];
+        [_boxSender sendBoxes:detectedBoxes forImage:image];
     }
     
     
@@ -349,13 +348,13 @@
 {
     if(!_sendBoxesToServer){
         _sendBoxesToServer = YES;
-//        [_boxSender openConnection];
+        [_boxSender openConnection];
         [senderButton setTitle:@"Stop" forState:UIControlStateNormal];
         NSLog(@"Sending boxes!");
         
     }else{
         _sendBoxesToServer = NO;
-//        [_boxSender closeConnection];
+        [_boxSender closeConnection];
         [senderButton setTitle:@"Send" forState:UIControlStateNormal];
         NSLog(@"Not sending boxes!");
     }

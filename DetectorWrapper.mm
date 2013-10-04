@@ -15,6 +15,8 @@
 #import "UIImage+Resize.h"
 #import "ConvolutionHelper.h"
 #import "BoundingBox.h"
+#import "NSArray+JSONHelper.h"
+
 
 using namespace cv;
 
@@ -24,6 +26,9 @@ using namespace cv;
 #define MAX_IMAGE_SIZE 300.0
 #define SCALES_PER_OCTAVE 10
 #define MAX_TRAINING_ITERATIONS 10
+
+// Scaling image on detection for being faster
+#define IMAGE_SCALE_FACTOR 100.0
 
 //training results
 #define SUCCESS 1
@@ -98,11 +103,12 @@ using namespace cv;
 {
     if (self = [super init]) {
         self.targetClasses = [NSArray arrayWithObject:detector.targetClass];
-        self.weights = [NSKeyedUnarchiver unarchiveObjectWithData:detector.weights];
-        self.sizes = [NSKeyedUnarchiver unarchiveObjectWithData:detector.sizes];
+        self.weights = [[NSArray arrayFromJSON:detector.weights] mutableCopy]; //[NSKeyedUnarchiver unarchiveObjectWithData:detector.weights];
+        self.sizes = [NSArray arrayFromJSON:detector.sizes]; //[NSKeyedUnarchiver unarchiveObjectWithData:detector.sizes];
 
-        self.scaleFactor = detector.scaleFactor;
+        self.scaleFactor = @(IMAGE_SCALE_FACTOR);
         self.detectionThreshold = detector.detectionThreshold;
+        
         
         // set _sizesP
         free(_sizesP);
@@ -173,8 +179,12 @@ using namespace cv;
     }
     _sizesP[2] = 31;
     
-    //scalefactor for detection. Used to ajust hog size with images resolution
-    self.scaleFactor = [NSNumber numberWithDouble:maxHog*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
+    // scalefactor for detection. Used to ajust hog size with images resolution
+    // It allows you to work with distinct image resolution and still have the same number
+    // of hogfeatures to homogenize performance (e.g. in ipad vs iphone)
+    //self.scaleFactor = [NSNumber numberWithDouble:maxHog*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
+    self.scaleFactor = @(IMAGE_SCALE_FACTOR);
+    
     _numOfFeatures = _sizesP[0]*_sizesP[1]*_sizesP[2];
     
     [self.delegate sendMessage:[NSString stringWithFormat:@"Hog features: %d %d %d for ratio:%f", _sizesP[0],_sizesP[1],_sizesP[2], ratio]];

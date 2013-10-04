@@ -2,14 +2,14 @@
 //  AnnotatedImage.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 01/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 04/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Author, Detector;
+@class Detector, User;
 
 @interface AnnotatedImage : NSManagedObject
 
@@ -21,7 +21,7 @@
 @property (nonatomic, retain) NSNumber * imageHeight;
 @property (nonatomic, retain) NSNumber * imageWidth;
 @property (nonatomic, retain) NSNumber * isSent;
-@property (nonatomic, retain) Author *author;
+@property (nonatomic, retain) User *user;
 @property (nonatomic, retain) Detector *detector;
 
 @end

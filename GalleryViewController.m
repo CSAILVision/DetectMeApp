@@ -9,7 +9,7 @@
 #import "GalleryViewController.h"
 #import "DetectorFetcher.h"
 #import "DetectorCell.h"
-#import "Author.h"
+#import "User.h"
 #import "Detector+Server.h"
 #import "ExecuteDetectorViewController.h"
 #import "ManagedDocumentHelper.h"

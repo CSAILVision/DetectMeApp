@@ -1,15 +1,15 @@
 //
-//  Author+Create.h
+//  User+Create.h
 //  DetecTube
 //
 //  Created by Josep Marc Mingot Hidalgo on 17/09/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
-#import "Author.h"
+#import "User.h"
 
-@interface Author (Create)
+@interface User (Create)
 
-+ (Author *) authorWithName:(NSString *)name inManagedObjectContext:context;
++ (User *) userWithName:(NSString *)name inManagedObjectContext:context;
 
 @end

@@ -7,9 +7,10 @@
 //
 
 #import "Detector+Server.h"
-#import "Author+Create.h"
 #import "DetectorFetcher.h"
 #import "ConstantsServer.h"
+#import "User+Create.h"
+#import "NSArray+JSONHelper.m"
 
 @implementation Detector (Server)
 
@@ -28,18 +29,18 @@
     }else if (matches.count == 0){
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
         detector.name = [detectorInfo objectForKey:SERVER_DETECTOR_NAME];
+        detector.targetClass = [detectorInfo objectForKey:SERVER_DETECTOR_TARGET_CLASS];
         detector.serverDatabaseID = [detectorInfo objectForKey:SERVER_DETECTOR_ID];
-        detector.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
+        detector.user = [User userWithName:@"Ramon" inManagedObjectContext:context];
+        detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
+        detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
         
         NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
         detector.image = [NSData dataWithContentsOfURL:imageURL];
         
         
-    }else{
-        detector = [matches lastObject];
-    }
+    }else detector = [matches lastObject];
     
-
     return detector;
 }
 

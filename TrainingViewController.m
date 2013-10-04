@@ -11,11 +11,11 @@
 #import "DetectorWrapper.h"
 #import "Detector.h"
 #import "AnnotatedImage.h"
-#import "Author+Create.h"
+#import "User+Create.h"
 #import "UIImage+ImageAveraging.h"
 #import "ManagedDocumentHelper.h"
 #import "ShareDetector.h"
-
+#import "NSArray+JSONHelper.h"
 
 
 @interface TrainingViewController()
@@ -44,9 +44,19 @@
 {
     [super viewWillAppear:animated];
     
-    if(!self.detectorDatabase)
-        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:nil];
+    if(!self.detectorDatabase){
+        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
+            [self useDocument:document];
+        }];
+    }
 }
+
+- (void) useDocument:(UIManagedDocument *)document
+{
+}
+
+
+
 
 - (void) viewWillDisappear:(BOOL)animated
 {
@@ -54,9 +64,6 @@
     self.detector = nil;
 }
 
-- (void) documentIsReady
-{
-}
 
 
 #pragma mark -
@@ -82,15 +89,13 @@
     
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
-    detector.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
+    detector.user = [User userWithName:@"Ramon" inManagedObjectContext:context];
     detector.isPublic = [NSNumber numberWithBool:_detectorTrainer.isPublic];
     detector.image = UIImageJPEGRepresentation(_detectorTrainer.averageImage, 0.5);
     detector.createdAt = [NSDate date];;
     detector.updatedAt = [NSDate date];;
-    detector.weights = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.weights];
-    detector.sizes = [NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.sizes];
-    detector.scaleFactor = detectorWrapper.scaleFactor;
-    
+    detector.weights = [detectorWrapper.weights convertToJSON];//[NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.weights];
+    detector.sizes = [detectorWrapper.sizes convertToJSON];//[NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.sizes];
     
     // AnnotatedImages
     NSArray *images = self.detectorTrainer.images;
@@ -111,7 +116,7 @@
         annotatedImage.boxWidth = @(boxRect.size.width);
         annotatedImage.boxX = @(boxRect.origin.x);
         annotatedImage.boxY = @(boxRect.origin.y);
-        annotatedImage.author = [Author authorWithName:@"Ramon" inManagedObjectContext:context];
+        annotatedImage.user = [User userWithName:@"Ramon" inManagedObjectContext:context];
         annotatedImage.detector = detector;
 
     }
