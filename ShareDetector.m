@@ -32,8 +32,8 @@
 - (id)init
 {
     if (self = [super init]) {
-        _user = @"ramon";
-        _password = @"ramon";
+//        _user = @"ramon";
+//        _password = @"ramon";
         _requestConstructor = [[PostHTTPConstructor alloc] init];
     }
     return self;
@@ -58,8 +58,8 @@
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:httpMethod];
     
-    // authenticate
-    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+//    // authenticate
+//    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
     
     NSDictionary *dict = [self getDictionaryFromDetector:detector];
     
@@ -88,8 +88,8 @@
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
     
-    // authenticate
-    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+//    // authenticate
+//    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
     
     NSDictionary *dict = [self getDictionaryFromAnnotatedImage:annotatedImage];
     
@@ -117,8 +117,8 @@
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
     
-    // authenticate
-    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+//    // authenticate
+//    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
     
     [_requestConstructor addFieldWithTitle:SERVER_DETECTOR_DELETED forValue:@"True"];
     
@@ -166,6 +166,8 @@
     if (error != nil) [self.delegate errorReceive:@"Error parsing JSON."];
     else {
         
+        NSLog(@"object json: %@",objectJSON);
+        
         if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // it is a detector
             _detector.serverDatabaseID = [objectJSON objectForKey:SERVER_DETECTOR_ID];
             _detector.isSent = @(TRUE);
@@ -178,7 +180,7 @@
             
         }else if([objectJSON objectForKey:SERVER_AIMAGE_AUTHOR]){
             _annotatedImage.isSent = @(TRUE);
-            NSLog(@"Image sent!!");
+            
         }else{
             NSLog(@"Error received with:%@",objectJSON);
         }

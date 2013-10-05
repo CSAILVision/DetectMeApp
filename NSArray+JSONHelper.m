@@ -22,8 +22,6 @@
     }
     
     
-    NSLog(@"json string: %@", jsonArray);
-    
     return jsonArray;
 }
 
@@ -34,9 +32,6 @@
     jsonArray = [jsonArray stringByReplacingOccurrencesOfString:@"]" withString:@"\""];
     
     NSArray *array = [jsonArray componentsSeparatedByString:@","];
-    
-    NSLog(@"json array: %@", array);
-    
     
     return [NSArray arrayWithArray:array];
 }

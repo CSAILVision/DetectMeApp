@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AuthHelper.h"
 
-@interface SignInViewController : UIViewController
+
+@interface SignInViewController : UIViewController <AuthHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
-@property (weak, nonatomic) IBOutlet UIButton *signInAction;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+- (IBAction)signInAction:(id)sender;
 
 @end

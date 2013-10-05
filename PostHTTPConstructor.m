@@ -67,6 +67,10 @@
     
     // POST body to be filled
     _postBody = [[NSMutableData alloc] init];
+    
+    // Token Authentication
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"token"];
+    [self addAuthenticationForToken:token];
 }
 
 
@@ -82,6 +86,12 @@
     NSString *base64encoding = [NSString base64StringFromData:credentialsData length:credentialsData.length];
     NSString *authorizationValue = [NSString stringWithFormat:@"Basic %@", base64encoding];
     
+    [_request setValue:authorizationValue forHTTPHeaderField:@"Authorization"];
+}
+
+- (void) addAuthenticationForToken:(NSString *) token
+{
+    NSString *authorizationValue = [NSString stringWithFormat:@"Token %@", token];
     [_request setValue:authorizationValue forHTTPHeaderField:@"Authorization"];
 }
 

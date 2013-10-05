@@ -182,8 +182,8 @@ using namespace cv;
     // scalefactor for detection. Used to ajust hog size with images resolution
     // It allows you to work with distinct image resolution and still have the same number
     // of hogfeatures to homogenize performance (e.g. in ipad vs iphone)
-    //self.scaleFactor = [NSNumber numberWithDouble:maxHog*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
-    self.scaleFactor = @(IMAGE_SCALE_FACTOR);
+    self.scaleFactor = [NSNumber numberWithDouble:maxHog*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
+    //self.scaleFactor = @(IMAGE_SCALE_FACTOR);
     
     _numOfFeatures = _sizesP[0]*_sizesP[1]*_sizesP[2];
     
