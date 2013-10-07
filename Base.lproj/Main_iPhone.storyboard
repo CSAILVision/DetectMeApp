@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Sign Up View Controller-->
         <scene sceneID="WAN-P1-rAH">
             <objects>
-                <viewController id="8J5-pv-E88" sceneMemberID="viewController">
+                <viewController id="8J5-pv-E88" customClass="SignUpViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KUT-xh-br4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="88" y="280" width="145" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="e-mail" minimumFontSize="17" id="nIA-EB-HQp">
                                 <rect key="frame" x="88" y="242" width="145" height="30"/>
@@ -36,11 +36,24 @@
                                 <state key="normal" title="Sign up">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="signUpAction:" destination="8J5-pv-E88" eventType="touchUpInside" id="KnK-XD-uUp"/>
+                                </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="7N3-i2-PNz">
+                                <rect key="frame" x="150" y="400" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="mCx-cn-LYo"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="7N3-i2-PNz" id="RzY-qu-V3s"/>
+                        <outlet property="emailTextField" destination="nIA-EB-HQp" id="QQn-BW-yYc"/>
+                        <outlet property="passwordTextField" destination="MLa-Do-khd" id="bTw-Ax-OEu"/>
+                        <outlet property="usernameTextField" destination="pA6-xU-bVL" id="kT4-6P-Dw3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PD5-XS-OcG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -94,7 +107,7 @@
                                 <rect key="frame" x="88" y="242" width="145" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Adm-xd-ZzV">
                                 <rect key="frame" x="186" y="297" width="47" height="30"/>
@@ -509,10 +522,10 @@
             </objects>
             <point key="canvasLocation" x="1027" y="80"/>
         </scene>
-        <!--View Controller - Profile-->
+        <!--User Profile View Controller - Profile-->
         <scene sceneID="FPJ-rk-Q0D">
             <objects>
-                <viewController id="crB-GQ-33Z" sceneMemberID="viewController">
+                <viewController id="crB-GQ-33Z" customClass="UserProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hly-BR-wMy">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -523,6 +536,9 @@
                                 <state key="normal" title="Log out">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="logOutAction:" destination="crB-GQ-33Z" eventType="touchUpInside" id="w9O-Fh-yEP"/>
+                                </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tJb-aU-ch9">
                                 <rect key="frame" x="122" y="186" width="76" height="21"/>
@@ -748,8 +764,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5Oa-Nd-f9w"/>
         <segue reference="5bx-2V-D5v"/>
         <segue reference="qoV-C6-q3a"/>
+        <segue reference="5Oa-Nd-f9w"/>
     </inferredMetricsTieBreakers>
 </document>

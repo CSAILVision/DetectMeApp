@@ -11,19 +11,33 @@
 @protocol AuthHelperDelegate <NSObject>
 
 @optional
-- (void) signInCompletedWithToken:(NSString *)token;
-- (void) signInFailedWithErrorMessage:(NSString *) errorMessage;
+- (void) signInCompleted;
+- (void) signUpCompleted;
 
 
-- (void) signUpEndedWithResult:(BOOL) success andMessage:(NSString *)message;
 - (void) forgetPasswordEndedWithResult:(BOOL) success andMessage:(NSString *)message;
+
+- (void) requestFailedWithErrorMessages: (NSDictionary *)errorMessages;
 
 @end
 
+/*
+ 
+ Class  Responsibilities:
+ 
+ - Create the post for sign in
+ - Store session credentials
+ - Remove credentials when log out
+ 
+ 
+ */
 
 @interface AuthHelper : NSObject <NSURLConnectionDataDelegate>
 
 @property (strong, nonatomic) id<AuthHelperDelegate> delegate;
-- (void) singInUsername:(NSString *)username forPassword:(NSString *) password;
+- (void) signInUsername:(NSString *)username forPassword:(NSString *) password;
++ (void) signOut;
+- (void) signUpUsername:(NSString *)username forEmail:(NSString *)email forPassword:(NSString *)password;
+
 
 @end

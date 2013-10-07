@@ -36,6 +36,13 @@
     }
 }
 
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.userNameTextField.text = @"";
+    self.passwordTextField.text = @"";
+}
+
 #pragma mark -
 #pragma mark IBActions
 
@@ -49,26 +56,16 @@
 #pragma mark -
 #pragma mark AuthHelperDelegate
 
-- (void) signInCompletedWithToken:(NSString *)token
+- (void) signInCompleted
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:TRUE forKey:@"isUserStored"];
-    [defaults setObject:token forKey:@"token"];
-    [defaults setObject:_username forKey:@"username"];
-    [defaults setObject:_password forKey:@"password"];
-    [defaults synchronize];
-    
-    [self.activityIndicator stopAnimating];
-    self.activityIndicator.hidden = YES;
-    
-    NSLog(@"Token received:%@", token);
-    
+    [self stopAnimation];
     [self performSegueWithIdentifier: @"SignInComplete" sender: self];
 }
 
-- (void) signInFailedWithErrorMessage:(NSString *)errorMessage
+- (void) requestFailedWithErrorMessages: (NSDictionary *)errorMessages;
 {
-    NSLog(@"Error: %@", errorMessage);
+    [self stopAnimation];
+    NSLog(@"Error: %@", errorMessages);
 }
 
 #pragma mark -
@@ -76,10 +73,20 @@
 
 - (void) signIn
 {
-    self.activityIndicator.hidden = NO;
-    [self.activityIndicator startAnimating];
-    [_authHelper singInUsername:_username forPassword:_password];
+    [self startAnimation];
+    [_authHelper signInUsername:_username forPassword:_password];
 }
 
+- (void) stopAnimation
+{
+    [self.activityIndicator stopAnimating];
+    self.activityIndicator.hidden = YES;
+}
+
+- (void) startAnimation
+{
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+}
 
 @end
