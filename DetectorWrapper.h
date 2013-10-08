@@ -10,6 +10,7 @@
 #import "TrainingSet.h"
 #import "Pyramid.h"
 #import "Detector.h"
+#import "SupportVector.h"
 
 @class TrainingSet;
 
@@ -31,7 +32,6 @@
 @property (strong, nonatomic) NSArray *targetClasses;
 @property (strong, nonatomic) NSMutableArray *weights;
 @property (strong, nonatomic) NSArray *sizes;
-@property (strong, nonatomic) NSNumber *numberSV;
 @property (strong, nonatomic) NSNumber *numberOfPositives;
 @property (strong, nonatomic) NSArray *precisionRecall;
 @property (strong, nonatomic) NSNumber *timeLearning;
@@ -41,13 +41,15 @@
 // In case of error training, provide specific detail of what has happened
 @property (strong, nonatomic, readonly) NSString *errorMessage;
 
+// Support vectors
+@property (strong, nonatomic) NSMutableArray *supportVectors;
 
 - (id) initWithDetector:(Detector *) detector;
 
 // Train the detector given an initial set formed by Images and ground truth bounding boxes containing positive examples.
 // Uses MaxHOG as an initial value for HoG dimensions. Common value is 8.
 // Returns 0:fail, 1:success, 2:interrupted
-- (int) trainOnSet:(TrainingSet *)trainingSet forMaxHOG:(int)maxHog;
+- (int) trainOnSet:(TrainingSet *)trainingSet;
 
 //Given a set with ground truth bounding boxes, returns the metric spesified.
 - (void) testOnSet:(TrainingSet *)set atThresHold:(float)detectionThreshold;

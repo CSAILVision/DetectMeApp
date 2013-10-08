@@ -39,5 +39,4 @@
 + (void) signOut;
 - (void) signUpUsername:(NSString *)username forEmail:(NSString *)email forPassword:(NSString *)password;
 
-
 @end

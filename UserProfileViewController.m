@@ -8,33 +8,36 @@
 
 #import "UserProfileViewController.h"
 #import "AuthHelper.h"
+#import "ManagedDocumentHelper.h"
+#import "User+Create.h"
 
 @interface UserProfileViewController ()
+{
+    User *_currentUser;
+    UIManagedDocument *_detectorDatabase;
+}
 
 @end
 
 @implementation UserProfileViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
+    [self outputValuesForCurrentUser];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) outputValuesForCurrentUser
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    _currentUser = [User getCurrentUserInManagedObjectContext:_detectorDatabase.managedObjectContext];
+    self.usernameLabel.text = _currentUser.username;
+    self.emailLabel.text = _currentUser.email;
 }
+
+
 
 #pragma mark -
 #pragma mark Segue

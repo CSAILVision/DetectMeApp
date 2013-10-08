@@ -9,6 +9,8 @@
 #import "AuthHelper.h"
 #import "ConstantsServer.h"
 #import "PostHTTPConstructor.h"
+#import "ManagedDocumentHelper.h"
+#import "User+Create.h"
 
 @interface AuthHelper()
 {
@@ -52,9 +54,9 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"isUserStored"];
-    [defaults setObject:@"" forKey:@"token"];
-    [defaults setObject:@"" forKey:@"username"];
-    [defaults setObject:@"" forKey:@"password"];
+    [defaults setObject:@"" forKey:USER_DEFAULTS_TOKEN];
+    [defaults setObject:@"" forKey:USER_DEFAULTS_USERNAME];
+    [defaults setObject:@"" forKey:USER_DEFAULTS_PASSWORD];
     [defaults synchronize];
 }
 
@@ -72,7 +74,7 @@
     
     [requestConstructor addFieldWithTitle:SERVER_AUTH_USERNAME forValue:username];
     [requestConstructor addFieldWithTitle:SERVER_AUTH_EMAIL forValue:email];
-    [requestConstructor addFieldWithTitle:@"password" forValue:password];
+    [requestConstructor addFieldWithTitle:SERVER_AUTH_PASSWORD forValue:password];
     
     
     // URL Connection
@@ -115,12 +117,13 @@
     
     NSLog(@"response data: %@", [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding]);
     
-    if(token){
+    if(token){ //signin
         [self storeSessionForToken:token];
+        [self storeUserInCoreData];
         [self.delegate signInCompleted];
         
         
-    } else if(username){
+    } else if(username){ //signup
         [self.delegate signUpCompleted];
         
     }else{
@@ -136,13 +139,17 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:TRUE forKey:@"isUserStored"];
-    [defaults setObject:token forKey:@"token"];
-    [defaults setObject:_username forKey:@"username"];
-    [defaults setObject:_password forKey:@"password"];
+    [defaults setObject:token forKey:USER_DEFAULTS_TOKEN];
+    [defaults setObject:_username forKey:USER_DEFAULTS_USERNAME];
+    [defaults setObject:_password forKey:USER_DEFAULTS_PASSWORD];
     [defaults synchronize];
 }
 
-
-
+- (void) storeUserInCoreData
+{
+    [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
+        [User userWithName:_username inManagedObjectContext:document.managedObjectContext];
+    }];
+}
 
 @end

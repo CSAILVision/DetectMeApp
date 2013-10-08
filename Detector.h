@@ -2,7 +2,7 @@
 //  Detector.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 04/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 08/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -28,6 +28,7 @@
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSString * weights;
+@property (nonatomic, retain) NSString * supportVectors;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) User *user;
 @end

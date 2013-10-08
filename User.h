@@ -2,7 +2,7 @@
 //  User.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 04/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 08/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -14,10 +14,7 @@
 @interface User : NSManagedObject
 
 @property (nonatomic, retain) NSString * email;
-@property (nonatomic, retain) NSNumber * isCurrentUser;
-@property (nonatomic, retain) NSNumber * isRememberingMe;
-@property (nonatomic, retain) NSDate * lastLogin;
-@property (nonatomic, retain) NSString * password;
+@property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) NSString * username;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) NSSet *detectors;

@@ -31,6 +31,7 @@
 
 #import "PostHTTPConstructor.h"
 #import "NSString+Base64Encoding.h"
+#import "ConstantsServer.h"
 
 @interface PostHTTPConstructor()
 {
@@ -67,10 +68,6 @@
     
     // POST body to be filled
     _postBody = [[NSMutableData alloc] init];
-    
-    // Token Authentication
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:@"token"];
-    [self addAuthenticationForToken:token];
 }
 
 
@@ -89,8 +86,10 @@
     [_request setValue:authorizationValue forHTTPHeaderField:@"Authorization"];
 }
 
-- (void) addAuthenticationForToken:(NSString *) token
+- (void) addTokenAuthentication
 {
+    // Token Authentication
+    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_TOKEN];
     NSString *authorizationValue = [NSString stringWithFormat:@"Token %@", token];
     [_request setValue:authorizationValue forHTTPHeaderField:@"Authorization"];
 }

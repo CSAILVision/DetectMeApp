@@ -26,6 +26,7 @@ using namespace cv;
 #define MAX_IMAGE_SIZE 300.0
 #define SCALES_PER_OCTAVE 10
 #define MAX_TRAINING_ITERATIONS 10
+#define MAX_HOG 8
 
 // Scaling image on detection for being faster
 #define IMAGE_SCALE_FACTOR 100.0
@@ -153,7 +154,7 @@ using namespace cv;
 #pragma mark -
 #pragma mark Public Methods
 
-- (int) trainOnSet:(TrainingSet *)trainingSet forMaxHOG:(int)maxHog;
+- (int) trainOnSet:(TrainingSet *)trainingSet
 {
     NSDate *start = [NSDate date]; //to compute the training time.
 
@@ -169,12 +170,12 @@ using namespace cv;
     float ratio;
     if(trainingSet.templateSize.height > trainingSet.templateSize.width){
         ratio = trainingSet.templateSize.width/trainingSet.templateSize.height;
-        _sizesP[0] = maxHog; //set in user preferences
+        _sizesP[0] = MAX_HOG; //set in user preferences
         _sizesP[1] = round(_sizesP[0]*ratio);
 
     }else{
         ratio = trainingSet.templateSize.height/trainingSet.templateSize.width;
-        _sizesP[1] = maxHog;
+        _sizesP[1] = MAX_HOG;
         _sizesP[0] = round(_sizesP[1]*ratio);
     }
     _sizesP[2] = 31;
@@ -182,7 +183,7 @@ using namespace cv;
     // scalefactor for detection. Used to ajust hog size with images resolution
     // It allows you to work with distinct image resolution and still have the same number
     // of hogfeatures to homogenize performance (e.g. in ipad vs iphone)
-    self.scaleFactor = [NSNumber numberWithDouble:maxHog*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
+    self.scaleFactor = [NSNumber numberWithDouble:MAX_HOG*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
     //self.scaleFactor = @(IMAGE_SCALE_FACTOR);
     
     _numOfFeatures = _sizesP[0]*_sizesP[1]*_sizesP[2];
@@ -204,6 +205,10 @@ using namespace cv;
     int iter = 0;
     _numSupportVectors=0;
     BOOL firstTimeError = YES;
+    
+    // Used to train detectors from the server that just have the support vectors
+    if(self.supportVectors) [self initializeDetectorWithSupportVectors];
+    
     
     while(_diff > STOP_CRITERIA && iter<MAX_TRAINING_ITERATIONS && !_isTrainCancelled){
 
@@ -243,9 +248,9 @@ using namespace cv;
     }
 
     //update information about the detector
-    self.numberSV = [NSNumber numberWithInt:_numSupportVectors];
-    self.timeLearning = [NSNumber numberWithDouble:-[start timeIntervalSinceNow]];
+    self.timeLearning = @(-[start timeIntervalSinceNow]);
     [self saveWeights];
+    [self storeSupportVectors];
     
     //See the results on training set
     [self.delegate updateProgress:1];
@@ -478,23 +483,6 @@ using namespace cv;
 #pragma mark -
 #pragma mark Private methods
 
-- (void) showOrientationHistogram
-{
-    double *histogram = (double *) calloc(18,sizeof(double));
-    for(int x = 0; x<_sizesP[1]; x++)
-        for(int y=0; y<_sizesP[0]; y++)
-            for(int f=18; f<27; f++)
-                histogram[f-18] += _weightsP[y + x*_sizesP[0] + f*_sizesP[0]*_sizesP[1]];
-    
-    printf("Orientation Histogram\n");
-    for(int i=0; i<9; i++)
-        printf("%f ", histogram[i]);
-    printf("\n");
-    
-    free(histogram);
-}
-
-
 - (NSArray *) getBoundingBoxesIn:(HogFeature *)imageHog forPyramid:(int)pyramidLevel forIndex:(int)imageHogIndex
 {
     int blocks[2] = {imageHog.numBlocksY, imageHog.numBlocksX};
@@ -715,7 +703,54 @@ using namespace cv;
     return sqrt(_diff);
 }
 
+#pragma mark -
+#pragma mark Support Vectors
 
+- (void) initializeDetectorWithSupportVectors
+{
+    _numSupportVectors = self.supportVectors.count;
+    _numOfFeatures = [(SupportVector *)[self.supportVectors firstObject] weights].count;
+    _sizesP[0] = [(NSNumber *) [self.sizes objectAtIndex:0] intValue];
+    _sizesP[1] = [(NSNumber *) [self.sizes objectAtIndex:1] intValue];
+    _sizesP[2] = [(NSNumber *) [self.sizes objectAtIndex:2] intValue];
+    
+    
+    for (int i=0; i<_numSupportVectors; i++){
+        SupportVector *sv = [self.supportVectors objectAtIndex:i];
+        
+        _trainingImageLabels[i] = sv.label.floatValue;
+        
+        for(int j=0;j<_numOfFeatures;j++){
+            float weight = [(NSNumber *)[sv.weights objectAtIndex:j] floatValue];
+            _trainingImageFeatures[i*_numOfFeatures + j] = weight;
+        }
+    }
+}
+
+
+- (void) storeSupportVectors
+{
+    // Retrieve from the current traning set the support vectors stored there
+    
+    self.supportVectors = [[NSMutableArray alloc] initWithCapacity:_numSupportVectors];
+    
+    for (int i=0; i<_numSupportVectors; i++){
+        float label = _trainingImageLabels[i];
+        
+        NSMutableArray *weights = [[NSMutableArray alloc] initWithCapacity:_numOfFeatures];
+        for(int j=0;j<_numOfFeatures;j++){
+            
+            //store the support vector as the first features
+            float weight = _trainingImageFeatures[i*_numOfFeatures + j];
+            [weights addObject:@(weight)];
+        }
+        SupportVector *sv = [[SupportVector alloc] initWithWeights:weights forLabel:@(label)];
+        [self.supportVectors addObject:sv];
+    }
+}
+
+#pragma mark -
+#pragma mark Visualization
 
 - (void) printListHogFeatures
 {
@@ -732,5 +767,21 @@ using namespace cv;
     }
 }
 
+
+- (void) showOrientationHistogram
+{
+    double *histogram = (double *) calloc(18,sizeof(double));
+    for(int x = 0; x<_sizesP[1]; x++)
+        for(int y=0; y<_sizesP[0]; y++)
+            for(int f=18; f<27; f++)
+                histogram[f-18] += _weightsP[y + x*_sizesP[0] + f*_sizesP[0]*_sizesP[1]];
+    
+    printf("Orientation Histogram\n");
+    for(int i=0; i<9; i++)
+        printf("%f ", histogram[i]);
+    printf("\n");
+    
+    free(histogram);
+}
 
 @end

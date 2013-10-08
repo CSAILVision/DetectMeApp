@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="f3c-mg-VEL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="xO6-5e-Ij7">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
@@ -44,6 +44,16 @@
                                 <rect key="frame" x="150" y="400" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7x6-qL-a9d">
+                                <rect key="frame" x="94" y="318" width="35" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="xO6-5e-Ij7" kind="modal" identifier="SignUpComplete" id="nAj-kx-A7M"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -79,6 +89,16 @@
                                 <state key="normal" title="Reset password">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gYc-KA-QRf">
+                                <rect key="frame" x="193" y="345" width="35" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="xO6-5e-Ij7" kind="modal" id="XG3-vb-ACa"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -126,7 +146,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="8J5-pv-E88" kind="push" id="VIU-ys-1pJ"/>
+                                    <segue destination="8J5-pv-E88" kind="modal" id="VIU-ys-1pJ"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Yqo-ba-nZO">
@@ -136,7 +156,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="WIr-gc-Bfp" kind="push" id="kT6-kJ-sjp"/>
+                                    <segue destination="WIr-gc-Bfp" kind="modal" id="kT6-kJ-sjp"/>
                                 </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="pjG-qb-Ubb">
@@ -151,7 +171,7 @@
                         <outlet property="activityIndicator" destination="pjG-qb-Ubb" id="UXD-pd-SMb"/>
                         <outlet property="passwordTextField" destination="h7m-pK-wbj" id="5aO-KH-I5r"/>
                         <outlet property="userNameTextField" destination="feh-0R-vpI" id="r1B-LP-qu1"/>
-                        <segue destination="8YX-ce-x5E" kind="push" identifier="SignInComplete" id="j5R-KW-aSP"/>
+                        <segue destination="8YX-ce-x5E" kind="modal" identifier="SignInComplete" id="pIq-Ls-msA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2vy-cn-CdF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -538,6 +558,7 @@
                                 </state>
                                 <connections>
                                     <action selector="logOutAction:" destination="crB-GQ-33Z" eventType="touchUpInside" id="w9O-Fh-yEP"/>
+                                    <segue destination="xO6-5e-Ij7" kind="modal" identifier="LogOut" id="SfB-Sl-l8o"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tJb-aU-ch9">
@@ -557,6 +578,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" id="3dk-X8-Z2z"/>
+                    <connections>
+                        <outlet property="emailLabel" destination="Y3Z-ij-Sdu" id="x9Q-p1-5Iz"/>
+                        <outlet property="usernameLabel" destination="tJb-aU-ch9" id="4E4-9E-4Lc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dJP-Xi-kfI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -739,24 +764,6 @@
             </objects>
             <point key="canvasLocation" x="2403" y="89"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="0TX-2F-HSt">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="f3c-mg-VEL" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pnN-ko-aeX">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="xO6-5e-Ij7" kind="relationship" relationship="rootViewController" id="uaF-Ni-roX"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vUG-w6-GI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-989" y="86"/>
-        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -766,6 +773,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="5bx-2V-D5v"/>
         <segue reference="qoV-C6-q3a"/>
+        <segue reference="XG3-vb-ACa"/>
         <segue reference="5Oa-Nd-f9w"/>
     </inferredMetricsTieBreakers>
 </document>

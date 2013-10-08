@@ -7,6 +7,7 @@
 //
 
 #import "SignInViewController.h"
+#import "ManagedDocumentHelper.h"
 
 @interface SignInViewController ()
 {

@@ -31,9 +31,10 @@
         detector.name = [detectorInfo objectForKey:SERVER_DETECTOR_NAME];
         detector.targetClass = [detectorInfo objectForKey:SERVER_DETECTOR_TARGET_CLASS];
         detector.serverDatabaseID = [detectorInfo objectForKey:SERVER_DETECTOR_ID];
-        detector.user = [User userWithName:@"Ramon" inManagedObjectContext:context];
+        detector.user = [User userWithName:@"InternetUser" inManagedObjectContext:context];
         detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
         detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
+        detector.supportVectors = [detectorInfo objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
         
         NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
         detector.image = [NSData dataWithContentsOfURL:imageURL];

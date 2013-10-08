@@ -32,8 +32,6 @@
 - (id)init
 {
     if (self = [super init]) {
-//        _user = @"ramon";
-//        _password = @"ramon";
         _requestConstructor = [[PostHTTPConstructor alloc] init];
     }
     return self;
@@ -57,9 +55,10 @@
     
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:httpMethod];
+    [_requestConstructor addTokenAuthentication];
     
-//    // authenticate
-//    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+    // authenticate with basic HTTP (used for development, not used with token authorization)
+    //[_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
     
     NSDictionary *dict = [self getDictionaryFromDetector:detector];
     
@@ -87,9 +86,7 @@
     
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
-    
-//    // authenticate
-//    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+    [_requestConstructor addTokenAuthentication];
     
     NSDictionary *dict = [self getDictionaryFromAnnotatedImage:annotatedImage];
     
@@ -202,7 +199,7 @@
                                                            //detector.updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
                                                            [NSString stringWithFormat:@"%@",detector.weights],
-                                                           @"tbd.", nil]
+                                                           detector.supportVectors, nil]
                                  
                                                                    forKeys:
                                  [NSArray arrayWithObjects:SERVER_DETECTOR_NAME,

@@ -16,7 +16,7 @@
 #import "ManagedDocumentHelper.h"
 #import "ShareDetector.h"
 #import "NSArray+JSONHelper.h"
-
+#import "SupportVector.h"
 
 @interface TrainingViewController()
 {
@@ -87,15 +87,18 @@
             [context deleteObject:annotatedImage];
     }
     
+    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+    
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
-    detector.user = [User userWithName:@"Ramon" inManagedObjectContext:context];
+    detector.user = currentUser;
     detector.isPublic = [NSNumber numberWithBool:_detectorTrainer.isPublic];
     detector.image = UIImageJPEGRepresentation(_detectorTrainer.averageImage, 0.5);
     detector.createdAt = [NSDate date];;
     detector.updatedAt = [NSDate date];;
-    detector.weights = [detectorWrapper.weights convertToJSON];//[NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.weights];
-    detector.sizes = [detectorWrapper.sizes convertToJSON];//[NSKeyedArchiver archivedDataWithRootObject:detectorWrapper.sizes];
+    detector.weights = [detectorWrapper.weights convertToJSON];
+    detector.sizes = [detectorWrapper.sizes convertToJSON];
+    detector.supportVectors = [SupportVector JSONFromSupportVectors:detectorWrapper.supportVectors];
     
     // AnnotatedImages
     NSArray *images = self.detectorTrainer.images;
@@ -116,7 +119,7 @@
         annotatedImage.boxWidth = @(boxRect.size.width);
         annotatedImage.boxX = @(boxRect.origin.x);
         annotatedImage.boxY = @(boxRect.origin.y);
-        annotatedImage.user = [User userWithName:@"Ramon" inManagedObjectContext:context];
+        annotatedImage.user = currentUser;
         annotatedImage.detector = detector;
 
     }
@@ -135,6 +138,7 @@
 {
     [self.progressView setProgress:progress];
 }
+
 
 
 @end

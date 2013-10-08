@@ -19,6 +19,7 @@
 
 
 - (void) createRequestForURL:(NSURL *)url forHTTPMethod:(NSString *)httpMethod;
+- (void) addTokenAuthentication; 
 - (void) addAuthenticationWihtUsername:(NSString *)username andPassword:(NSString *)password;
 - (void) addFieldWithTitle:(NSString *)title forValue:(NSString *) value;
 - (void) addFileFieldWithTitle:(NSString *)title withFilename:(NSString *)filename withMIMEType:(NSString *)mimeType forData:(NSData *)data;

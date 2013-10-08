@@ -9,17 +9,20 @@
 #ifndef DetectMe_ConstantsServer_h
 #define DetectMe_ConstantsServer_h
 
-#define SERVER_IP @"128.30.99.161"
+// SERVER MISCELLANIA
+#define SERVER_IP @"128.30.99.19"
 #define SERVER_PORT 8000
 #define SERVER_PORT_NODE 7000
 #define MOBILE_LISTENING_PORT 9000
-#define SERVER_ADDRESS @"http://128.30.99.161:8000/"
+#define SERVER_ADDRESS @"http://128.30.99.19:8000/"
 #define SERVER_TOKEN @"token"
 
+// AUTHORIZATION IN SERVER
 #define SERVER_AUTH_USERNAME @"username"
 #define SERVER_AUTH_PASSWORD @"password"
 #define SERVER_AUTH_EMAIL @"email"
 
+// DETECTOR
 #define SERVER_DETECTOR_ID @"id"
 #define SERVER_DETECTOR_NAME @"name"
 #define SERVER_DETECTOR_TARGET_CLASS @"target_class"
@@ -34,6 +37,7 @@
 #define SERVER_DETECTOR_HASH @"hash_value"
 #define SERVER_DETECTOR_DELETED @"is_deleted"
 
+// ANNOTATED IMAGE
 #define SERVER_AIMAGE_IMAGE @"image_jpeg"
 #define SERVER_AIMAGE_BOX_X @"box_x"
 #define SERVER_AIMAGE_BOX_Y @"box_y"
@@ -41,6 +45,12 @@
 #define SERVER_AIMAGE_BOX_HEIGHT @"box_width"
 #define SERVER_AIMAGE_AUTHOR @"author"
 #define SERVER_AIMAGE_DETECTOR @"detector"
+
+
+// USER DEFAULTS
+#define USER_DEFAULTS_USERNAME @"username"
+#define USER_DEFAULTS_PASSWORD @"password"
+#define USER_DEFAULTS_TOKEN @"token"
 
 #endif
 

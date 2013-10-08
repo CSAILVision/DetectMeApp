@@ -45,8 +45,7 @@
 - (void) signUpCompleted
 {
     [self stopAnimation];
-    [self.navigationController popViewControllerAnimated:YES];
-    
+    [self performSegueWithIdentifier:@"SignUpComplete" sender:nil];
 }
 
 - (void) requestFailedWithErrorMessages:(NSDictionary *)errorMessages

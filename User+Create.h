@@ -10,6 +10,7 @@
 
 @interface User (Create)
 
-+ (User *) userWithName:(NSString *)name inManagedObjectContext:context;
++ (User *) userWithName:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
++ (User *) getCurrentUserInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
