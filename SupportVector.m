@@ -71,4 +71,12 @@
     return json;
 }
 
+#pragma mark -
+#pragma mark Print
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"label = %@", self.label];
+}
+
 @end

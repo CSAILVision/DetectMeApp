@@ -126,6 +126,9 @@ using namespace cv;
         for(int i=0; i<numberOfWeights; i++)
             _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
+        // support vectors
+        
+        self.supportVectors = [NSMutableArray arrayWithArray:[SupportVector suppportVectorsFromJSON:detector.supportVectors]];
     }
     
     return self;

@@ -37,6 +37,11 @@
         NSArray *listOfImages = [trainingSet getImagesOfBoundingBoxes];
         self.averageImage = [UIImage imageAverageFromImages:listOfImages];
 
+        // check if training from a previous one
+        if(self.detector){
+            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];
+        }else
+            self.detectorWrapper = [[DetectorWrapper alloc] init];
         
         self.detectorWrapper = [[DetectorWrapper alloc] init];
         self.detectorWrapper.delegate = self;

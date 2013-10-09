@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DetectorWrapper.h"
+#import "Detector.h"
 
 /*
  
@@ -37,7 +38,7 @@
 @property BOOL isPublic;
 
 // For the downloaded detectors, this stores the support vectors
-@property (strong, nonatomic) NSArray *supportVectors;
+@property (strong, nonatomic) Detector *detector;
 
 // when updating a classifier, it stores the indexes of
 // the images that have already been used

@@ -35,6 +35,7 @@
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
             [self useDocument:document];
         }];
+        [self useDocument:self.detectorDatabase];
     }
 }
 

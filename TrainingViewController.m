@@ -36,6 +36,8 @@
     self.finishButton.hidden = YES;
     [self.activityIndicator startAnimating];
     [self.progressView setProgress:0];
+    
+    _detectorTrainer.detector = self.detector; //in case previous detector
     [_detectorTrainer trainDetector];
     _detectorTrainer.delegate = self;
 }
@@ -76,29 +78,46 @@
     
     // Create entity
     NSManagedObjectContext *context = self.detectorDatabase.managedObjectContext;
+
+    // 3 possibilities:
+    // (1) create a new detector. POST.
+    // (2) update a detector for which I am the owner. PUT.
+    // (3) update the detector of other person. It will create a brand new detector. POST.
+    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+    BOOL isToUpdate = (self.detector.user == currentUser && self.detector.serverDatabaseID>0); // PUT (case(2))
     
-    // Detector
     Detector *detector = self.detector;
-    if (!self.detector) { //if it is not an update
+    for(AnnotatedImage *annotatedImage in self.detector.annotatedImages)
+        [context deleteObject:annotatedImage];
+    
+    if(!isToUpdate){ // case (1) and (3)
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
-    }else{
-        // delete previously annotated images
-        for(AnnotatedImage *annotatedImage in self.detector.annotatedImages)
-            [context deleteObject:annotatedImage];
     }
     
-    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+//    // Detector
+//    Detector *detector = self.detector;
+//    if (!self.detector) { //if it is not an update
+//        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+//    }else if(!isToUpdate){
+//        // delete previously annotated images
+//        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+//        for(AnnotatedImage *annotatedImage in self.detector.annotatedImages)
+//            [context deleteObject:annotatedImage];
+//    }
+
     
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
     detector.user = currentUser;
+    detector.parentID = isToUpdate? detector.parentID : detector.serverDatabaseID;
     detector.isPublic = [NSNumber numberWithBool:_detectorTrainer.isPublic];
     detector.image = UIImageJPEGRepresentation(_detectorTrainer.averageImage, 0.5);
-    detector.createdAt = [NSDate date];;
-    detector.updatedAt = [NSDate date];;
+    detector.createdAt = [NSDate date];
+    detector.updatedAt = [NSDate date];
     detector.weights = [detectorWrapper.weights convertToJSON];
     detector.sizes = [detectorWrapper.sizes convertToJSON];
     detector.supportVectors = [SupportVector JSONFromSupportVectors:detectorWrapper.supportVectors];
+    
     
     // AnnotatedImages
     NSArray *images = self.detectorTrainer.images;
@@ -126,7 +145,7 @@
     
     // send detector
     _shareDetector = [[ShareDetector alloc] init];
-    [_shareDetector shareDetector:detector];
+    [_shareDetector shareDetector:detector toUpdate:isToUpdate];
     
     self.imageView.image = _detectorTrainer.averageImage;
     

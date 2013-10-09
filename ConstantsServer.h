@@ -10,11 +10,11 @@
 #define DetectMe_ConstantsServer_h
 
 // SERVER MISCELLANIA
-#define SERVER_IP @"128.30.99.19"
+#define SERVER_IP @"128.30.99.42"
 #define SERVER_PORT 8000
 #define SERVER_PORT_NODE 7000
 #define MOBILE_LISTENING_PORT 9000
-#define SERVER_ADDRESS @"http://128.30.99.19:8000/"
+#define SERVER_ADDRESS @"http://128.30.99.42:8000/"
 #define SERVER_TOKEN @"token"
 
 // AUTHORIZATION IN SERVER
@@ -36,6 +36,8 @@
 #define SERVER_DETECTOR_SUPPORT_VECTORS @"support_vectors"
 #define SERVER_DETECTOR_HASH @"hash_value"
 #define SERVER_DETECTOR_DELETED @"is_deleted"
+#define SERVER_DETECTOR_PARENT @"parent"
+
 
 // ANNOTATED IMAGE
 #define SERVER_AIMAGE_IMAGE @"image_jpeg"

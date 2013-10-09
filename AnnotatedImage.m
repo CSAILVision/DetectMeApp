@@ -2,7 +2,7 @@
 //  AnnotatedImage.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 08/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 09/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 

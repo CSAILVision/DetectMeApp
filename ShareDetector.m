@@ -10,6 +10,7 @@
 #import "PostHTTPConstructor.h"
 #import "ConstantsServer.h"
 #import "AnnotatedImage.h"
+#import "User.h"
 
 @interface ShareDetector()
 {
@@ -40,18 +41,26 @@
 #pragma mark -
 #pragma mark Public methods
 
--(void) shareDetector:(Detector *)detector
+-(void) shareDetector:(Detector *)detector toUpdate:(BOOL)isToUpdate;
 {
     _detector = detector;
     
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     
-    // select between create or update of objects
+//    // select between create (POST) or update (PUT) the detector
+//    NSString *httpMethod;
+//    NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
+//    if(detector.serverDatabaseID.intValue > 0 && detector.user.username == currentUsername){
+//        httpMethod =  @"PUT";
+//        urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
+//    }else httpMethod = @"POST";
+    
     NSString *httpMethod;
-    if(detector.serverDatabaseID.intValue > 0){
+    if(isToUpdate){
         httpMethod =  @"PUT";
         urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
     }else httpMethod = @"POST";
+    
     
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:httpMethod];
@@ -194,7 +203,6 @@
                                  [NSArray arrayWithObjects:detector.name,
                                                            detector.targetClass,
                                                            detector.isPublic ? @"True":@"False",
-                                                           @(2),
                                                            //detector.createdAt,
                                                            //detector.updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
@@ -205,7 +213,6 @@
                                  [NSArray arrayWithObjects:SERVER_DETECTOR_NAME,
                                                            SERVER_DETECTOR_TARGET_CLASS,
                                                            SERVER_DETECTOR_PUBLIC,
-                                                           SERVER_DETECTOR_AUTHOR,
                                                            //SERVER_DETECTOR_CREATED_AT,
                                                            //SERVER_DETECTOR_UPDATED_AT,
                                                            SERVER_DETECTOR_SIZES,
@@ -213,9 +220,11 @@
                                                            SERVER_DETECTOR_SUPPORT_VECTORS,nil]];
     
     // if we are updating, specify for which detector
-    if(!detector.serverDatabaseID>0){
+    if(!detector.serverDatabaseID.integerValue > 0)
         [dict setObject:detector.serverDatabaseID forKey:SERVER_DETECTOR_ID];
-    }
+    
+    if(detector.parentID.integerValue > 0)
+        [dict setObject:detector.parentID forKey:SERVER_DETECTOR_PARENT];
     
     return [NSDictionary dictionaryWithDictionary:dict];
 }
@@ -227,7 +236,6 @@
                                                            annotatedImage.boxY,
                                                            annotatedImage.boxWidth,
                                                            annotatedImage.boxHeight,
-                                                           @(2),
                                                            _detector.serverDatabaseID,nil]
                                  
                                                                    forKeys:
@@ -235,7 +243,6 @@
                                                            SERVER_AIMAGE_BOX_Y,
                                                            SERVER_AIMAGE_BOX_WIDTH,
                                                            SERVER_AIMAGE_BOX_HEIGHT,
-                                                           SERVER_AIMAGE_AUTHOR,
                                                            SERVER_AIMAGE_DETECTOR,nil]];
     
     

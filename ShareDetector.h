@@ -20,7 +20,8 @@
 
 @interface ShareDetector : NSObject <NSURLConnectionDataDelegate>
 
-- (void) shareDetector:(Detector *) detector;
+// the share to the server can be for updating (PUT) or creating new one (POST)
+- (void) shareDetector:(Detector *) detector toUpdate:(BOOL)isToUpdate;
 - (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
 - (void) deletedetector:(Detector *) detector;
 
