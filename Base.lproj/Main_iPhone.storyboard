@@ -215,7 +215,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DetectorCell" id="Avg-Jw-jMn" customClass="DetectorCell">
-                                        <rect key="frame" x="46" y="0.0" width="229" height="238"/>
+                                        <rect key="frame" x="46" y="64" width="229" height="238"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="229" height="238"/>
@@ -529,6 +529,7 @@
         <!--Navigation Controller - Add-->
         <scene sceneID="TqD-U2-a3e">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MCJ-jn-S8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController definesPresentationContext="YES" id="3BI-ep-jMA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Add" id="l8y-bL-hZh"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ats-UH-cDA">
@@ -538,7 +539,6 @@
                         <segue destination="pkB-Kb-gbg" kind="relationship" relationship="rootViewController" id="5Oa-Nd-f9w"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MCJ-jn-S8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1027" y="80"/>
         </scene>
@@ -745,7 +745,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="gzV-tb-nhM" kind="push" id="5bx-2V-D5v"/>
+                                    <action selector="finishAction:" destination="BVg-c3-mya" eventType="touchUpInside" id="oJW-jd-gJX"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -771,9 +771,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5bx-2V-D5v"/>
-        <segue reference="qoV-C6-q3a"/>
         <segue reference="XG3-vb-ACa"/>
-        <segue reference="5Oa-Nd-f9w"/>
+        <segue reference="iBb-Sq-DZc"/>
+        <segue reference="qoV-C6-q3a"/>
     </inferredMetricsTieBreakers>
 </document>

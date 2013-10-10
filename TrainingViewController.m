@@ -17,6 +17,7 @@
 #import "ShareDetector.h"
 #import "NSArray+JSONHelper.h"
 #import "SupportVector.h"
+#import "TakePictureViewController.h"
 
 @interface TrainingViewController()
 {
@@ -94,18 +95,6 @@
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
     }
     
-//    // Detector
-//    Detector *detector = self.detector;
-//    if (!self.detector) { //if it is not an update
-//        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
-//    }else if(!isToUpdate){
-//        // delete previously annotated images
-//        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
-//        for(AnnotatedImage *annotatedImage in self.detector.annotatedImages)
-//            [context deleteObject:annotatedImage];
-//    }
-
-    
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
     detector.user = currentUser;
@@ -158,6 +147,13 @@
     [self.progressView setProgress:progress];
 }
 
+#pragma mark -
+#pragma mark IBActions
 
+- (IBAction)finishAction:(id)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.tabBarController setSelectedIndex:0];
+}
 
 @end

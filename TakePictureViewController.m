@@ -54,7 +54,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Detector";
     
     [self initializeButtons];
     [self initializeAnnotations];
@@ -62,13 +61,21 @@
     
     _images = [[NSMutableArray alloc] init];
     
-    // Used when accessint the controller from the retrain controllers
-    self.nextButton.hidden = self.hideNextButton;
-
     // Add subviews in front of  the prevLayer
     [self.view.layer insertSublayer:_prevLayer atIndex:0];
 }
 
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // Used when accessing the controller from the retrain controllers
+    if(self.hideNextButton){
+        self.nextButton.hidden = YES;
+        self.hideNextButton = NO;
+    }
+}
 
 - (void) viewDidAppear:(BOOL)animated
 {

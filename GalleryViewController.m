@@ -31,6 +31,7 @@
 {
     [super viewWillAppear:animated];
     
+    
     if(!self.detectorDatabase){
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
             [self useDocument:document];

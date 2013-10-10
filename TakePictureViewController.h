@@ -24,13 +24,16 @@
 
 @property (strong, nonatomic) id<TakePictureViewControllerDelegate> delegate;
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
-@property BOOL hideNextButton;
+
 
 //views
 @property (weak, nonatomic) IBOutlet TagView *tagView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet AYUIButton *switchButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
+
+// trick to hide next button when accessing from retrain
+@property BOOL hideNextButton;
 
 - (IBAction)switchCameras:(id)sender;
 - (IBAction)takePictureAction:(id)sender;
