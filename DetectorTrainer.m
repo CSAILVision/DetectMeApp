@@ -43,7 +43,6 @@
         }else
             self.detectorWrapper = [[DetectorWrapper alloc] init];
         
-        self.detectorWrapper = [[DetectorWrapper alloc] init];
         self.detectorWrapper.delegate = self;
         int trainingState = [self.detectorWrapper trainOnSet:trainingSet];
 

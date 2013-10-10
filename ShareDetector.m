@@ -47,14 +47,6 @@
     
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     
-//    // select between create (POST) or update (PUT) the detector
-//    NSString *httpMethod;
-//    NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
-//    if(detector.serverDatabaseID.intValue > 0 && detector.user.username == currentUsername){
-//        httpMethod =  @"PUT";
-//        urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
-//    }else httpMethod = @"POST";
-    
     NSString *httpMethod;
     if(isToUpdate){
         httpMethod =  @"PUT";
@@ -171,21 +163,20 @@
     // update the detectorID field that stores the id of the detector on the webserver database
     if (error != nil) [self.delegate errorReceive:@"Error parsing JSON."];
     else {
-        
-        NSLog(@"object json: %@",objectJSON);
-        
+    
         if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // it is a detector
             _detector.serverDatabaseID = [objectJSON objectForKey:SERVER_DETECTOR_ID];
             _detector.isSent = @(TRUE);
             [self.delegate finishedUploadingDetecor:objectJSON];
             
+            NSLog(@"detector %@ sent", _detector.name);
+            
             for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
                 [self shareAnnotatedImage:annotatedImage];
             
-            NSLog(@"sending this images:%@",_detector.annotatedImages);
-            
-        }else if([objectJSON objectForKey:SERVER_AIMAGE_AUTHOR]){
+        }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){
             _annotatedImage.isSent = @(TRUE);
+            NSLog(@"annotated image sent: %@", objectJSON);
             
         }else{
             NSLog(@"Error received with:%@",objectJSON);

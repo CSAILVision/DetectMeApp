@@ -30,7 +30,6 @@
 {
     [super viewDidLoad];
     
-    NSLog(@"loading");
     //detector trainner initilization
     _detectorTrainer = [[DetectorTrainer alloc] init];
     _detectorTrainer.name = self.detector.name;

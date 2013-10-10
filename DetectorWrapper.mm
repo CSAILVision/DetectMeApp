@@ -77,7 +77,7 @@ using namespace cv;
 - (double) computeDifferenceWithLastWeights:(double *) weightsPLast;
 
 // Print unoriented hog features for debugging purposes
-- (void) printListHogFeatures:(float *) listOfHogFeaturesFloat;
+- (void) printListHogFeatures;
 
 @end
 
@@ -219,6 +219,8 @@ using namespace cv;
         
         //Get Bounding Boxes from detection
         [self getBoundingBoxesForTrainingSet:trainingSet];
+        
+        
         
         //The first time that not enough positive or negative bb have been generated (due to bb with different geometries), try to unify all the sizes of the bounding boxes. This solve the problem in most of the cases at the cost of losing accuracy. However if still not solved, give an error saying not possible training done due to the ground truth bouning boxes shape.
         if(self.numberOfPositives.intValue < 2 || self.numberOfPositives.intValue == _numberOfTrainingExamples){
@@ -626,7 +628,15 @@ using namespace cv;
         }
     });
     
-    [self.delegate sendMessage:[NSString stringWithFormat:@"added:%d positives", positives]];
+//    NSLog(@"Training Image Labels (SV + new points)");
+    int positius = 0;
+    for(int i=0; i<_numberOfTrainingExamples;i++){
+//        NSLog(@"%f", _trainingImageLabels[i]);
+        if(_trainingImageLabels[i]==1.0) positius++;
+    }
+    
+    [self.delegate sendMessage:[NSString stringWithFormat:@"added %d NEW positives", positives]];
+    NSLog(@"RATIO of POSITIVES(with new and previous SV): %d/%d", positius, _numberOfTrainingExamples);
     self.numberOfPositives = @(positives);
 }
 
@@ -717,9 +727,10 @@ using namespace cv;
     _sizesP[1] = [(NSNumber *) [self.sizes objectAtIndex:1] intValue];
     _sizesP[2] = [(NSNumber *) [self.sizes objectAtIndex:2] intValue];
     
+    NSLog(@"Initial number of SV: %d", _numSupportVectors);
     
     for (int i=0; i<_numSupportVectors; i++){
-        SupportVector *sv = [self.supportVectors objectAtIndex:i];
+        SupportVector *sv = (SupportVector *)[self.supportVectors objectAtIndex:i];
         
         _trainingImageLabels[i] = sv.label.floatValue;
         
@@ -728,6 +739,10 @@ using namespace cv;
             _trainingImageFeatures[i*_numOfFeatures + j] = weight;
         }
     }
+    
+    NSLog(@"Labels for initial sv:");
+    for(int i=0; i<_numSupportVectors;i++)
+        NSLog(@"%f", _trainingImageLabels[i]);
 }
 
 

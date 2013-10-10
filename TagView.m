@@ -46,10 +46,6 @@ UIViewAutoresizingFlexibleHeight
     
     _touchIsMoving = NO;
     _touchIsResizing = NO;
-    
-    NSLog(@"bounding box: %@",self.box);
-    NSLog(@"frame: %@", NSStringFromCGRect(self.frame));
-    
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder

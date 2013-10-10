@@ -98,7 +98,7 @@
     detector.name = _detectorTrainer.name;
     detector.targetClass = _detectorTrainer.targetClass;
     detector.user = currentUser;
-    detector.parentID = isToUpdate? detector.parentID : detector.serverDatabaseID;
+    detector.parentID = isToUpdate? detector.parentID : self.detector.serverDatabaseID;
     detector.isPublic = [NSNumber numberWithBool:_detectorTrainer.isPublic];
     detector.image = UIImageJPEGRepresentation(_detectorTrainer.averageImage, 0.5);
     detector.createdAt = [NSDate date];
