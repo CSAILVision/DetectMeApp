@@ -38,8 +38,8 @@
         self.averageImage = [UIImage imageAverageFromImages:listOfImages];
 
         // check if training from a previous one
-        if(self.detector){
-            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];
+        if(self.previousDetector){
+            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.previousDetector];
         }else
             self.detectorWrapper = [[DetectorWrapper alloc] init];
         

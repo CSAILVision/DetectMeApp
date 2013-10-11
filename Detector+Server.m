@@ -11,6 +11,9 @@
 #import "ConstantsServer.h"
 #import "User+Create.h"
 #import "NSArray+JSONHelper.m"
+#import "AnnotatedImage.h"
+#import "SupportVector.h"
+#import "NSArray+JSONHelper.h"
 
 @implementation Detector (Server)
 
@@ -39,26 +42,66 @@
         detector.parentID = @(0);
         id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
         if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
-
         
         NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
         detector.image = [NSData dataWithContentsOfURL:imageURL];
         
+        NSLog(@"detector overriden: %@", detector.name);
         
     }else detector = [matches lastObject];
     
     return detector;
 }
 
++ (Detector *) detectorWithDetectorTrainer:(DetectorTrainer *)detectorTrainer
+                                  toUpdate:(BOOL) isToUpdate
+                    inManagedObjectContext:(NSManagedObjectContext *)context;
+{
+    
+    // 3 possibilities:
+    // (1) Create a new detector. POST.
+    // (2) Update a detector for which the current user is the owner. PUT.
+    // (3) Update the detector of other user. Creates a brand new detector. POST.
+    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+//    BOOL isToUpdate = (detectorTrainer.previousDetector.user == currentUser && detectorTrainer.previousDetector.serverDatabaseID>0); // PUT (case(2))
+    
+    Detector *detector = detectorTrainer.previousDetector;
+    for(AnnotatedImage *annotatedImage in detectorTrainer.previousDetector.annotatedImages)
+        [context deleteObject:annotatedImage];
+    
+    if(!isToUpdate){ // case (1) and (3)
+        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+    }
+    
+    detector.name = detectorTrainer.name;
+    detector.targetClass = detectorTrainer.targetClass;
+    detector.user = currentUser;
+    detector.parentID = isToUpdate? detector.parentID : detectorTrainer.previousDetector.serverDatabaseID;
+    detector.isPublic = [NSNumber numberWithBool:detectorTrainer.isPublic];
+    detector.image = UIImageJPEGRepresentation(detectorTrainer.averageImage, 0.5);
+    detector.createdAt = [NSDate date];
+    detector.updatedAt = [NSDate date];
+    detector.weights = [detectorTrainer.weights convertToJSON];
+    detector.sizes = [detectorTrainer.sizes convertToJSON];
+    detector.supportVectors = [SupportVector JSONFromSupportVectors:detectorTrainer.supportVectors];
+    
+    return detector;
+}
+
+
 + (void) removePublicDetectorsInManagedObjectContext:(NSManagedObjectContext *)context
 {
+    // delete all public detectors except those owned by current user
+    NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
-    request.predicate = [NSPredicate predicateWithFormat:@"isPublic = YES"];
+    request.predicate = [NSPredicate predicateWithFormat:@"(isPublic == YES) AND (user.username != %@)",currentUsername];
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-    for(Detector *publicDetector in matches)
+    for(Detector *publicDetector in matches){
+        NSLog(@"detector %@ removed", publicDetector);
         [context deleteObject:publicDetector];
+    }
     
 }
 

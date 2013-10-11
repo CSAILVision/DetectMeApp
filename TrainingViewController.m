@@ -18,11 +18,15 @@
 #import "NSArray+JSONHelper.h"
 #import "SupportVector.h"
 #import "TakePictureViewController.h"
+#import "Detector+Server.h"
+#import "AnnotatedImage+Create.h"
+#import "ConstantsServer.h"
 
 @interface TrainingViewController()
 {
-    DetectorTrainer *_detectorTrainer;
     ShareDetector *_shareDetector;
+    Detector *_detector;
+    NSUInteger _annotatedImagesSent;
 }
 
 @end
@@ -38,9 +42,8 @@
     [self.activityIndicator startAnimating];
     [self.progressView setProgress:0];
     
-    _detectorTrainer.detector = self.detector; //in case previous detector
-    [_detectorTrainer trainDetector];
-    _detectorTrainer.delegate = self;
+    [self.detectorTrainer trainDetector];
+    self.detectorTrainer.delegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -48,23 +51,8 @@
     [super viewWillAppear:animated];
     
     if(!self.detectorDatabase){
-        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
-            [self useDocument:document];
-        }];
+        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     }
-}
-
-- (void) useDocument:(UIManagedDocument *)document
-{
-}
-
-
-
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.detector = nil;
 }
 
 
@@ -75,68 +63,46 @@
 
 - (void) trainDidEndWithDetector:(DetectorWrapper *)detectorWrapper
 {
-    NSLog(@"finished training with detector:%@",_detectorTrainer.name);
+    NSLog(@"finished training with detector:%@",self.detectorTrainer.name);
     
     // Create entity
     NSManagedObjectContext *context = self.detectorDatabase.managedObjectContext;
 
+    self.detectorTrainer.weights = detectorWrapper.weights;
+    self.detectorTrainer.sizes = detectorWrapper.sizes;
+    self.detectorTrainer.supportVectors = detectorWrapper.supportVectors;
+    
     // 3 possibilities:
     // (1) Create a new detector. POST.
     // (2) Update a detector for which the current user is the owner. PUT.
     // (3) Update the detector of other user. Creates a brand new detector. POST.
     User *currentUser = [User getCurrentUserInManagedObjectContext:context];
-    BOOL isToUpdate = (self.detector.user == currentUser && self.detector.serverDatabaseID>0); // PUT (case(2))
+    BOOL isToUpdate = (self.detectorTrainer.previousDetector.user == currentUser && self.detectorTrainer.previousDetector.serverDatabaseID>0); // PUT (case(2))
     
-    Detector *detector = self.detector;
-    for(AnnotatedImage *annotatedImage in self.detector.annotatedImages)
-        [context deleteObject:annotatedImage];
-    
-    if(!isToUpdate){ // case (1) and (3)
-        detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
-    }
-    
-    detector.name = _detectorTrainer.name;
-    detector.targetClass = _detectorTrainer.targetClass;
-    detector.user = currentUser;
-    detector.parentID = isToUpdate? detector.parentID : self.detector.serverDatabaseID;
-    detector.isPublic = [NSNumber numberWithBool:_detectorTrainer.isPublic];
-    detector.image = UIImageJPEGRepresentation(_detectorTrainer.averageImage, 0.5);
-    detector.createdAt = [NSDate date];
-    detector.updatedAt = [NSDate date];
-    detector.weights = [detectorWrapper.weights convertToJSON];
-    detector.sizes = [detectorWrapper.sizes convertToJSON];
-    detector.supportVectors = [SupportVector JSONFromSupportVectors:detectorWrapper.supportVectors];
-    
+    _detector = [Detector detectorWithDetectorTrainer:self.detectorTrainer
+                                             toUpdate:isToUpdate
+                               inManagedObjectContext:context];
     
     // AnnotatedImages
     NSArray *images = self.detectorTrainer.images;
     NSArray *boxes = self.detectorTrainer.boxes;
-    
     for(int i=0; i<images.count; i++){
-        AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
-        
         UIImage *image = [images objectAtIndex:i];
         Box *box = [boxes objectAtIndex:i];
-
-        annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
-        annotatedImage.imageHeight = @(image.size.height);
-        annotatedImage.imageWidth = @(image.size.width);
         
-        CGRect boxRect = [box getRectangleForBox];
-        annotatedImage.boxHeight = @(boxRect.size.height);
-        annotatedImage.boxWidth = @(boxRect.size.width);
-        annotatedImage.boxX = @(boxRect.origin.x);
-        annotatedImage.boxY = @(boxRect.origin.y);
-        annotatedImage.user = currentUser;
-        annotatedImage.detector = detector;
-
+        [AnnotatedImage annotatedImageWithImage:image
+                                         andBox:box
+                                    forDetector:_detector
+                         inManagedObjectContext:context];
     }
+    
     
     // send detector
     _shareDetector = [[ShareDetector alloc] init];
-    [_shareDetector shareDetector:detector toUpdate:isToUpdate];
+    _shareDetector.delegate = self;
+    [_shareDetector shareDetector:_detector toUpdate:isToUpdate];
     
-    self.imageView.image = _detectorTrainer.averageImage;
+    self.imageView.image = self.detectorTrainer.averageImage;
     
     [self.activityIndicator stopAnimating];
     self.finishButton.hidden = NO;
@@ -155,5 +121,41 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     [self.tabBarController setSelectedIndex:0];
 }
+
+#pragma mark -
+#pragma mark ShareDetectorDelegate
+
+- (void) endDetectorUploading:(NSDictionary *)detectorJSON
+{
+    _detector.serverDatabaseID = [detectorJSON objectForKey:SERVER_DETECTOR_ID];
+    _detector.isSent = @(TRUE);
+    
+    NSLog(@"detector %@ sent", _detector.name);
+    
+    // send images
+    _annotatedImagesSent = 0;
+    for(AnnotatedImage *annotatedImage in _detector.annotatedImages){
+        _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
+        _shareDetector.delegate = self;
+        [_shareDetector shareAnnotatedImage:annotatedImage];
+    }
+}
+
+- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON
+{
+    _annotatedImagesSent++;
+    NSLog(@"%d images sent", _annotatedImagesSent);
+    
+    if(_annotatedImagesSent == _detector.annotatedImages.count){
+        for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
+            annotatedImage.isSent = @(TRUE);
+    }
+}
+
+-(void) errorReceive:(NSString *) error
+{
+    NSLog(@"%@",error);
+}
+
 
 @end

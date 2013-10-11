@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "DetectorTrainer.h"
+#import "ShareDetector.h"
 
-@interface TrainingViewController : UIViewController<DetectorTrainerDelegate>
+@interface TrainingViewController : UIViewController<DetectorTrainerDelegate, ShareDectorDelegate>
 
 //model
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
-@property (strong, nonatomic) Detector *detector;
+//@property (strong, nonatomic) Detector *detector;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *label;

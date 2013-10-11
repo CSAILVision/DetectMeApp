@@ -13,10 +13,13 @@
 #import "AnnotatedImage.h"
 #import "Box.h"
 #import "User.h"
+#import "ShareDetector.h"
 
 @interface DetailViewController ()
 {
     BOOL _isOwner;
+    BOOL _detectorHasChanged;
+    ShareDetector *_shareDetector;
 }
 
 @end
@@ -37,6 +40,20 @@
         self.deleteButton.hidden = YES;
         self.shareButton.hidden = YES;
     }
+    
+    _shareDetector = [[ShareDetector alloc] init];
+    
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if(_detectorHasChanged){
+        NSLog(@"Updating detector to the server...");
+        [_shareDetector shareDetector:self.detector toUpdate:YES];
+    }
+    
 }
 
 #pragma mark -
@@ -58,6 +75,7 @@
 
 - (IBAction)deleteAction:(id)sender
 {
+    [_shareDetector deleteDetector:self.detector];
     [self.delegate deleteDetector:self.detector];
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -37,8 +37,14 @@
 @property (strong, nonatomic) UIImage *averageImage;
 @property BOOL isPublic;
 
-// For the downloaded detectors, this stores the support vectors
-@property (strong, nonatomic) Detector *detector;
+// Information about the previous detector (in case of retrain)
+@property (strong, nonatomic) Detector *previousDetector;
+
+// Information take from detectorWrapper after training
+@property (strong, nonatomic) NSArray *weights;
+@property (strong, nonatomic) NSArray *sizes;
+@property (strong, nonatomic) NSArray *supportVectors;
+
 
 // when updating a classifier, it stores the indexes of
 // the images that have already been used

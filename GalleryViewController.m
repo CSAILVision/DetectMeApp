@@ -54,8 +54,7 @@
     
     else{ // Own private and own public
         NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
-        NSString *predicate = [NSString stringWithFormat:@"user.username == '%@'", currentUsername];
-        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:predicate]];
+        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"user.username == %@", currentUsername]];
     }
 }
 

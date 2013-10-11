@@ -12,7 +12,9 @@
 
 @protocol ShareDectorDelegate <NSObject>
 
--(void) finishedUploadingDetecor:(NSDictionary *)detectorJSON;
+- (void) endDetectorUploading:(NSDictionary *)detectorJSON;
+- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON;
+
 -(void) errorReceive:(NSString *) error;
 
 @end
@@ -23,7 +25,8 @@
 // the share to the server can be for updating (PUT) or creating new one (POST)
 - (void) shareDetector:(Detector *) detector toUpdate:(BOOL)isToUpdate;
 - (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
-- (void) deletedetector:(Detector *) detector;
+- (void) deleteDetector:(Detector *) detector;
+
 
 @property (strong, nonatomic) id<ShareDectorDelegate> delegate;
 

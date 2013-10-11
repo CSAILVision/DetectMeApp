@@ -19,8 +19,8 @@
     PostHTTPConstructor *_requestConstructor;
     NSMutableData *_responseData;
     
-    Detector *_detector;
-    AnnotatedImage *_annotatedImage;
+//    Detector *_detector;
+//    AnnotatedImage *_annotatedImage;
 }
 @end
 
@@ -43,14 +43,12 @@
 
 -(void) shareDetector:(Detector *)detector toUpdate:(BOOL)isToUpdate;
 {
-    _detector = detector;
-    
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     
     NSString *httpMethod;
     if(isToUpdate){
         httpMethod =  @"PUT";
-        urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
+        urlWebServer = [NSString stringWithFormat:@"%@%@/",urlWebServer,detector.serverDatabaseID];
     }else httpMethod = @"POST";
     
     
@@ -81,7 +79,6 @@
 
 - (void) shareAnnotatedImage:(AnnotatedImage *)annotatedImage
 {
-    _annotatedImage = annotatedImage;
     
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/annotatedimages/",SERVER_ADDRESS];
     
@@ -96,7 +93,7 @@
         [_requestConstructor addFieldWithTitle:key forValue:[dict objectForKey:key]];
     
     [_requestConstructor addFileFieldWithTitle:SERVER_AIMAGE_IMAGE
-                                  withFilename:[NSString stringWithFormat:@"%@_annotated_image.jpeg",_detector.name]
+                                  withFilename:[NSString stringWithFormat:@"%@_annotated_image.jpeg",annotatedImage.detector.name]
                                   withMIMEType:@"image/jpeg"
                                        forData:annotatedImage.image];
     
@@ -107,16 +104,14 @@
 }
 
 
-- (void) deletedetector:(Detector *)detector
+- (void) deleteDetector:(Detector *)detector
 {
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
     
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
-    
-//    // authenticate
-//    [_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+    [_requestConstructor addTokenAuthentication];
     
     [_requestConstructor addFieldWithTitle:SERVER_DETECTOR_DELETED forValue:@"True"];
     
@@ -160,26 +155,17 @@
     NSError *error = nil;
     NSDictionary *objectJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
-    // update the detectorID field that stores the id of the detector on the webserver database
     if (error != nil) [self.delegate errorReceive:@"Error parsing JSON."];
     else {
     
-        if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // it is a detector
-            _detector.serverDatabaseID = [objectJSON objectForKey:SERVER_DETECTOR_ID];
-            _detector.isSent = @(TRUE);
-            [self.delegate finishedUploadingDetecor:objectJSON];
+        if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // detector returned
+            [self.delegate endDetectorUploading:objectJSON];
             
-            NSLog(@"detector %@ sent", _detector.name);
-            
-            for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
-                [self shareAnnotatedImage:annotatedImage];
-            
-        }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){
-            _annotatedImage.isSent = @(TRUE);
-            NSLog(@"annotated image sent: %@", objectJSON);
-            
+        }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){ // annotated image returned
+            [self.delegate endAnnotatedImageUploading:objectJSON];
+
         }else{
-            NSLog(@"Error received with:%@",objectJSON);
+            [self.delegate errorReceive:[NSString stringWithFormat:@"Error received with:%@",objectJSON]];
         }
     }
 }
@@ -193,7 +179,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:
                                  [NSArray arrayWithObjects:detector.name,
                                                            detector.targetClass,
-                                                           detector.isPublic ? @"True":@"False",
+                                                           detector.isPublic.boolValue ? @"True":@"False",
                                                            //detector.createdAt,
                                                            //detector.updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
@@ -227,7 +213,7 @@
                                                            annotatedImage.boxY,
                                                            annotatedImage.boxWidth,
                                                            annotatedImage.boxHeight,
-                                                           _detector.serverDatabaseID,nil]
+                                                           annotatedImage.detector.serverDatabaseID,nil]
                                  
                                                                    forKeys:
                                  [NSArray arrayWithObjects:SERVER_AIMAGE_BOX_X,

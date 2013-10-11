@@ -121,9 +121,9 @@
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         _detectorTrainer.images = _images;
         _detectorTrainer.boxes = _boxes;
+        _detectorTrainer.previousDetector = self.detector;
         TrainingViewController *trainingVC = segue.destinationViewController;
         trainingVC.detectorTrainer = _detectorTrainer;
-        trainingVC.detector = self.detector;
         
     }else if([[segue identifier] isEqualToString:@"TakePicture"]){
         TakePictureViewController *takePictureVC = (TakePictureViewController *) segue.destinationViewController;
