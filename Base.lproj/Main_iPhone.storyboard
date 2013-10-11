@@ -260,8 +260,8 @@
                                 <rect key="frame" x="85" y="122" width="150" height="29"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <segments>
-                                    <segment title="All"/>
-                                    <segment title="Private"/>
+                                    <segment title="Server"/>
+                                    <segment title="Own"/>
                                 </segments>
                                 <connections>
                                     <action selector="privateAction:" destination="gzV-tb-nhM" eventType="valueChanged" id="Cau-IE-jss"/>
@@ -349,11 +349,6 @@
                                     <segue destination="XS7-CC-cf8" kind="push" identifier="ExecuteDetector" id="iMa-zQ-BRS"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="88n-SY-bB2">
-                                <rect key="frame" x="20" y="319" width="280" height="183"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7u9-ff-09D">
                                 <rect key="frame" x="228" y="97" width="49" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -365,7 +360,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pGN-q9-Qct">
-                                <rect key="frame" x="232" y="173" width="40" height="30"/>
+                                <rect key="frame" x="232" y="174" width="40" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -382,13 +377,29 @@
                                     <action selector="deleteAction:" destination="eMG-ES-tQK" eventType="touchUpInside" id="oqK-Jt-TQr"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VTZ-g4-cNm">
+                                <rect key="frame" x="20" y="357" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="public - private" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RYB-aP-v9V">
+                                <rect key="frame" x="20" y="386" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="Dvl-NJ-Ynk"/>
                     <connections>
+                        <outlet property="authorLabel" destination="VTZ-g4-cNm" id="Q3o-Mx-tqD"/>
+                        <outlet property="deleteButton" destination="OLo-A2-bQf" id="lCL-1e-DJK"/>
                         <outlet property="imageView" destination="XTR-Jg-eQX" id="gcu-vP-Dex"/>
-                        <outlet property="tableView" destination="88n-SY-bB2" id="W0O-aF-Lhy"/>
+                        <outlet property="publicLabel" destination="RYB-aP-v9V" id="bYx-U1-SlZ"/>
+                        <outlet property="shareButton" destination="pGN-q9-Qct" id="kb5-20-cpZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ouv-3B-cQR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -529,7 +540,6 @@
         <!--Navigation Controller - Add-->
         <scene sceneID="TqD-U2-a3e">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MCJ-jn-S8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController definesPresentationContext="YES" id="3BI-ep-jMA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Add" id="l8y-bL-hZh"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ats-UH-cDA">
@@ -539,6 +549,7 @@
                         <segue destination="pkB-Kb-gbg" kind="relationship" relationship="rootViewController" id="5Oa-Nd-f9w"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MCJ-jn-S8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1027" y="80"/>
         </scene>

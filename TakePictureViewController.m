@@ -82,6 +82,8 @@
     [super viewDidAppear:animated];
     self.detectorTrainer = [[DetectorTrainer alloc] init];
     
+    self.title = [NSString stringWithFormat:@"%lu images", (unsigned long)_images.count];
+    
 //    //set the frame here after all the navigation tabs have been uploaded and we have the definite frame size
 //    _prevLayer.frame = self.detectView.frame;
 
@@ -119,6 +121,9 @@
 
         [_images addObject:image];
         [_boxes addObject:[self convertBoxForView:self.tagView.box]];
+        NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_images.count];
+        [self performSelectorOnMainThread:@selector(setTitle:) withObject:title waitUntilDone:NO];
+        
     }
     //DETECTION
 //    NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];

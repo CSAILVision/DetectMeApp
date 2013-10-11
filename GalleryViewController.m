@@ -13,9 +13,11 @@
 #import "Detector+Server.h"
 #import "ExecuteDetectorViewController.h"
 #import "ManagedDocumentHelper.h"
+#import "ConstantsServer.h"
 
 
 @implementation GalleryViewController
+
 
 
 #pragma mark -  
@@ -33,17 +35,11 @@
     
     
     if(!self.detectorDatabase){
-        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
-            [self useDocument:document];
-        }];
-        [self useDocument:self.detectorDatabase];
-    }
-}
-
-- (void) useDocument:(UIManagedDocument *)document
-{
-    [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
-    [self fetchAll];
+        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
+        [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
+        
+    }else
+        [self fetchAll];
 }
 
 
@@ -53,10 +49,14 @@
 
 - (IBAction)privateAction:(UISegmentedControl *)segmentedControl
 {
-    if (segmentedControl.selectedSegmentIndex == 0)
+    if (segmentedControl.selectedSegmentIndex == 0) // Server public and own public
         [self fetchAll];
-    else
-        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"isPublic == NO"]];
+    
+    else{ // Own private and own public
+        NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
+        NSString *predicate = [NSString stringWithFormat:@"user.username == '%@'", currentUsername];
+        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:predicate]];
+    }
 }
 
 #pragma mark -
@@ -72,6 +72,7 @@
                         afterDelay: 0.1];
     }else
         [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@ OR targetClass CONTAINS[cd] %@", searchText, searchText]];
+
 }
 
 
@@ -170,7 +171,7 @@
 
 - (void) fetchDetectorsFromServerIntoDocument:(UIManagedDocument *) document
 {
-    // Populate the table if not
+    // Populate the table if it was not.
     // |document| as an argument for thread safe: someone could change the propertie in parallel
     dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
     dispatch_async(fetchQ, ^{
@@ -183,6 +184,9 @@
                 //start creating objects in document's context
                 [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
             }
+            
+            // when finished, present them on the screen
+            [self performSelectorOnMainThread:@selector(fetchAll) withObject:nil waitUntilDone:NO];
         }];
     });
 }

@@ -9,25 +9,19 @@
 #import "DetailViewController.h"
 #import "ExecuteDetectorViewController.h"
 #import "TrainingImagesCollectionViewController.h"
+#import "ConstantsServer.h"
 #import "AnnotatedImage.h"
 #import "Box.h"
+#import "User.h"
 
 @interface DetailViewController ()
 {
+    BOOL _isOwner;
 }
 
 @end
 
 @implementation DetailViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -35,13 +29,14 @@
     
     self.title = self.detector.name;
     self.imageView.image =[UIImage imageWithData:self.detector.image];
+    self.authorLabel.text = [NSString stringWithFormat:@"Author: %@", self.detector.user.username];
+    self.publicLabel.text = self.detector.isPublic.boolValue ? @"Public" : @"Private";
     
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    _isOwner = [self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]];
+    if(!_isOwner){
+        self.deleteButton.hidden = YES;
+        self.shareButton.hidden = YES;
+    }
 }
 
 #pragma mark -

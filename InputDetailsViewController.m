@@ -40,6 +40,7 @@
 - (IBAction)isPublicAction:(UISegmentedControl *)sender
 {
     self.detectorTrainer.isPublic = sender.selectedSegmentIndex == kIsPublic ? YES : NO;
+    NSLog(@"bullshit");
 }
 
 #pragma mark -

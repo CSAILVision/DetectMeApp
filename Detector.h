@@ -2,7 +2,7 @@
 //  Detector.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 09/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 11/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -19,17 +19,17 @@
 @property (nonatomic, retain) NSNumber * isPublic;
 @property (nonatomic, retain) NSNumber * isSent;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * parentID;
 @property (nonatomic, retain) NSNumber * precisionRecall;
 @property (nonatomic, retain) NSNumber * rating;
 @property (nonatomic, retain) NSNumber * serverDatabaseID;
 @property (nonatomic, retain) NSString * sizes;
 @property (nonatomic, retain) NSString * supportVectors;
-@property (nonatomic, retain) id targetClass;
+@property (nonatomic, retain) NSString * targetClass;
 @property (nonatomic, retain) NSNumber * timeLearning;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSString * weights;
-@property (nonatomic, retain) NSNumber * parentID;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) User *user;
 @end

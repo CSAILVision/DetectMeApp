@@ -115,8 +115,6 @@
     NSString *token = [responseJSON objectForKey:SERVER_TOKEN];
     NSString *username = [responseJSON objectForKey:SERVER_AUTH_USERNAME];
     
-    NSLog(@"TOKEN: %@", [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding]);
-    
     if(token){ //signin
         [self storeSessionForToken:token];
         [self storeUserInCoreData];

@@ -2,7 +2,7 @@
 //  Detector.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 09/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 11/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -19,6 +19,7 @@
 @dynamic isPublic;
 @dynamic isSent;
 @dynamic name;
+@dynamic parentID;
 @dynamic precisionRecall;
 @dynamic rating;
 @dynamic serverDatabaseID;
@@ -29,7 +30,6 @@
 @dynamic type;
 @dynamic updatedAt;
 @dynamic weights;
-@dynamic parentID;
 @dynamic annotatedImages;
 @dynamic user;
 

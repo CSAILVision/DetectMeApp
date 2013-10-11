@@ -81,9 +81,9 @@
     NSManagedObjectContext *context = self.detectorDatabase.managedObjectContext;
 
     // 3 possibilities:
-    // (1) create a new detector. POST.
-    // (2) update a detector for which I am the owner. PUT.
-    // (3) update the detector of other person. It will create a brand new detector. POST.
+    // (1) Create a new detector. POST.
+    // (2) Update a detector for which the current user is the owner. PUT.
+    // (3) Update the detector of other user. Creates a brand new detector. POST.
     User *currentUser = [User getCurrentUserInManagedObjectContext:context];
     BOOL isToUpdate = (self.detector.user == currentUser && self.detector.serverDatabaseID>0); // PUT (case(2))
     

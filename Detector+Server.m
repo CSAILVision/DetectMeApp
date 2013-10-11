@@ -39,8 +39,7 @@
         detector.parentID = @(0);
         id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
         if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
-    
-        NSLog(@"parent id: %@", detector.parentID);
+
         
         NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
         detector.image = [NSData dataWithContentsOfURL:imageURL];

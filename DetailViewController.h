@@ -20,9 +20,13 @@
 
 @property (strong, nonatomic) id<DetailViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *authorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *publicLabel;
 @property (strong, nonatomic) Detector *detector;
 
 - (IBAction)deleteAction:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIButton *shareButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @end
