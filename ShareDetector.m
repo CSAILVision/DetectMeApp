@@ -107,10 +107,10 @@
 - (void) deleteDetector:(Detector *)detector
 {
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
-    urlWebServer = [NSString stringWithFormat:@"%@%@",urlWebServer,detector.serverDatabaseID];
+    urlWebServer = [NSString stringWithFormat:@"%@%@/",urlWebServer,detector.serverDatabaseID];
     
     // initiate creation of the request
-    [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
+    [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PATCH"];
     [_requestConstructor addTokenAuthentication];
     
     [_requestConstructor addFieldWithTitle:SERVER_DETECTOR_DELETED forValue:@"True"];
@@ -166,6 +166,7 @@
 
         }else{
             [self.delegate errorReceive:[NSString stringWithFormat:@"Error received with:%@",objectJSON]];
+            NSLog(@"Erro: %@", objectJSON);
         }
     }
 }
