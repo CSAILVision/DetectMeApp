@@ -28,8 +28,6 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-    NSLog(@"Detector matches: %lu", (unsigned long)matches.count);
-    
     if(!matches || matches.count>1){
         // handle error
     }else if (matches.count == 0){

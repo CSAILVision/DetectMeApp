@@ -1,6 +1,6 @@
 //
 //  ShareDetector.m
-//  LabelMe
+//  DetectMe
 //
 //  Created by Josep Marc Mingot Hidalgo on 12/09/13.
 //  Copyright (c) 2013 CSAIL. All rights reserved.
@@ -11,6 +11,7 @@
 #import "ConstantsServer.h"
 #import "AnnotatedImage.h"
 #import "User.h"
+#import "Rating.h"
 
 @interface ShareDetector()
 {
@@ -19,8 +20,6 @@
     PostHTTPConstructor *_requestConstructor;
     NSMutableData *_responseData;
     
-//    Detector *_detector;
-//    AnnotatedImage *_annotatedImage;
 }
 @end
 
@@ -59,7 +58,7 @@
     // authenticate with basic HTTP (used for development, not used with token authorization)
     //[_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
     
-    NSDictionary *dict = [self getDictionaryFromDetector:detector];
+    NSDictionary *dict = [self dictionaryFromDetector:detector];
     
     // construct the request adding the fields from the dictionary and the images
     for(NSString *key in dict)
@@ -86,7 +85,7 @@
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
     [_requestConstructor addTokenAuthentication];
     
-    NSDictionary *dict = [self getDictionaryFromAnnotatedImage:annotatedImage];
+    NSDictionary *dict = [self dictionaryFromAnnotatedImage:annotatedImage];
     
     // construct the request adding the fields from the dictionary and the images
     for(NSString *key in dict)
@@ -103,6 +102,25 @@
     [conn start];
 }
 
+- (void) shareRating:(Rating *)rating
+{
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/ratings/",SERVER_ADDRESS];
+    
+    // initiate creation of the request
+    [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
+    [_requestConstructor addTokenAuthentication];
+    
+    NSDictionary *dict = [self dictionaryFromRating:rating];
+    
+    // construct the request adding the fields from the dictionary and the images
+    for(NSString *key in dict)
+        [_requestConstructor addFieldWithTitle:key forValue:[dict objectForKey:key]];
+    
+    // URL Connection
+    _responseData = [[NSMutableData alloc] init];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[_requestConstructor getRequest] delegate:self];
+    [conn start];
+}
 
 - (void) deleteDetector:(Detector *)detector
 {
@@ -164,9 +182,11 @@
         }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){ // annotated image returned
             [self.delegate endAnnotatedImageUploading:objectJSON];
 
+        }else if([objectJSON objectForKey:SERVER_RATING_RATING]){ // rating returned
+            
         }else{
             [self.delegate errorReceive:[NSString stringWithFormat:@"Error received with:%@",objectJSON]];
-            NSLog(@"Erro: %@", objectJSON);
+            NSLog(@"JSON Error: %@", objectJSON);
         }
     }
 }
@@ -175,7 +195,7 @@
 #pragma	mark -
 #pragma mark Private methods
 
-- (NSDictionary *) getDictionaryFromDetector:(Detector *) detector
+- (NSDictionary *) dictionaryFromDetector:(Detector *) detector
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:
                                  [NSArray arrayWithObjects:detector.name,
@@ -207,24 +227,37 @@
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 
-- (NSDictionary *) getDictionaryFromAnnotatedImage:(AnnotatedImage *) annotatedImage
+- (NSDictionary *) dictionaryFromAnnotatedImage:(AnnotatedImage *) annotatedImage
 {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:
-                                 [NSArray arrayWithObjects:annotatedImage.boxX,
-                                                           annotatedImage.boxY,
-                                                           annotatedImage.boxWidth,
-                                                           annotatedImage.boxHeight,
-                                                           annotatedImage.detector.serverDatabaseID,nil]
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:
+                             [NSArray arrayWithObjects:annotatedImage.boxX,
+                                                       annotatedImage.boxY,
+                                                       annotatedImage.boxWidth,
+                                                       annotatedImage.boxHeight,
+                                                       annotatedImage.detector.serverDatabaseID,nil]
                                  
-                                                                   forKeys:
-                                 [NSArray arrayWithObjects:SERVER_AIMAGE_BOX_X,
-                                                           SERVER_AIMAGE_BOX_Y,
-                                                           SERVER_AIMAGE_BOX_WIDTH,
-                                                           SERVER_AIMAGE_BOX_HEIGHT,
-                                                           SERVER_AIMAGE_DETECTOR,nil]];
+                                                     forKeys:
+                             [NSArray arrayWithObjects:SERVER_AIMAGE_BOX_X,
+                                                       SERVER_AIMAGE_BOX_Y,
+                                                       SERVER_AIMAGE_BOX_WIDTH,
+                                                       SERVER_AIMAGE_BOX_HEIGHT,
+                                                       SERVER_AIMAGE_DETECTOR,nil]];
     
     
-    return [NSDictionary dictionaryWithDictionary:dict];
+    return dict;
+}
+
+- (NSDictionary *) dictionaryFromRating:(Rating *) rating
+{
+    NSDictionary *dict = [NSDictionary dictionaryWithObjects:
+                          [NSArray arrayWithObjects:rating.detector.serverDatabaseID,
+                                                    rating.rating,nil]
+                          
+                                                     forKeys:
+                          [NSArray arrayWithObjects:SERVER_RATING_DETECTOR,
+                                                    SERVER_RATING_RATING,nil]];
+    
+    return dict;
 }
 
 

@@ -39,7 +39,6 @@
 #define SERVER_DETECTOR_PARENT @"parent"
 #define SERVER_DETECTOR_AVERAGE_RATING @"average_rating"
 
-
 // ANNOTATED IMAGE
 #define SERVER_AIMAGE_IMAGE @"image_jpeg"
 #define SERVER_AIMAGE_BOX_X @"box_x"
@@ -48,6 +47,11 @@
 #define SERVER_AIMAGE_BOX_HEIGHT @"box_width"
 #define SERVER_AIMAGE_AUTHOR @"author"
 #define SERVER_AIMAGE_DETECTOR @"detector"
+
+
+// RATING
+#define SERVER_RATING_DETECTOR @"detector"
+#define SERVER_RATING_RATING @"rating"
 
 
 // USER DEFAULTS

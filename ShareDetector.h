@@ -1,6 +1,6 @@
 //
 //  ShareDetector.h
-//  LabelMe
+//  DetectMe
 //
 //  Created by Josep Marc Mingot Hidalgo on 12/09/13.
 //  Copyright (c) 2013 CSAIL. All rights reserved.
@@ -24,8 +24,9 @@
 
 // the share to the server can be for updating (PUT) or creating new one (POST)
 - (void) shareDetector:(Detector *) detector toUpdate:(BOOL)isToUpdate;
-- (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
 - (void) deleteDetector:(Detector *) detector;
+- (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
+- (void) shareRating:(Rating *) rating;
 
 
 @property (strong, nonatomic) id<ShareDectorDelegate> delegate;
