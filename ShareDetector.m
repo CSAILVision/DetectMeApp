@@ -234,6 +234,12 @@
                                                        annotatedImage.boxY,
                                                        annotatedImage.boxWidth,
                                                        annotatedImage.boxHeight,
+                                                       annotatedImage.locationLatitude,
+                                                       annotatedImage.locationLongitude,
+                                                       annotatedImage.motionQuaternionW,
+                                                       annotatedImage.motionQuaternionX,
+                                                       annotatedImage.motionQuaternionY,
+                                                       annotatedImage.motionQuaternionZ,
                                                        annotatedImage.detector.serverDatabaseID,nil]
                                  
                                                      forKeys:
@@ -241,6 +247,12 @@
                                                        SERVER_AIMAGE_BOX_Y,
                                                        SERVER_AIMAGE_BOX_WIDTH,
                                                        SERVER_AIMAGE_BOX_HEIGHT,
+                                                       SERVER_AIMAGE_LOC_LATITUDE,
+                                                       SERVER_AIMAGE_LOC_LONGITUDE,
+                                                       SERVER_AIMAGE_MOT_QUATW,
+                                                       SERVER_AIMAGE_MOT_QUATX,
+                                                       SERVER_AIMAGE_MOT_QUATY,
+                                                       SERVER_AIMAGE_MOT_QUATZ,
                                                        SERVER_AIMAGE_DETECTOR,nil]];
     
     

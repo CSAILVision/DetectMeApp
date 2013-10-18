@@ -11,59 +11,10 @@
 
 @implementation AnnotatedImage (Create)
 
-//+ (AnnotatedImage *) annotatedImageWithImage:(UIImage *)image
-//                                      andBox:(Box *)box
-//                                 forDetector:(Detector *)detector
-//                      inManagedObjectContext:(NSManagedObjectContext *)context
-//{
-//    AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
-//
-//    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
-//    
-//    annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
-//    annotatedImage.imageHeight = @(image.size.height);
-//    annotatedImage.imageWidth = @(image.size.width);
-//    
-//    CGRect boxRect = [box getRectangleForBox];
-//    annotatedImage.boxHeight = @(boxRect.size.height);
-//    annotatedImage.boxWidth = @(boxRect.size.width);
-//    annotatedImage.boxX = @(boxRect.origin.x);
-//    annotatedImage.boxY = @(boxRect.origin.y);
-//    annotatedImage.user = currentUser;
-//    annotatedImage.detector = detector;
-//    
-//    return annotatedImage;
-//}
-
-//+ (AnnotatedImage *) annotatedImageWithWrapper:(AnnotatedImageWrapper *) wrapper
-//                                   forDetector:(Detector *)detector
-//                        inManagedObjectContext:(NSManagedObjectContext *)context
-//{
-//    AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
-//    
-//    UIImage *image = wrapper.image;
-//    Box *box = wrapper.box;
-//    
-//    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
-//    
-//    annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
-//    annotatedImage.imageHeight = @(image.size.height);
-//    annotatedImage.imageWidth = @(image.size.width);
-//    
-//    CGRect boxRect = [box getRectangleForBox];
-//    annotatedImage.boxHeight = @(boxRect.size.height);
-//    annotatedImage.boxWidth = @(boxRect.size.width);
-//    annotatedImage.boxX = @(boxRect.origin.x);
-//    annotatedImage.boxY = @(boxRect.origin.y);
-//    annotatedImage.user = currentUser;
-//    annotatedImage.detector = detector;
-//    
-//    return annotatedImage;
-//}
-
 + (AnnotatedImage *) annotatedImageWithImage:(UIImage *)image
                                          box:(Box *)box
                                  forLocation:(CLLocation *) location
+                                   forMotion:(CMDeviceMotion *) motion
                       inManagedObjectContext:(NSManagedObjectContext *)context
 {
     AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
@@ -74,17 +25,17 @@
     annotatedImage.imageHeight = @(image.size.height);
     annotatedImage.imageWidth = @(image.size.width);
     
-//    CGRect boxRect = [box getRectangleForBox];
-//    annotatedImage.boxHeight = @(boxRect.size.height);
-//    annotatedImage.boxWidth = @(boxRect.size.width);
-//    annotatedImage.boxX = @(boxRect.origin.x);
-//    annotatedImage.boxY = @(boxRect.origin.y);
     [annotatedImage setBox:box];
     
     annotatedImage.user = currentUser;
     
-    annotatedImage.locLatitude = @(location.coordinate.latitude);
-    annotatedImage.locLongitude = @(location.coordinate.longitude);
+    annotatedImage.locationLatitude = @(location.coordinate.latitude);
+    annotatedImage.locationLongitude = @(location.coordinate.longitude);
+    
+    annotatedImage.motionQuaternionW = @(motion.attitude.quaternion.w);
+    annotatedImage.motionQuaternionX = @(motion.attitude.quaternion.x);
+    annotatedImage.motionQuaternionY = @(motion.attitude.quaternion.y);
+    annotatedImage.motionQuaternionZ = @(motion.attitude.quaternion.z);
     
     return annotatedImage;
 }

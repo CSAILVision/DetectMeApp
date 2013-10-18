@@ -47,6 +47,12 @@
 #define SERVER_AIMAGE_BOX_HEIGHT @"box_width"
 #define SERVER_AIMAGE_AUTHOR @"author"
 #define SERVER_AIMAGE_DETECTOR @"detector"
+#define SERVER_AIMAGE_LOC_LATITUDE @"location_latitude"
+#define SERVER_AIMAGE_LOC_LONGITUDE @"location_longitude"
+#define SERVER_AIMAGE_MOT_QUATX @"motion_quaternionX"
+#define SERVER_AIMAGE_MOT_QUATY @"motion_quaternionY"
+#define SERVER_AIMAGE_MOT_QUATZ @"motion_quaternionZ"
+#define SERVER_AIMAGE_MOT_QUATW @"motion_quaternionW"
 
 
 // RATING

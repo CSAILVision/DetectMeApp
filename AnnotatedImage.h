@@ -21,8 +21,12 @@
 @property (nonatomic, retain) NSNumber * imageHeight;
 @property (nonatomic, retain) NSNumber * imageWidth;
 @property (nonatomic, retain) NSNumber * isSent;
-@property (nonatomic, retain) NSNumber * locLatitude;
-@property (nonatomic, retain) NSNumber * locLongitude;
+@property (nonatomic, retain) NSNumber * locationLatitude;
+@property (nonatomic, retain) NSNumber * locationLongitude;
+@property (nonatomic, retain) NSNumber * motionQuaternionX;
+@property (nonatomic, retain) NSNumber * motionQuaternionY;
+@property (nonatomic, retain) NSNumber * motionQuaternionZ;
+@property (nonatomic, retain) NSNumber * motionQuaternionW;
 @property (nonatomic, retain) Detector *detector;
 @property (nonatomic, retain) User *user;
 

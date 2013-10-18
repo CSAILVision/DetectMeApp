@@ -18,8 +18,6 @@
 {
     DetectorTrainer *_detectorTrainer;
     UIManagedDocument *_detectorDatabase;
-//    NSMutableArray *_images;
-//    NSMutableArray *_boxes;
     NSMutableArray *_annotatedImages;
 }
 
@@ -44,18 +42,6 @@
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
-//    _images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
-//    _boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
-//    for(AnnotatedImage *annotatedImage in annotatedImages){
-//        
-//        UIImage *image = [UIImage imageWithData:annotatedImage.image];
-//        [_images addObject:image];
-//        
-//        CGPoint upperLeft = CGPointMake(annotatedImage.boxX.floatValue, annotatedImage.boxY.floatValue);
-//        CGPoint lowerRight = CGPointMake(annotatedImage.boxX.floatValue + annotatedImage.boxWidth.floatValue,
-//                                         annotatedImage.boxY.floatValue + annotatedImage.boxHeight.floatValue);
-//        [_boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight]];
-//    }
     
 	// Do any additional setup after loading the view.
 }
@@ -89,22 +75,13 @@
     AnnotatedImage *deleted = [_annotatedImages objectAtIndex:indexPath.row];
     [_annotatedImages removeObjectAtIndex:indexPath.row];
     [_detectorDatabase.managedObjectContext deleteObject:deleted];
-    
-//    [_images removeObjectAtIndex:indexPath.row];
-//    [_boxes removeObjectAtIndex:indexPath.row];
+
     [self.collectionView reloadData];
 }
 
 #pragma mark -
 #pragma mark TakePictureViewControllerDelegate
 
-//- (void) takenImages:(NSArray *)images withBoxes:(NSArray *)boxes
-//{
-//    [_images addObjectsFromArray:images];
-//    [_boxes addObjectsFromArray:boxes];
-//    [self.collectionView reloadData];
-//
-//}
 
 - (void) takenAnnotatedImages:(NSArray *) annotatedImages
 {
@@ -118,7 +95,6 @@
 
 - (void) finishEditingWithBoxes:(NSMutableArray *)boxes
 {
-//    _boxes = boxes;
     [self updateBoxes:[NSArray arrayWithArray:boxes]];
 }
 
@@ -132,16 +108,12 @@
         NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
         
         TagViewController *tagVC = (TagViewController *) segue.destinationViewController;
-//        tagVC.images = _images;
-//        tagVC.boxes = _boxes;
         tagVC.images = [self extractImages];
         tagVC.boxes = [self extractBoxes];
         tagVC.currentIndex = indexPath.row;
         tagVC.delegate = self;
         
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
-//        _detectorTrainer.images = _images;
-//        _detectorTrainer.boxes = _boxes;
         _detectorTrainer.previousDetector = self.detector;
         _detectorTrainer.annotatedImages = _annotatedImages;
         TrainingViewController *trainingVC = segue.destinationViewController;

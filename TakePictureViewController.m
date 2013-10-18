@@ -10,19 +10,16 @@
 #import "InputDetailsViewController.h"
 #import "UIImage+HOG.h"
 #import "UIImage+Resize.h"
-#import "AnnotatedImageWrapper.h"
 #import "AnnotatedImage+Create.h"
 #import "ManagedDocumentHelper.h"
 
 @interface TakePictureViewController()
 {
     BOOL _takePicture;
-//    NSMutableArray *_images;
-//    NSMutableArray *_boxes;
-//    NSMutableArray *_annotatedImageWrappers;
     NSMutableArray *_annotatedImages;
     UIManagedDocument *_detectorDatabase;
     CLLocationManager *_locationManager;
+    CMMotionManager *_motionManager;
     CLLocation *_currentLocation;
 }
 
@@ -51,18 +48,23 @@
     [self.switchButton setImage:[UIImage imageNamed:@"switchCamera"] forState:UIControlStateNormal];
 }
 
-- (void) initializeAnnotations
-{
-//    _images = [[NSMutableArray alloc] init];
-//    _boxes = [[NSMutableArray alloc] init];
-}
 
-- (void) initializeLocationManager
+- (void) initializeManagers
 {
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [_locationManager startUpdatingLocation];
+    
+    _motionManager = [[CMMotionManager alloc] init];
+    [_motionManager startDeviceMotionUpdates];
+    
+}
+
+- (void) stopManagers
+{
+    [_locationManager stopUpdatingLocation];
+    [_motionManager stopDeviceMotionUpdates];
 }
 
 - (void)viewDidLoad
@@ -70,12 +72,9 @@
     [super viewDidLoad];
     
     [self initializeButtons];
-    [self initializeAnnotations];
     [self.tagView addBoxInView];
     
     _annotatedImages = [[NSMutableArray alloc] init];
-    
-//    _images = [[NSMutableArray alloc] init];
     
     // Add subviews in front of  the prevLayer
     [self.view.layer insertSublayer:_prevLayer atIndex:0];
@@ -86,7 +85,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self initializeLocationManager];
+    [self initializeManagers];
     
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
@@ -117,9 +116,9 @@
 {
     [super viewWillDisappear:animated];
     self.imageView.image = nil;
-//    [self.delegate takenImages:_images withBoxes:_boxes];
     [self.delegate takenAnnotatedImages:_annotatedImages];
-    [_locationManager stopUpdatingLocation];
+    
+    [self stopManagers];
 }
 
 
@@ -141,15 +140,11 @@
         }else image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight];
         
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
-
-        
-//        [_images addObject:image];
-//        [_boxes addObject:[self convertBoxForView:self.tagView.box]];
-        
         
         AnnotatedImage *annotatedImage = [AnnotatedImage annotatedImageWithImage:image
                                                                              box:[self convertBoxForView:self.tagView.box]
                                                                      forLocation:_currentLocation
+                                                                       forMotion:_motionManager.deviceMotion
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
         [_annotatedImages addObject:annotatedImage];
@@ -231,7 +226,6 @@
     if ([segue.identifier isEqualToString:@"showInputDetails"]) {
 
         InputDetailsViewController *destinationVC = (InputDetailsViewController *)segue.destinationViewController;
-//        self.detectorTrainer.annotatedImageWrappers = [NSArray arrayWithArray:_annotatedImageWrappers];
         self.detectorTrainer.annotatedImages = [NSArray arrayWithArray:_annotatedImages];
         destinationVC.detectorTrainer = self.detectorTrainer;
     }

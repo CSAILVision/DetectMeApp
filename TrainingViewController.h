@@ -15,7 +15,6 @@
 //model
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
-//@property (strong, nonatomic) Detector *detector;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *label;

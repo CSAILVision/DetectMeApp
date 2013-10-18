@@ -21,8 +21,12 @@
 @dynamic imageHeight;
 @dynamic imageWidth;
 @dynamic isSent;
-@dynamic locLatitude;
-@dynamic locLongitude;
+@dynamic locationLatitude;
+@dynamic locationLongitude;
+@dynamic motionQuaternionX;
+@dynamic motionQuaternionY;
+@dynamic motionQuaternionZ;
+@dynamic motionQuaternionW;
 @dynamic detector;
 @dynamic user;
 

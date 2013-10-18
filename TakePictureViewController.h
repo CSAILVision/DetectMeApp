@@ -8,18 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreMotion/CoreMotion.h>
 #import "CameraVideoViewController.h"
 #import "DetectorTrainer.h"
 #import "TagView.h"
 #import "AYUIButton.h"
 
 
-
-
 @protocol TakePictureViewControllerDelegate <NSObject>
 
-//- (void) takenImages:(NSArray *) images withBoxes:(NSArray *)boxes;
 - (void) takenAnnotatedImages:(NSArray *) annotatedImages;
+
 @end
 
 @interface TakePictureViewController : CameraVideoViewController <CLLocationManagerDelegate>

@@ -11,7 +11,6 @@
 #import "TrainingSet.h"
 #import "DetectorWrapper.h"
 #import "UIImage+ImageAveraging.h"
-#import "AnnotatedImageWrapper.h"
 #import "AnnotatedImage+Create.h"
 
 //training results
