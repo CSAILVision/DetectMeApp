@@ -11,6 +11,8 @@
 #import "TrainingSet.h"
 #import "DetectorWrapper.h"
 #import "UIImage+ImageAveraging.h"
+#import "AnnotatedImageWrapper.h"
+#import "AnnotatedImage+Create.h"
 
 //training results
 #define SUCCESS 1
@@ -18,6 +20,10 @@
 #define FAIL 0
 
 @interface DetectorTrainer()
+{
+    NSMutableArray *_images;
+    NSMutableArray *_boxes;
+}
 
 @property (strong, nonatomic) DetectorWrapper *detectorWrapper;
 
@@ -31,7 +37,8 @@
     dispatch_queue_t training_queue = dispatch_queue_create("training_queue", 0);
     dispatch_async(training_queue, ^{
         
-        TrainingSet *trainingSet = [[TrainingSet alloc] initWithBoxes:self.boxes forImages:self.images];
+        
+        TrainingSet *trainingSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];
         
         //obtain the image average of the groundtruth images
         NSArray *listOfImages = [trainingSet getImagesOfBoundingBoxes];
@@ -48,7 +55,7 @@
 
         
         if (trainingState == SUCCESS) {
-            TrainingSet *testSet = [[TrainingSet alloc] initWithBoxes:self.boxes forImages:self.images];
+            TrainingSet *testSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];
 
             [self.detectorWrapper testOnSet:testSet atThresHold:0.0];
         }
@@ -75,6 +82,23 @@
 - (void) trainingDidEnd
 {    
     [self.delegate trainDidEndWithDetector:self.detectorWrapper];
+}
+
+#pragma mark -
+#pragma mark Getters and setters
+
+- (void) setAnnotatedImages:(NSArray *)annotatedImages
+{
+    if(!_annotatedImages){
+        _annotatedImages = annotatedImages;
+        _images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
+        _boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
+        
+        for(AnnotatedImage *aImage in annotatedImages){
+            [_images addObject:[UIImage imageWithData:aImage.image]];
+            [_boxes addObject:[aImage boxForAnnotatedImage]];
+        }
+    }
 }
 
 #pragma mark -

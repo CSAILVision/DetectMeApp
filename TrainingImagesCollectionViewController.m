@@ -11,12 +11,16 @@
 #import "DetectorTrainer.h"
 #import "TrainingViewController.h"
 #import "AnnotatedImage.h"
+#import "ManagedDocumentHelper.h"
+#import "AnnotatedImage+Create.h"
 
 @interface TrainingImagesCollectionViewController ()
 {
     DetectorTrainer *_detectorTrainer;
-    NSMutableArray *_images;
-    NSMutableArray *_boxes;
+    UIManagedDocument *_detectorDatabase;
+//    NSMutableArray *_images;
+//    NSMutableArray *_boxes;
+    NSMutableArray *_annotatedImages;
 }
 
 @end
@@ -36,20 +40,22 @@
     _detectorTrainer.targetClass = self.detector.targetClass;
     _detectorTrainer.isPublic = self.detector.isPublic.boolValue;
     
+    if(!_detectorDatabase)
+        _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
-    NSArray *annotatedImages = [self.detector.annotatedImages allObjects];
-    _images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
-    _boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
-    for(AnnotatedImage *annotatedImage in annotatedImages){
-        
-        UIImage *image = [UIImage imageWithData:annotatedImage.image];
-        [_images addObject:image];
-        
-        CGPoint upperLeft = CGPointMake(annotatedImage.boxX.floatValue, annotatedImage.boxY.floatValue);
-        CGPoint lowerRight = CGPointMake(annotatedImage.boxX.floatValue + annotatedImage.boxWidth.floatValue,
-                                         annotatedImage.boxY.floatValue + annotatedImage.boxHeight.floatValue);
-        [_boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight]];
-    }
+    _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
+//    _images = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
+//    _boxes = [[NSMutableArray alloc] initWithCapacity:annotatedImages.count];
+//    for(AnnotatedImage *annotatedImage in annotatedImages){
+//        
+//        UIImage *image = [UIImage imageWithData:annotatedImage.image];
+//        [_images addObject:image];
+//        
+//        CGPoint upperLeft = CGPointMake(annotatedImage.boxX.floatValue, annotatedImage.boxY.floatValue);
+//        CGPoint lowerRight = CGPointMake(annotatedImage.boxX.floatValue + annotatedImage.boxWidth.floatValue,
+//                                         annotatedImage.boxY.floatValue + annotatedImage.boxHeight.floatValue);
+//        [_boxes addObject:[[Box alloc] initWithUpperLeft:upperLeft lowerRight:lowerRight]];
+//    }
     
 	// Do any additional setup after loading the view.
 }
@@ -62,13 +68,15 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _images.count;
+    return _annotatedImages.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     TrainingImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"trainingCell" forIndexPath:indexPath];
-    cell.imageView.image = [_images objectAtIndex:indexPath.row];
+    AnnotatedImage *annotatedImage = [_annotatedImages objectAtIndex:indexPath.row];
+    UIImage *image = [UIImage imageWithData:annotatedImage.image];
+    cell.imageView.image = image;
     return cell;
 }
 
@@ -78,20 +86,31 @@
 {
     CGPoint buttonPosition = [sender convertPoint:CGPointZero fromView:self.collectionView];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:buttonPosition];
-    [_images removeObjectAtIndex:indexPath.row];
-    [_boxes removeObjectAtIndex:indexPath.row];
+    AnnotatedImage *deleted = [_annotatedImages objectAtIndex:indexPath.row];
+    [_annotatedImages removeObjectAtIndex:indexPath.row];
+    [_detectorDatabase.managedObjectContext deleteObject:deleted];
+    
+//    [_images removeObjectAtIndex:indexPath.row];
+//    [_boxes removeObjectAtIndex:indexPath.row];
     [self.collectionView reloadData];
 }
 
 #pragma mark -
 #pragma mark TakePictureViewControllerDelegate
 
-- (void) takenImages:(NSArray *)images withBoxes:(NSArray *)boxes
-{
-    [_images addObjectsFromArray:images];
-    [_boxes addObjectsFromArray:boxes];
-    [self.collectionView reloadData];
+//- (void) takenImages:(NSArray *)images withBoxes:(NSArray *)boxes
+//{
+//    [_images addObjectsFromArray:images];
+//    [_boxes addObjectsFromArray:boxes];
+//    [self.collectionView reloadData];
+//
+//}
 
+- (void) takenAnnotatedImages:(NSArray *) annotatedImages
+{
+    [_annotatedImages addObjectsFromArray:annotatedImages];
+    [self.collectionView reloadData];
+    
 }
 
 #pragma mark -
@@ -99,7 +118,8 @@
 
 - (void) finishEditingWithBoxes:(NSMutableArray *)boxes
 {
-    _boxes = boxes;
+//    _boxes = boxes;
+    [self updateBoxes:[NSArray arrayWithArray:boxes]];
 }
 
 
@@ -112,16 +132,18 @@
         NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
         
         TagViewController *tagVC = (TagViewController *) segue.destinationViewController;
-        tagVC.images = _images;
-        tagVC.boxes = _boxes;
+//        tagVC.images = _images;
+//        tagVC.boxes = _boxes;
+        tagVC.images = [self extractImages];
+        tagVC.boxes = [self extractBoxes];
         tagVC.currentIndex = indexPath.row;
         tagVC.delegate = self;
-        NSLog(@"%@", _boxes);
         
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
-        _detectorTrainer.images = _images;
-        _detectorTrainer.boxes = _boxes;
+//        _detectorTrainer.images = _images;
+//        _detectorTrainer.boxes = _boxes;
         _detectorTrainer.previousDetector = self.detector;
+        _detectorTrainer.annotatedImages = _annotatedImages;
         TrainingViewController *trainingVC = segue.destinationViewController;
         trainingVC.detectorTrainer = _detectorTrainer;
         
@@ -133,5 +155,39 @@
     }
 }
 
+#pragma mark -
+#pragma mark Private Methods
+
+- (void) updateBoxes:(NSArray *)boxes
+{
+    for(int i=0; i<boxes.count; i++){
+        AnnotatedImage *ai = [_annotatedImages objectAtIndex:i];
+        Box *box = [boxes objectAtIndex:i];
+        
+        [ai setBox:box];
+    }
+}
+
+- (NSMutableArray *) extractBoxes
+{
+    NSMutableArray *boxes = [[NSMutableArray alloc] initWithCapacity:_annotatedImages.count];
+    
+    for(AnnotatedImage *ai in _annotatedImages)
+        [boxes addObject:[ai boxForAnnotatedImage]];
+    
+    return  boxes;
+}
+
+- (NSMutableArray *) extractImages
+{
+    NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:_annotatedImages.count];
+    
+    for(AnnotatedImage *ai in _annotatedImages){
+        UIImage *image = [UIImage imageWithData:ai.image];
+        [images addObject:image];
+    }
+        
+    return  images;
+}
 
 @end

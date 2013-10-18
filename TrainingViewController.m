@@ -84,17 +84,23 @@
                                inManagedObjectContext:context];
     
     // AnnotatedImages
-    NSArray *images = self.detectorTrainer.images;
-    NSArray *boxes = self.detectorTrainer.boxes;
-    for(int i=0; i<images.count; i++){
-        UIImage *image = [images objectAtIndex:i];
-        Box *box = [boxes objectAtIndex:i];
-        
-        [AnnotatedImage annotatedImageWithImage:image
-                                         andBox:box
-                                    forDetector:_detector
-                         inManagedObjectContext:context];
-    }
+//    NSArray *images = self.detectorTrainer.images;
+//    NSArray *boxes = self.detectorTrainer.boxes;
+//    for(int i=0; i<images.count; i++){
+//        UIImage *image = [images objectAtIndex:i];
+//        Box *box = [boxes objectAtIndex:i];
+//        
+//        [AnnotatedImage annotatedImageWithImage:image
+//                                         andBox:box
+//                                    forDetector:_detector
+//                         inManagedObjectContext:context];
+//        
+//    }
+    
+    
+    // set to the current detector
+    for(AnnotatedImage *aImage in self.detectorTrainer.annotatedImages)
+        aImage.detector = _detector;
     
     
     // send detector

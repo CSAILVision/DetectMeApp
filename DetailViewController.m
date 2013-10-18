@@ -101,7 +101,6 @@
 
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl
 {
-    NSLog(@"%ld", (long)ratingControl.selectedSegmentIndex);
     _rating.rating = @(ratingControl.selectedSegmentIndex + 1);
     [_shareDetector shareRating:_rating];
 }

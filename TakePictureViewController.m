@@ -10,13 +10,20 @@
 #import "InputDetailsViewController.h"
 #import "UIImage+HOG.h"
 #import "UIImage+Resize.h"
-
+#import "AnnotatedImageWrapper.h"
+#import "AnnotatedImage+Create.h"
+#import "ManagedDocumentHelper.h"
 
 @interface TakePictureViewController()
 {
     BOOL _takePicture;
-    NSMutableArray *_images;
-    NSMutableArray *_boxes;
+//    NSMutableArray *_images;
+//    NSMutableArray *_boxes;
+//    NSMutableArray *_annotatedImageWrappers;
+    NSMutableArray *_annotatedImages;
+    UIManagedDocument *_detectorDatabase;
+    CLLocationManager *_locationManager;
+    CLLocation *_currentLocation;
 }
 
 @end
@@ -46,10 +53,17 @@
 
 - (void) initializeAnnotations
 {
-    _images = [[NSMutableArray alloc] init];
-    _boxes = [[NSMutableArray alloc] init];
+//    _images = [[NSMutableArray alloc] init];
+//    _boxes = [[NSMutableArray alloc] init];
 }
 
+- (void) initializeLocationManager
+{
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [_locationManager startUpdatingLocation];
+}
 
 - (void)viewDidLoad
 {
@@ -59,7 +73,9 @@
     [self initializeAnnotations];
     [self.tagView addBoxInView];
     
-    _images = [[NSMutableArray alloc] init];
+    _annotatedImages = [[NSMutableArray alloc] init];
+    
+//    _images = [[NSMutableArray alloc] init];
     
     // Add subviews in front of  the prevLayer
     [self.view.layer insertSublayer:_prevLayer atIndex:0];
@@ -69,6 +85,11 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self initializeLocationManager];
+    
+    if(!_detectorDatabase)
+        _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     // Used when accessing the controller from the retrain controllers
     if(self.hideNextButton){
@@ -82,7 +103,7 @@
     [super viewDidAppear:animated];
     self.detectorTrainer = [[DetectorTrainer alloc] init];
     
-    self.title = [NSString stringWithFormat:@"%lu images", (unsigned long)_images.count];
+    self.title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
     
 //    //set the frame here after all the navigation tabs have been uploaded and we have the definite frame size
 //    _prevLayer.frame = self.detectView.frame;
@@ -96,7 +117,9 @@
 {
     [super viewWillDisappear:animated];
     self.imageView.image = nil;
-    [self.delegate takenImages:_images withBoxes:_boxes];
+//    [self.delegate takenImages:_images withBoxes:_boxes];
+    [self.delegate takenAnnotatedImages:_annotatedImages];
+    [_locationManager stopUpdatingLocation];
 }
 
 
@@ -119,9 +142,19 @@
         
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
 
-        [_images addObject:image];
-        [_boxes addObject:[self convertBoxForView:self.tagView.box]];
-        NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_images.count];
+        
+//        [_images addObject:image];
+//        [_boxes addObject:[self convertBoxForView:self.tagView.box]];
+        
+        
+        AnnotatedImage *annotatedImage = [AnnotatedImage annotatedImageWithImage:image
+                                                                             box:[self convertBoxForView:self.tagView.box]
+                                                                     forLocation:_currentLocation
+                                                          inManagedObjectContext:_detectorDatabase.managedObjectContext];
+        
+        [_annotatedImages addObject:annotatedImage];
+        
+        NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
         [self performSelectorOnMainThread:@selector(setTitle:) withObject:title waitUntilDone:NO];
         
     }
@@ -170,6 +203,27 @@
 
 
 #pragma mark -
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError: %@", error);
+    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                         message:@"Failed to Get Your Location"
+                                                        delegate:nil
+                                               cancelButtonTitle:@"OK"
+                                               otherButtonTitles:nil];
+    [errorAlert show];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    NSLog(@"didUpdateToLocation: %@", newLocation);
+    _currentLocation = newLocation;
+
+}
+
+#pragma mark -
 #pragma mark Segue
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -177,8 +231,8 @@
     if ([segue.identifier isEqualToString:@"showInputDetails"]) {
 
         InputDetailsViewController *destinationVC = (InputDetailsViewController *)segue.destinationViewController;
-        self.detectorTrainer.images = [NSArray arrayWithArray:_images];
-        self.detectorTrainer.boxes = [NSArray arrayWithArray:_boxes];
+//        self.detectorTrainer.annotatedImageWrappers = [NSArray arrayWithArray:_annotatedImageWrappers];
+        self.detectorTrainer.annotatedImages = [NSArray arrayWithArray:_annotatedImages];
         destinationVC.detectorTrainer = self.detectorTrainer;
     }
 }

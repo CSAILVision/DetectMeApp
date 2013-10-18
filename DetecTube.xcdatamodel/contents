@@ -9,6 +9,8 @@
         <attribute name="imageHeight" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="imageWidth" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="isSent" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="locLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <relationship name="detector" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="annotatedImages" inverseEntity="Detector" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="annotatedImages" inverseEntity="User" syncable="YES"/>
     </entity>
@@ -48,9 +50,9 @@
         <relationship name="ratings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rating" inverseName="user" inverseEntity="Rating" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AnnotatedImage" positionX="-407" positionY="-27" width="128" height="193"/>
+        <element name="AnnotatedImage" positionX="-407" positionY="-27" width="128" height="223"/>
         <element name="Detector" positionX="187" positionY="-67" width="128" height="343"/>
-        <element name="User" positionX="-9" positionY="432" width="128" height="133"/>
         <element name="Rating" positionX="-90" positionY="254" width="117" height="88"/>
+        <element name="User" positionX="-9" positionY="432" width="128" height="133"/>
     </elements>
 </model>

@@ -10,6 +10,7 @@
 #import "DetectorWrapper.h"
 #import "Detector.h"
 
+
 /*
  
  Class  Responsibilities:
@@ -30,8 +31,10 @@
 @interface DetectorTrainer : NSObject <DetectorWrapperDelegate>
 
 // Information recolected to train the detector
-@property (strong, nonatomic) NSArray *images;
-@property (strong, nonatomic) NSArray *boxes;
+//@property (strong, nonatomic) NSArray *images;
+//@property (strong, nonatomic) NSArray *boxes;
+//@property (strong, nonatomic) NSArray *annotatedImageWrappers;
+@property (strong, nonatomic) NSArray *annotatedImages;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *targetClass;
 @property (strong, nonatomic) UIImage *averageImage;

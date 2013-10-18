@@ -32,6 +32,7 @@
         // handle error
     }else if (matches.count == 0){
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
+        NSLog(@"overriding detector %@", [detectorInfo objectForKey:SERVER_DETECTOR_NAME]);
     }else detector = [matches lastObject];
     
     // general update of the detector
@@ -106,19 +107,6 @@
     }
     
 }
-
-//- (NSNumber *) ratingForCurrentUserInContext:(NSManagedObjectContext *) context
-//{
-//    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
-//    
-//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Rating"];
-//    request.predicate = [NSPredicate predicateWithFormat:@"(detector == %@) AND (user == %@)",self, currentUser];
-//    NSError *error;
-//    Rating *rating = [[context executeFetchRequest:request error:&error] lastObject];
-//    
-//    return rating.rating;
-//
-//}
 
 
 @end

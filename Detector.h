@@ -2,7 +2,7 @@
 //  Detector.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 17/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 18/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 
 @interface Detector : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * averageRating;
 @property (nonatomic, retain) NSDate * createdAt;
 @property (nonatomic, retain) NSNumber * detectionThreshold;
 @property (nonatomic, retain) NSData * image;
@@ -29,10 +30,9 @@
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSString * weights;
-@property (nonatomic, retain) NSNumber * averageRating;
 @property (nonatomic, retain) NSSet *annotatedImages;
-@property (nonatomic, retain) User *user;
 @property (nonatomic, retain) NSSet *ratings;
+@property (nonatomic, retain) User *user;
 @end
 
 @interface Detector (CoreDataGeneratedAccessors)

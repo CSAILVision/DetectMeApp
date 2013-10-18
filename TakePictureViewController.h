@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <CoreLocation/CoreLocation.h>
 #import "CameraVideoViewController.h"
 #import "DetectorTrainer.h"
 #import "TagView.h"
@@ -15,12 +15,14 @@
 
 
 
+
 @protocol TakePictureViewControllerDelegate <NSObject>
 
-- (void) takenImages:(NSArray *) images withBoxes:(NSArray *)boxes;
+//- (void) takenImages:(NSArray *) images withBoxes:(NSArray *)boxes;
+- (void) takenAnnotatedImages:(NSArray *) annotatedImages;
 @end
 
-@interface TakePictureViewController : CameraVideoViewController
+@interface TakePictureViewController : CameraVideoViewController <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) id<TakePictureViewControllerDelegate> delegate;
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
