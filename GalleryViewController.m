@@ -38,8 +38,7 @@
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
         [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
         
-    }else
-        [self fetchAll];
+    }else [self fetchAll];
 }
 
 
@@ -177,7 +176,7 @@
         NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
         [document.managedObjectContext performBlock:^{
             if (detectors.count>0) {
-                [Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
+                //[Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
             }
             for(NSDictionary *detectorInfo in detectors){
                 //start creating objects in document's context

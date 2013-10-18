@@ -13,16 +13,12 @@
  
  Class  Responsibilities:
  
- - Update or Create Rating for the given detector and current user
+ - Get or Create Rating for the given detector and current user
  
  
  */
 
 @interface Rating (Create)
-
-//+ (Rating *) ratingWithRating:(NSNumber *)ratingNumber
-//                  forDetector:(Detector *)detector
-//       inManagedObjectContext:(NSManagedObjectContext *)context;
 
 + (Rating *) ratingforDetector:(Detector *)detector
         inManagedObjectContext:(NSManagedObjectContext *)context;

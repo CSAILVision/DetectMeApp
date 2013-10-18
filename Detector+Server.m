@@ -28,27 +28,30 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
+    NSLog(@"Detector matches: %lu", (unsigned long)matches.count);
+    
     if(!matches || matches.count>1){
-        
+        // handle error
     }else if (matches.count == 0){
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
-        detector.name = [detectorInfo objectForKey:SERVER_DETECTOR_NAME];
-        detector.targetClass = [detectorInfo objectForKey:SERVER_DETECTOR_TARGET_CLASS];
-        detector.serverDatabaseID = [detectorInfo objectForKey:SERVER_DETECTOR_ID];
-        NSString *authorUsername = [detectorInfo objectForKey:SERVER_DETECTOR_AUTHOR];
-        detector.user = [User userWithName:authorUsername inManagedObjectContext:context];
-        detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
-        detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
-        detector.supportVectors = [detectorInfo objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
-        detector.averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
-        detector.parentID = @(0);
-        id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
-        if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
-        
-        NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
-        detector.image = [NSData dataWithContentsOfURL:imageURL];
-        
     }else detector = [matches lastObject];
+    
+    // general update of the detector
+    detector.name = [detectorInfo objectForKey:SERVER_DETECTOR_NAME];
+    detector.targetClass = [detectorInfo objectForKey:SERVER_DETECTOR_TARGET_CLASS];
+    detector.serverDatabaseID = [detectorInfo objectForKey:SERVER_DETECTOR_ID];
+    NSString *authorUsername = [detectorInfo objectForKey:SERVER_DETECTOR_AUTHOR];
+    detector.user = [User userWithName:authorUsername inManagedObjectContext:context];
+    detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
+    detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
+    detector.supportVectors = [detectorInfo objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
+    detector.averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
+    detector.parentID = @(0);
+    id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
+    if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
+    
+    NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
+    detector.image = [NSData dataWithContentsOfURL:imageURL];
     
     return detector;
 }
@@ -101,6 +104,7 @@
     for(Detector *publicDetector in matches){
         NSLog(@"detector %@ removed", publicDetector);
         [context deleteObject:publicDetector];
+        NSLog(@"overriden detector:");
     }
     
 }

@@ -58,15 +58,6 @@
     
 }
 
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    
-
-
-}
-
 
 - (void) viewWillDisappear:(BOOL)animated
 {
@@ -110,6 +101,7 @@
 
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl
 {
+    NSLog(@"%ld", (long)ratingControl.selectedSegmentIndex);
     _rating.rating = @(ratingControl.selectedSegmentIndex + 1);
 }
 
