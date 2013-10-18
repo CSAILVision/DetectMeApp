@@ -2,12 +2,13 @@
 //  Detector.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 11/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 17/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
 #import "Detector.h"
 #import "AnnotatedImage.h"
+#import "Rating.h"
 #import "User.h"
 
 
@@ -21,7 +22,6 @@
 @dynamic name;
 @dynamic parentID;
 @dynamic precisionRecall;
-@dynamic rating;
 @dynamic serverDatabaseID;
 @dynamic sizes;
 @dynamic supportVectors;
@@ -30,7 +30,9 @@
 @dynamic type;
 @dynamic updatedAt;
 @dynamic weights;
+@dynamic averageRating;
 @dynamic annotatedImages;
 @dynamic user;
+@dynamic ratings;
 
 @end

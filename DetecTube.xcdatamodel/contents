@@ -13,6 +13,7 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="annotatedImages" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Detector" representedClassName="Detector" syncable="YES">
+        <attribute name="averageRating" optional="YES" attributeType="Float" minValueString="1" maxValueString="5" defaultValueString="0" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="detectionThreshold" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -21,7 +22,6 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="parentID" optional="YES" attributeType="Integer 32" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="precisionRecall" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="rating" optional="YES" attributeType="Float" minValueString="0" maxValueString="5" defaultValueString="0.0" syncable="YES"/>
         <attribute name="serverDatabaseID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="sizes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="supportVectors" optional="YES" attributeType="String" syncable="YES"/>
@@ -31,7 +31,13 @@
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="weights" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="annotatedImages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AnnotatedImage" inverseName="detector" inverseEntity="AnnotatedImage" syncable="YES"/>
+        <relationship name="ratings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rating" inverseName="detector" inverseEntity="Rating" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="detectors" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Rating" representedClassName="Rating" syncable="YES">
+        <attribute name="rating" optional="YES" attributeType="Integer 16" minValueString="1" maxValueString="5" defaultValueString="0" syncable="YES"/>
+        <relationship name="detector" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="ratings" inverseEntity="Detector" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="ratings" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
@@ -39,10 +45,12 @@
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="annotatedImages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AnnotatedImage" inverseName="user" inverseEntity="AnnotatedImage" syncable="YES"/>
         <relationship name="detectors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Detector" inverseName="user" inverseEntity="Detector" syncable="YES"/>
+        <relationship name="ratings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rating" inverseName="user" inverseEntity="Rating" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AnnotatedImage" positionX="-542" positionY="156" width="128" height="193"/>
-        <element name="Detector" positionX="189" positionY="36" width="128" height="328"/>
-        <element name="User" positionX="-146" positionY="87" width="128" height="118"/>
+        <element name="AnnotatedImage" positionX="-407" positionY="-27" width="128" height="193"/>
+        <element name="Detector" positionX="187" positionY="-67" width="128" height="343"/>
+        <element name="User" positionX="-9" positionY="432" width="128" height="133"/>
+        <element name="Rating" positionX="-90" positionY="254" width="117" height="88"/>
     </elements>
 </model>

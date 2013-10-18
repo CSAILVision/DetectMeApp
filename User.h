@@ -2,14 +2,14 @@
 //  User.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 11/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 17/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class AnnotatedImage, Detector;
+@class AnnotatedImage, Detector, Rating;
 
 @interface User : NSManagedObject
 
@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSString * username;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) NSSet *detectors;
+@property (nonatomic, retain) NSSet *ratings;
 @end
 
 @interface User (CoreDataGeneratedAccessors)
@@ -31,5 +32,10 @@
 - (void)removeDetectorsObject:(Detector *)value;
 - (void)addDetectors:(NSSet *)values;
 - (void)removeDetectors:(NSSet *)values;
+
+- (void)addRatingsObject:(Rating *)value;
+- (void)removeRatingsObject:(Rating *)value;
+- (void)addRatings:(NSSet *)values;
+- (void)removeRatings:(NSSet *)values;
 
 @end

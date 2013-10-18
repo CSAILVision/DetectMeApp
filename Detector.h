@@ -2,14 +2,14 @@
 //  Detector.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 11/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 17/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class AnnotatedImage, User;
+@class AnnotatedImage, Rating, User;
 
 @interface Detector : NSManagedObject
 
@@ -21,7 +21,6 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * parentID;
 @property (nonatomic, retain) NSNumber * precisionRecall;
-@property (nonatomic, retain) NSNumber * rating;
 @property (nonatomic, retain) NSNumber * serverDatabaseID;
 @property (nonatomic, retain) NSString * sizes;
 @property (nonatomic, retain) NSString * supportVectors;
@@ -30,8 +29,10 @@
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSString * weights;
+@property (nonatomic, retain) NSNumber * averageRating;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) User *user;
+@property (nonatomic, retain) NSSet *ratings;
 @end
 
 @interface Detector (CoreDataGeneratedAccessors)
@@ -40,5 +41,10 @@
 - (void)removeAnnotatedImagesObject:(AnnotatedImage *)value;
 - (void)addAnnotatedImages:(NSSet *)values;
 - (void)removeAnnotatedImages:(NSSet *)values;
+
+- (void)addRatingsObject:(Rating *)value;
+- (void)removeRatingsObject:(Rating *)value;
+- (void)addRatings:(NSSet *)values;
+- (void)removeRatings:(NSSet *)values;
 
 @end

@@ -359,15 +359,8 @@
                                     <segue destination="JSg-iz-zBY" kind="push" identifier="Retrain" id="IfY-dD-Gcr"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pGN-q9-Qct">
-                                <rect key="frame" x="232" y="174" width="40" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Share">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OLo-A2-bQf">
-                                <rect key="frame" x="230" y="211" width="44" height="30"/>
+                                <rect key="frame" x="230" y="281" width="44" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Delete">
                                     <color key="titleColor" red="1" green="0.2032083227" blue="0.1815025861" alpha="1" colorSpace="calibratedRGB"/>
@@ -378,16 +371,48 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VTZ-g4-cNm">
-                                <rect key="frame" x="20" y="357" width="280" height="21"/>
+                                <rect key="frame" x="20" y="387" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="public - private" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RYB-aP-v9V">
-                                <rect key="frame" x="20" y="386" width="280" height="21"/>
+                                <rect key="frame" x="20" y="416" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="RfU-2c-lGT">
+                                <rect key="frame" x="20" y="314" width="173" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="1"/>
+                                    <segment title="2"/>
+                                    <segment title="3"/>
+                                    <segment title="4"/>
+                                    <segment title="5"/>
+                                </segments>
+                                <connections>
+                                    <action selector="ratingAction:" destination="eMG-ES-tQK" eventType="valueChanged" id="SMN-bU-7Tw"/>
+                                </connections>
+                            </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="LoU-Gx-SJ4">
+                                <rect key="frame" x="201" y="217" width="113" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Private"/>
+                                    <segment title="Public"/>
+                                </segments>
+                                <connections>
+                                    <action selector="isPublicAction:" destination="eMG-ES-tQK" eventType="valueChanged" id="jCL-qh-CgC"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EOz-bL-8rH">
+                                <rect key="frame" x="20" y="445" width="50" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -398,8 +423,10 @@
                         <outlet property="authorLabel" destination="VTZ-g4-cNm" id="Q3o-Mx-tqD"/>
                         <outlet property="deleteButton" destination="OLo-A2-bQf" id="lCL-1e-DJK"/>
                         <outlet property="imageView" destination="XTR-Jg-eQX" id="gcu-vP-Dex"/>
+                        <outlet property="isPublicControl" destination="LoU-Gx-SJ4" id="jXj-en-TXN"/>
                         <outlet property="publicLabel" destination="RYB-aP-v9V" id="bYx-U1-SlZ"/>
-                        <outlet property="shareButton" destination="pGN-q9-Qct" id="kb5-20-cpZ"/>
+                        <outlet property="ratingControl" destination="RfU-2c-lGT" id="LSq-NP-Gw1"/>
+                        <outlet property="ratingLabel" destination="EOz-bL-8rH" id="TK8-Ma-76t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ouv-3B-cQR" userLabel="First Responder" sceneMemberID="firstResponder"/>

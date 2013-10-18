@@ -14,6 +14,7 @@
 #import "AnnotatedImage.h"
 #import "SupportVector.h"
 #import "NSArray+JSONHelper.h"
+#import "Rating.h"
 
 @implementation Detector (Server)
 
@@ -39,14 +40,13 @@
         detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
         detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
         detector.supportVectors = [detectorInfo objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
+        detector.averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
         detector.parentID = @(0);
         id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
         if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
         
         NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[detectorInfo objectForKey:SERVER_DETECTOR_IMAGE]]];
         detector.image = [NSData dataWithContentsOfURL:imageURL];
-        
-        NSLog(@"detector overriden: %@", detector.name);
         
     }else detector = [matches lastObject];
     
@@ -104,6 +104,19 @@
     }
     
 }
+
+//- (NSNumber *) ratingForCurrentUserInContext:(NSManagedObjectContext *) context
+//{
+//    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+//    
+//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Rating"];
+//    request.predicate = [NSPredicate predicateWithFormat:@"(detector == %@) AND (user == %@)",self, currentUser];
+//    NSError *error;
+//    Rating *rating = [[context executeFetchRequest:request error:&error] lastObject];
+//    
+//    return rating.rating;
+//
+//}
 
 
 @end

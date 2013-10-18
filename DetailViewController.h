@@ -22,11 +22,18 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *authorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *publicLabel;
+@property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (strong, nonatomic) Detector *detector;
 
-- (IBAction)deleteAction:(id)sender;
-
-@property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *ratingControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *isPublicControl;
+
+
+
+- (IBAction)deleteAction:(id)sender;
+- (IBAction)isPublicAction:(id)sender;
+- (IBAction)ratingAction:(UISegmentedControl *)ratingControl;
+
 
 @end

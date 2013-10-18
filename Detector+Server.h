@@ -18,6 +18,8 @@
                                   toUpdate:(BOOL) isToUpdate
                     inManagedObjectContext:(NSManagedObjectContext *)context;
 
+//- (NSNumber *) ratingForCurrentUserInContext:(NSManagedObjectContext *) context;
+
 // Used to update the DB. First all public detectors are removed
 + (void) removePublicDetectorsInManagedObjectContext:(NSManagedObjectContext *)context;
 

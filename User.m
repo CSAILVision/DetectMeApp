@@ -2,13 +2,14 @@
 //  User.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 11/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 17/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
 #import "User.h"
 #import "AnnotatedImage.h"
 #import "Detector.h"
+#import "Rating.h"
 
 
 @implementation User
@@ -18,5 +19,6 @@
 @dynamic username;
 @dynamic annotatedImages;
 @dynamic detectors;
+@dynamic ratings;
 
 @end
