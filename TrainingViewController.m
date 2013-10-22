@@ -124,6 +124,9 @@
     
     NSLog(@"detector %@ sent", _detector.name);
     
+    // Forcing save to avoid losing the detector if closed before auto-saving
+    [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+    
     // send images
     _annotatedImagesSent = 0;
     for(AnnotatedImage *annotatedImage in _detector.annotatedImages){

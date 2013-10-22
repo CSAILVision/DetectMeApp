@@ -57,6 +57,12 @@
     }
 }
 
+- (IBAction)refreshAction:(id)sender
+{
+    [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
+    [self fetchAll];
+}
+
 #pragma mark -
 #pragma mark UISearchDelegate
 

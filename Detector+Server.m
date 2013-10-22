@@ -28,6 +28,8 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
+    NSLog(@"matches in the local db:%lu", (unsigned long)matches.count);
+    
     if(!matches || matches.count>1){
         // handle error
     }else if (matches.count == 0){
@@ -44,7 +46,8 @@
     detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
     detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
     detector.supportVectors = [detectorInfo objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
-    detector.averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
+    NSNumber *averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
+    if(averageRating.integerValue>0) detector.averageRating = averageRating;
     detector.parentID = @(0);
     id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
     if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;

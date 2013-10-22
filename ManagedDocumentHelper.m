@@ -14,13 +14,14 @@
 + (UIManagedDocument *) sharedDatabaseUsingBlock:(completion_block_t) completionBlock
 {
     NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    url = [url URLByAppendingPathComponent:@"Default Detector Database"];
+    url = [url URLByAppendingPathComponent:@"detector_database"];
         
-    static UIManagedDocument *managedDocument;
+    static DebugManagedDocument *managedDocument;
     static dispatch_once_t mngddoc;
     
+    
     dispatch_once(&mngddoc, ^{
-        managedDocument = [[UIManagedDocument alloc] initWithFileURL:url];
+        managedDocument = [[DebugManagedDocument alloc] initWithFileURL:url];
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]){
             
@@ -39,7 +40,7 @@
         }
     });
  
-    return managedDocument;
+    return (UIManagedDocument *) managedDocument;
 }
 
 

@@ -19,7 +19,7 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="annotatedImages" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Detector" representedClassName="Detector" syncable="YES">
-        <attribute name="averageRating" optional="YES" attributeType="Float" minValueString="1" maxValueString="5" defaultValueString="0" syncable="YES"/>
+        <attribute name="averageRating" optional="YES" attributeType="Float" minValueString="1" maxValueString="5" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="detectionThreshold" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -41,7 +41,7 @@
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="detectors" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Rating" representedClassName="Rating" syncable="YES">
-        <attribute name="rating" optional="YES" attributeType="Integer 16" minValueString="1" maxValueString="5" defaultValueString="0" syncable="YES"/>
+        <attribute name="rating" optional="YES" attributeType="Integer 16" minValueString="1" maxValueString="5" syncable="YES"/>
         <relationship name="detector" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="ratings" inverseEntity="Detector" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="ratings" inverseEntity="User" syncable="YES"/>
     </entity>

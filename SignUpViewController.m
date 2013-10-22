@@ -7,6 +7,7 @@
 //
 
 #import "SignUpViewController.h"
+#import "UIViewController+ShowAlert.h"
 
 @interface SignUpViewController ()
 {
@@ -48,9 +49,10 @@
     [self performSegueWithIdentifier:@"SignUpComplete" sender:nil];
 }
 
-- (void) requestFailedWithErrorMessages:(NSDictionary *)errorMessages
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 {
     [self stopAnimation];
+    [self showAlertWithTitle:title andDescription:message];
 }
 
 #pragma mark -

@@ -17,7 +17,7 @@
 
 - (void) forgetPasswordEndedWithResult:(BOOL) success andMessage:(NSString *)message;
 
-- (void) requestFailedWithErrorMessages: (NSDictionary *)errorMessages;
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 
 @end
 
@@ -28,6 +28,8 @@
  - Create the post for sign in
  - Store session credentials
  - Remove credentials when log out
+ - Handling errors and just delegate title and body of the 
+   error message
  
  
  */

@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 - (IBAction)privateAction:(UISegmentedControl *)segmentedControl;
+- (IBAction)refreshAction:(id)sender;
 
 @end

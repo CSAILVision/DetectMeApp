@@ -112,8 +112,11 @@
     NSError *error = nil;
     NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
+    NSLog(@"received:%@", responseJSON);
+    
     NSString *token = [responseJSON objectForKey:SERVER_TOKEN];
-    NSString *username = [responseJSON objectForKey:SERVER_AUTH_USERNAME];
+    // when there is a error, the value of the key-value pair is an array.
+    id email = [responseJSON objectForKey:SERVER_AUTH_EMAIL];
     
     if(token){ //signin
         [self storeSessionForToken:token];
@@ -121,12 +124,10 @@
         [self.delegate signInCompleted];
         
         
-    } else if(username){ //signup
+    } else if([email isKindOfClass:[NSString class]]){ //signup
         [self.delegate signUpCompleted];
         
-    }else{
-        [self.delegate requestFailedWithErrorMessages:responseJSON];
-    }
+    }else [self handleErrorForJSON:responseJSON];
 }
 
 
@@ -148,6 +149,19 @@
     [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
         [User userWithName:_username inManagedObjectContext:document.managedObjectContext];
     }];
+}
+
+- (void) handleErrorForJSON:(NSDictionary *)errorJSON
+{
+    NSArray *keys = [errorJSON allKeys];
+    NSArray *values = [errorJSON allValues];
+    
+    NSString *title = [keys firstObject];
+    NSString *message = [[values firstObject] firstObject];
+    
+    if([title isEqualToString:@"non_field_errors"]) title = @"Error";
+    
+    [self.delegate requestFailedWithErrorTitle:title errorMessage:message];
 }
 
 @end

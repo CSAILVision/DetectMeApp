@@ -2,7 +2,7 @@
 //  AnnotatedImage.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 18/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 22/10/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -23,12 +23,11 @@
 @property (nonatomic, retain) NSNumber * isSent;
 @property (nonatomic, retain) NSNumber * locationLatitude;
 @property (nonatomic, retain) NSNumber * locationLongitude;
+@property (nonatomic, retain) NSNumber * motionQuaternionW;
 @property (nonatomic, retain) NSNumber * motionQuaternionX;
 @property (nonatomic, retain) NSNumber * motionQuaternionY;
 @property (nonatomic, retain) NSNumber * motionQuaternionZ;
-@property (nonatomic, retain) NSNumber * motionQuaternionW;
 @property (nonatomic, retain) Detector *detector;
 @property (nonatomic, retain) User *user;
 
 @end
-

@@ -8,6 +8,7 @@
 
 #import "SignInViewController.h"
 #import "ManagedDocumentHelper.h"
+#import "UIViewController+ShowAlert.h"
 
 @interface SignInViewController ()
 {
@@ -63,10 +64,12 @@
     [self performSegueWithIdentifier: @"SignInComplete" sender: self];
 }
 
-- (void) requestFailedWithErrorMessages: (NSDictionary *)errorMessages;
+
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *)message;
 {
     [self stopAnimation];
-    NSLog(@"Error: %@", errorMessages);
+    [self showAlertWithTitle:title andDescription:message];
+    
 }
 
 #pragma mark -
