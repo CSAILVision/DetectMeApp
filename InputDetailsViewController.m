@@ -10,17 +10,18 @@
 #import "TrainingViewController.h"
 
 
-#define kClass @"Class"
-#define kName @"Name"
+#define kClass @"Object"
+#define kName @"Detector name"
 #define kIsPublic 0
 
 
 @implementation InputDetailsViewController
 
 
-- (void)viewDidLoad
+- (void) viewDidAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    // default initial value
+    self.detectorTrainer.isPublic = YES;
 }
 
 
@@ -48,7 +49,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showTraining"]) {
-        
         TrainingViewController *destinationVC = (TrainingViewController *)segue.destinationViewController;
         destinationVC.detectorTrainer = self.detectorTrainer;
     }
@@ -60,11 +60,17 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    // Add suggestion of a detector name to go faster training
     
     if ([textField.placeholder isEqualToString:kName])
         self.detectorTrainer.name = textField.text;
-    else if([textField.placeholder isEqualToString:kClass])
+    else if([textField.placeholder isEqualToString:kClass]){
         self.detectorTrainer.targetClass = textField.text;
+        if([textField.text length]!=0 && [self.nameTextField.text length]==0){
+            self.nameTextField.text = [NSString stringWithFormat:@"%@-Detector", textField.text];
+            self.detectorTrainer.name = self.nameTextField.text;
+        }
+    }
 
 }
 

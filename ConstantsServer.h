@@ -9,12 +9,12 @@
 #ifndef DetectMe_ConstantsServer_h
 #define DetectMe_ConstantsServer_h
 
+
 // SERVER MISCELLANIA
-#define SERVER_IP @"128.30.99.198"
-#define SERVER_PORT 8000
+#define SERVER_IP @"128.30.99.198" // for node connection
 #define SERVER_PORT_NODE 7000
 #define MOBILE_LISTENING_PORT 9000
-#define SERVER_ADDRESS @"http://128.30.99.198:8000/"
+#define SERVER_ADDRESS @ "http://128.52.160.100/"
 #define SERVER_TOKEN @"token"
 
 // AUTHORIZATION IN SERVER

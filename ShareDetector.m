@@ -56,7 +56,7 @@
     [_requestConstructor addTokenAuthentication];
     
     // authenticate with basic HTTP (used for development, not used with token authorization)
-    //[_requestConstructor addAuthenticationWihtUsername:_user andPassword:_password];
+    //[_requestConstructor addAuthenticationWihtUsername:@"ramon" andPassword:@"ramon"];
     
     NSDictionary *dict = [self dictionaryFromDetector:detector];
     

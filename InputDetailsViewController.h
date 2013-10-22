@@ -12,6 +12,8 @@
 @interface InputDetailsViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
+@property (weak, nonatomic) IBOutlet UITextField *objectTextField;
+@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 
 - (IBAction)isPublicAction:(UISegmentedControl *)sender;
 

@@ -110,7 +110,7 @@
 - (NSArray *) detectorsJSONToObjects:(NSArray *)detectorsJSON
 {
     
-    NSString *serverAdress = @"http://128.30.99.160:8000/media/";
+    NSString *serverAdress = [NSString stringWithFormat:@"%@media/", SERVER_ADDRESS];
     NSMutableArray *detectors = [NSMutableArray arrayWithCapacity:detectorsJSON.count];
     for(NSDictionary *detectorJSON in detectorsJSON) {
 

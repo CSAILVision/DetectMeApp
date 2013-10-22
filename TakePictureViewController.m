@@ -116,6 +116,7 @@
 {
     [super viewWillDisappear:animated];
     self.imageView.image = nil;
+    self.title = @"Add";
     [self.delegate takenAnnotatedImages:_annotatedImages];
     
     [self stopManagers];
