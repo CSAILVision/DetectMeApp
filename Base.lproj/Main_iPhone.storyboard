@@ -402,12 +402,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="public - private" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RYB-aP-v9V">
-                                <rect key="frame" x="20" y="416" width="280" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="RfU-2c-lGT">
                                 <rect key="frame" x="20" y="314" width="173" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -422,19 +416,19 @@
                                     <action selector="ratingAction:" destination="eMG-ES-tQK" eventType="valueChanged" id="SMN-bU-7Tw"/>
                                 </connections>
                             </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="LoU-Gx-SJ4">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="LoU-Gx-SJ4">
                                 <rect key="frame" x="201" y="217" width="113" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
-                                    <segment title="Private"/>
                                     <segment title="Public"/>
+                                    <segment title="Private"/>
                                 </segments>
                                 <connections>
                                     <action selector="isPublicAction:" destination="eMG-ES-tQK" eventType="valueChanged" id="jCL-qh-CgC"/>
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EOz-bL-8rH">
-                                <rect key="frame" x="20" y="445" width="50" height="21"/>
+                                <rect key="frame" x="20" y="416" width="50" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -449,7 +443,6 @@
                         <outlet property="deleteButton" destination="OLo-A2-bQf" id="lCL-1e-DJK"/>
                         <outlet property="imageView" destination="XTR-Jg-eQX" id="gcu-vP-Dex"/>
                         <outlet property="isPublicControl" destination="LoU-Gx-SJ4" id="jXj-en-TXN"/>
-                        <outlet property="publicLabel" destination="RYB-aP-v9V" id="bYx-U1-SlZ"/>
                         <outlet property="ratingControl" destination="RfU-2c-lGT" id="LSq-NP-Gw1"/>
                         <outlet property="ratingLabel" destination="EOz-bL-8rH" id="TK8-Ma-76t"/>
                     </connections>

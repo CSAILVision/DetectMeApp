@@ -37,8 +37,8 @@
     self.title = self.detector.name;
     self.imageView.image =[UIImage imageWithData:self.detector.image];
     self.authorLabel.text = [NSString stringWithFormat:@"Author: %@", self.detector.user.username];
-    self.publicLabel.text = self.detector.isPublic.boolValue ? @"Public" : @"Private";
     self.ratingLabel.text = [NSString stringWithFormat:@"%@", self.detector.averageRating];
+    self.isPublicControl.selectedSegmentIndex = self.detector.isPublic.boolValue ? 0:1;
     
     _isOwner = [self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]];
     if(!_isOwner){
@@ -94,9 +94,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)isPublicAction:(id)sender
+- (IBAction)isPublicAction:(UISegmentedControl *) isPublicControl;
 {
-
+    BOOL isPublic = isPublicControl.selectedSegmentIndex == 0 ? YES:NO;
+    self.detector.isPublic = @(isPublic);
+    _detectorHasChanged = YES;
+    
 }
 
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl

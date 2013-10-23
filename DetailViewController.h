@@ -21,7 +21,6 @@
 @property (strong, nonatomic) id<DetailViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *authorLabel;
-@property (weak, nonatomic) IBOutlet UILabel *publicLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (strong, nonatomic) Detector *detector;
 
@@ -32,7 +31,7 @@
 
 
 - (IBAction)deleteAction:(id)sender;
-- (IBAction)isPublicAction:(id)sender;
+- (IBAction)isPublicAction:(UISegmentedControl *) isPublicControl;
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl;
 
 
