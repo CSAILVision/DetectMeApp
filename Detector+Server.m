@@ -28,13 +28,12 @@
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
-    NSLog(@"matches in the local db:%lu", (unsigned long)matches.count);
-    
     if(!matches || matches.count>1){
         // handle error
     }else if (matches.count == 0){
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];
-        NSLog(@"overriding detector %@", [detectorInfo objectForKey:SERVER_DETECTOR_NAME]);
+        NSLog(@"New detector received %@", [detectorInfo objectForKey:SERVER_DETECTOR_NAME]);
+        detector.isSent = @(YES);
     }else detector = [matches lastObject];
     
     // general update of the detector

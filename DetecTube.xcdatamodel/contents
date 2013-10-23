@@ -41,6 +41,7 @@
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="detectors" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Rating" representedClassName="Rating" syncable="YES">
+        <attribute name="isSent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="Integer 16" minValueString="1" maxValueString="5" syncable="YES"/>
         <relationship name="detector" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="ratings" inverseEntity="Detector" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="ratings" inverseEntity="User" syncable="YES"/>
@@ -56,7 +57,7 @@
     <elements>
         <element name="AnnotatedImage" positionX="-407" positionY="-27" width="128" height="283"/>
         <element name="Detector" positionX="187" positionY="-67" width="128" height="343"/>
-        <element name="Rating" positionX="-90" positionY="254" width="117" height="88"/>
+        <element name="Rating" positionX="-90" positionY="254" width="117" height="103"/>
         <element name="User" positionX="-9" positionY="432" width="128" height="133"/>
     </elements>
 </model>

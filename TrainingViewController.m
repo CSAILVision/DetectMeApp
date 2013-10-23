@@ -21,6 +21,7 @@
 #import "Detector+Server.h"
 #import "AnnotatedImage+Create.h"
 #import "ConstantsServer.h"
+#import "UIViewController+ShowAlert.h"
 
 @interface TrainingViewController()
 {
@@ -88,7 +89,6 @@
     for(AnnotatedImage *aImage in self.detectorTrainer.annotatedImages)
         aImage.detector = _detector;
     
-    
     // send detector
     _shareDetector = [[ShareDetector alloc] init];
     _shareDetector.delegate = self;
@@ -117,39 +117,64 @@
 #pragma mark -
 #pragma mark ShareDetectorDelegate
 
-- (void) endDetectorUploading:(NSDictionary *)detectorJSON
+- (void) detectorDidSent
 {
-    _detector.serverDatabaseID = [detectorJSON objectForKey:SERVER_DETECTOR_ID];
-    _detector.isSent = @(TRUE);
-    
-    NSLog(@"detector %@ sent", _detector.name);
-    
-    // Forcing save to avoid losing the detector if closed before auto-saving
-    [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
-    
-    // send images
     _annotatedImagesSent = 0;
     for(AnnotatedImage *annotatedImage in _detector.annotatedImages){
-        _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
-        _shareDetector.delegate = self;
-        [_shareDetector shareAnnotatedImage:annotatedImage];
+        if(!annotatedImage.isSent.boolValue){
+            _annotatedImagesSent++;
+            _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
+            _shareDetector.delegate = self;
+            [_shareDetector shareAnnotatedImage:annotatedImage];
+        }
     }
 }
 
-- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON
+- (void) annotatedImageDidSent
 {
-    _annotatedImagesSent++;
-    NSLog(@"%d images sent", _annotatedImagesSent);
-    
-    if(_annotatedImagesSent == _detector.annotatedImages.count){
-        for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
-            annotatedImage.isSent = @(TRUE);
-    }
+    _annotatedImagesSent--;
+    if(_annotatedImagesSent==0)
+        // Forcing save to avoid losing the detector and annotated images if closed before auto-saving
+        [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
 }
 
--(void) errorReceive:(NSString *) error
+//- (void) endDetectorUploading:(NSDictionary *)detectorJSON
+//{
+//    _detector.serverDatabaseID = [detectorJSON objectForKey:SERVER_DETECTOR_ID];
+//    _detector.isSent = @(TRUE);
+//    
+//    NSLog(@"detector %@ sent", _detector.name);
+//    
+//    // send images
+//    _annotatedImagesSent = 0;
+//    for(AnnotatedImage *annotatedImage in _detector.annotatedImages){
+//        _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
+//        _shareDetector.delegate = self;
+//        [_shareDetector shareAnnotatedImage:annotatedImage];
+//    }
+//}
+//
+//- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON
+//{
+//    _annotatedImagesSent++;
+//    NSLog(@"%d images sent", _annotatedImagesSent);
+//    
+//    if(_annotatedImagesSent == _detector.annotatedImages.count){ // all the images sent
+//        for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
+//            annotatedImage.isSent = @(TRUE);
+//        
+//        // Forcing save to avoid losing the detector and annotated images if closed before auto-saving
+//        [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+//    }
+//    
+//    
+//    // Forcing save to avoid losing the detector and annotated images if closed before auto-saving
+//    [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
+//}
+
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 {
-    NSLog(@"%@",error);
+    [self showAlertWithTitle:title andDescription:message];
 }
 
 

@@ -14,6 +14,9 @@
 #import "ExecuteDetectorViewController.h"
 #import "ManagedDocumentHelper.h"
 #import "ConstantsServer.h"
+#import "ShareDetector.h"
+#import "AnnotatedImage.h"
+
 
 
 @implementation GalleryViewController
@@ -59,8 +62,14 @@
 
 - (IBAction)refreshAction:(id)sender
 {
+    // Update from server
     [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
     [self fetchAll];
+    
+    // Try to send all the detectors/images/ratings that have not been send
+    [self persistentSent:@"Detector"];
+    [self persistentSent:@"AnnotatedImage"];
+    [self persistentSent:@"Rating"];
 }
 
 #pragma mark -
@@ -193,6 +202,30 @@
             [self performSelectorOnMainThread:@selector(fetchAll) withObject:nil waitUntilDone:NO];
         }];
     });
+}
+
+- (void) persistentSent:(NSString *)modelName
+{
+    NSError *error;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:modelName];
+    request.predicate = [NSPredicate predicateWithFormat:@"isSent == NO"];
+    NSArray *matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
+    
+    NSLog(@"Found %lu for %@", (unsigned long)matches.count, modelName);
+    
+    for(id element in matches){
+        ShareDetector *sh = [[ShareDetector alloc] init];
+        if([modelName isEqualToString:@"Detector"]){
+            Detector *detector = (Detector *)element;
+            [sh shareDetector:detector toUpdate:detector.serverDatabaseID ? YES:NO];
+            
+        }else if([modelName isEqualToString:@"AnnotatedImage"]){
+            [sh shareAnnotatedImage:(AnnotatedImage *)element];
+            
+        }else if([modelName isEqualToString:@"Rating"]){
+            [sh shareRating:(Rating *) element];
+        }
+    }
 }
 
 

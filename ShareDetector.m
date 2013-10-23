@@ -20,6 +20,9 @@
     PostHTTPConstructor *_requestConstructor;
     NSMutableData *_responseData;
     
+    Detector *_detector;
+    AnnotatedImage *_annotatedImage;
+    Rating *_rating;
 }
 @end
 
@@ -42,6 +45,8 @@
 
 -(void) shareDetector:(Detector *)detector toUpdate:(BOOL)isToUpdate;
 {
+    _detector = detector;
+    
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     
     NSString *httpMethod;
@@ -78,6 +83,7 @@
 
 - (void) shareAnnotatedImage:(AnnotatedImage *)annotatedImage
 {
+    _annotatedImage = annotatedImage;
     
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/annotatedimages/",SERVER_ADDRESS];
     
@@ -104,6 +110,7 @@
 
 - (void) shareRating:(Rating *)rating
 {
+    _rating = rating;
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/ratings/",SERVER_ADDRESS];
     
     // initiate creation of the request
@@ -145,22 +152,12 @@
 
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    if ([response isKindOfClass:[NSHTTPURLResponse class]]){
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
-        
-        // TODO: sent error message correctly after seeing http header.
-    }
-    
 }
 
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error ", @"")
-                                message:[error localizedDescription]
-                               delegate:nil
-                      cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                      otherButtonTitles:nil] show];
+    [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:[error localizedDescription]];
 }
 
 -(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -173,20 +170,30 @@
     NSError *error = nil;
     NSDictionary *objectJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
-    if (error != nil) [self.delegate errorReceive:@"Error parsing JSON."];
-    else {
+    if (error != nil){
+        [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Parsing JSON"];
+        NSLog(@"objectJSON %@", objectJSON);
+    }else {
     
         if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // detector returned
-            [self.delegate endDetectorUploading:objectJSON];
+            _detector.serverDatabaseID = [objectJSON objectForKey:SERVER_DETECTOR_ID];
+            _detector.isSent = @(YES);
+            NSLog(@"detector %@ sent", _detector.name);
             
+            [self.delegate detectorDidSent];
+
         }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){ // annotated image returned
-            [self.delegate endAnnotatedImageUploading:objectJSON];
+            _annotatedImage.isSent = @(YES);
+            NSLog(@"Image sent");
+            
+            [self.delegate annotatedImageDidSent];
 
         }else if([objectJSON objectForKey:SERVER_RATING_RATING]){ // rating returned
+            _rating.isSent = @(YES);
             
         }else{
-            [self.delegate errorReceive:[NSString stringWithFormat:@"Error received with:%@",objectJSON]];
-            NSLog(@"JSON Error: %@", objectJSON);
+            NSLog(@"Sending error: %@", objectJSON);
+            [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Failed to sent the detector"];
         }
     }
 }

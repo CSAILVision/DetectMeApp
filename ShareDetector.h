@@ -12,10 +12,14 @@
 
 @protocol ShareDectorDelegate <NSObject>
 
-- (void) endDetectorUploading:(NSDictionary *)detectorJSON;
-- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON;
+//- (void) endDetectorUploading:(NSDictionary *)detectorJSON;
+//- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON;
+//- (void) detectorDidSent;
+//- (void) errorReceive:(NSString *) error;
 
--(void) errorReceive:(NSString *) error;
+- (void) detectorDidSent;
+- (void) annotatedImageDidSent;
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 
 @end
 

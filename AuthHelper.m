@@ -95,11 +95,7 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error ", @"")
-                                message:[error localizedDescription]
-                               delegate:nil
-                      cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                      otherButtonTitles:nil] show];
+    [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:[error localizedDescription]];
 }
 
 -(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
