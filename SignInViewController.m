@@ -73,6 +73,21 @@
 }
 
 #pragma mark -
+#pragma mark UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if([textField.placeholder isEqualToString:@"username"])
+        [self.passwordTextField becomeFirstResponder];
+    
+    else if([textField.placeholder isEqualToString:@"password"])
+        [self signInAction:self];
+    
+    
+    return YES;
+}
+
+#pragma mark -
 #pragma mark Private Methods
 
 - (void) signIn

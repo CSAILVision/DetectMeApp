@@ -112,8 +112,6 @@
     NSError *error = nil;
     NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
-    NSLog(@"received:%@", responseJSON);
-    
     NSString *token = [responseJSON objectForKey:SERVER_TOKEN];
     // when there is a error, the value of the key-value pair is an array.
     id email = [responseJSON objectForKey:SERVER_AUTH_EMAIL];

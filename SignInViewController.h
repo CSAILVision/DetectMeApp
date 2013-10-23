@@ -10,7 +10,7 @@
 #import "AuthHelper.h"
 
 
-@interface SignInViewController : UIViewController <AuthHelperDelegate>
+@interface SignInViewController : UIViewController <AuthHelperDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;

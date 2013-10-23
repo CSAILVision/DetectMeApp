@@ -36,7 +36,10 @@
     NSString *email = self.emailTextField.text;
     NSString *password = self.passwordTextField.text;
     
-    [_authHelper signUpUsername:username forEmail:email forPassword:password];
+    if ([email length]==0)
+        [self showAlertWithTitle:@"Error" andDescription:@"e-mail can not be blank"];
+    
+    else [_authHelper signUpUsername:username forEmail:email forPassword:password];
     
 }
 
@@ -53,6 +56,24 @@
 {
     [self stopAnimation];
     [self showAlertWithTitle:title andDescription:message];
+}
+
+#pragma mark -
+#pragma mark UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if([textField.placeholder isEqualToString:@"username"])
+        [self.emailTextField becomeFirstResponder];
+    
+    else if([textField.placeholder isEqualToString:@"e-mail"])
+        [self.passwordTextField becomeFirstResponder];
+    
+    else if([textField.placeholder isEqualToString:@"password"])
+        [self signUpAction:self];
+    
+    
+    return YES;
 }
 
 #pragma mark -

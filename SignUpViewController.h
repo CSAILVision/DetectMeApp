@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AuthHelper.h"
 
-@interface SignUpViewController : UIViewController <AuthHelperDelegate>
+@interface SignUpViewController : UIViewController <AuthHelperDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
