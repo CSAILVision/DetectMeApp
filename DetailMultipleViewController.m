@@ -40,14 +40,24 @@
 #pragma mark -
 #pragma mark IActions
 
-
-- (IBAction)executeAction:(id)sender
-{
-}
-
 - (IBAction)deleteAction:(id)sender
 {
     [_detectorDatabase.managedObjectContext deleteObject:self.multipleDetector];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+#pragma mark -
+#pragma mark Segue
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"ExecuteDetectorMultiple"]) {
+        NSArray *detectors = [self.multipleDetector.detectors allObjects];
+        [(ExecuteDetectorViewController *)segue.destinationViewController setDetectors:detectors];
+        
+    }
+}
+
 @end

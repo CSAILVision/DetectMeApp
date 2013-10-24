@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MultipleDetector.h"
 #import "DetailViewController.h"
+#import "ExecuteDetectorViewController.h"
+
 
 @interface DetailMultipleViewController : UIViewController
 
@@ -17,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 
 
-- (IBAction)executeAction:(id)sender;
 - (IBAction)deleteAction:(id)sender;
 
 @end

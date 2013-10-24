@@ -34,6 +34,7 @@
     const NSArray *_settingsStrings;
     BoxSender *_boxSender;
     
+    NSMutableArray *_detectorWrappers;
 }
 
 @property (strong, nonatomic) Pyramid *hogPyramid;
@@ -55,8 +56,8 @@
 - (NSMutableArray *) initialDetectionThresholds
 {
     if(!_initialDetectionThresholds){
-        _initialDetectionThresholds = [[NSMutableArray alloc] initWithCapacity:self.detectors.count];
-        for(DetectorWrapper *detectorWrapper in self.detectors)
+        _initialDetectionThresholds = [[NSMutableArray alloc] initWithCapacity:_detectorWrappers.count];
+        for(DetectorWrapper *detectorWrapper in _detectorWrappers)
             [_initialDetectionThresholds addObject:detectorWrapper.detectionThreshold];
     }
     return _initialDetectionThresholds;
@@ -106,19 +107,26 @@
 - (void)initializeSlider
 {
     [self.detectionThresholdSliderButton addTarget:self action:@selector(sliderChangeAction:) forControlEvents:UIControlEventValueChanged];
-    if(self.detectors.count == 1){
-        DetectorWrapper *detectorWrapper = [self.detectors objectAtIndex:0];
+    if(_detectorWrappers.count == 1){
+        DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
         self.detectionThresholdSliderButton.value = detectorWrapper.detectionThreshold.floatValue;
     }
 }
 
 - (void)initializeDetectView
 {
-    NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity:self.detectors.count];
-    for(DetectorWrapper *detectorWrapper in self.detectors)
+    NSMutableArray *labels = [[NSMutableArray alloc] initWithCapacity:_detectorWrappers.count];
+    for(DetectorWrapper *detectorWrapper in _detectorWrappers)
         [labels addObject:[detectorWrapper.targetClasses componentsJoinedByString:@"+"]];
     
     [self.detectView initializeInTheLayer:_prevLayer forObjectLabels:labels];
+}
+
+- (void) initializeDetectorWrappers
+{
+    _detectorWrappers = [[NSMutableArray alloc] initWithCapacity:self.detectors.count];
+    for(Detector *detector in self.detectors)
+        [_detectorWrappers addObject:[[DetectorWrapper alloc] initWithDetector:detector]];
 }
 
 - (void)viewDidLoad
@@ -126,8 +134,10 @@
     [super viewDidLoad];
     _boxSender = [[BoxSender alloc] init];
     
-    DetectorWrapper *detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];
-    self.detectors = [NSArray arrayWithObject: detectorWrapper];
+    [self initializeDetectorWrappers];
+    
+//    DetectorWrapper *detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];
+//    self.detectors = [NSArray arrayWithObject: detectorWrapper];
     
     [self initializeConstants];
     [self initializeSlider];
@@ -161,7 +171,7 @@
     _prevLayer.frame = self.detectView.frame;
     
     //reset the pyramid with the new detectors
-    self.hogPyramid = [[Pyramid alloc] initWithDetectors:self.detectors forNumPyramids:_numPyramids];
+    self.hogPyramid = [[Pyramid alloc] initWithDetectors:_detectorWrappers forNumPyramids:_numPyramids];
     
     //Fix Orientation
     [self adaptToPhoneOrientation:[[UIDevice currentDevice] orientation]];
@@ -172,8 +182,8 @@
     [super viewWillDisappear:animated];
     
     //update detection threshold it it is the only one
-    if(self.detectors.count == 1)
-        [self.delegate updateDetector:(DetectorWrapper *)[self.detectors objectAtIndex:0]];
+    if(_detectorWrappers.count == 1)
+        [self.delegate updateDetector:(DetectorWrapper *)[_detectorWrappers objectAtIndex:0]];
 }
 
 
@@ -192,8 +202,8 @@
     NSMutableArray *nmsArray = [[NSMutableArray alloc] init];
     
      //single class detection
-    if(self.detectors.count == 1){
-        DetectorWrapper *detectorWrapper = [self.detectors objectAtIndex:0];
+    if(_detectorWrappers.count == 1){
+        DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
         float detectionThreshold = 0; //-1 + 2*detectorWrapper.detectionThreshold.floatValue; //in [-1,1]
 
         [nmsArray addObject:[detectorWrapper detect:image
@@ -210,8 +220,8 @@
         //each detector run in parallel
         __block NSArray *candidatesForDetector;
         dispatch_queue_t detectorQueue = dispatch_queue_create("detectorQueue", DISPATCH_QUEUE_CONCURRENT);
-        dispatch_apply(self.detectors.count, detectorQueue, ^(size_t i) {
-            DetectorWrapper *detectorWrapper = [self.detectors objectAtIndex:i];
+        dispatch_apply(_detectorWrappers.count, detectorQueue, ^(size_t i) {
+            DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:i];
             float detectionThreshold = -1 + 2*detectorWrapper.detectionThreshold.floatValue;
             candidatesForDetector = [detectorWrapper detect:self.hogPyramid minimumThreshold:detectionThreshold usingNms:YES orientation:orientation];
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -304,16 +314,16 @@
     UISlider *slider = (UISlider *)sender;
     
     //if only one detector executing, update the detection threshold property
-    if(self.detectors.count == 1){
+    if(_detectorWrappers.count == 1){
         
-        DetectorWrapper *detectorWrapper = [self.detectors objectAtIndex:0];
+        DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
         detectorWrapper.detectionThreshold = [NSNumber numberWithFloat:slider.value];
         
     //if more than one, joinly increase/decrease detection threshold
     }else{
         if(((int)slider.value*100)%4==0){
-            for(int i=0; i<self.detectors.count; i++){
-                DetectorWrapper *detectorWrapper = [self.detectors objectAtIndex:i];
+            for(int i=0; i<_detectorWrappers.count; i++){
+                DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:i];
                 NSNumber *initialThreshold = [self.initialDetectionThresholds objectAtIndex:i];
                 float newThreshold = initialThreshold.floatValue + (slider.value - 0.5);
                 newThreshold = newThreshold >= 0 ? newThreshold : 0;

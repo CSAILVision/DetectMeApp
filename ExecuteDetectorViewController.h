@@ -30,8 +30,9 @@
 @property (nonatomic, strong) id<ExecuteDetectorViewControllerDelegate> delegate;
 
 //model properties
-@property (nonatomic,strong) NSArray *detectors;
-@property (strong, nonatomic) Detector *detector;
+//@property (nonatomic,strong) NSArray *detectors;
+//@property (strong, nonatomic) Detector *detector;
+@property (strong, nonatomic) NSArray *detectors;
 
 //self views
 @property (nonatomic, weak) IBOutlet UIImageView *HOGimageView;

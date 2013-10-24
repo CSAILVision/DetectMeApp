@@ -166,7 +166,8 @@
     
     if ([[segue identifier] isEqualToString:@"ExecuteDetector"]) {
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        [(ExecuteDetectorViewController *)segue.destinationViewController setDetector:detector];
+        NSArray *detectors = [NSArray arrayWithObject:detector];
+        [(ExecuteDetectorViewController *)segue.destinationViewController setDetectors:detectors];
         
     }else if([[segue identifier] isEqualToString:@"ShowDetailSimple"]){
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];

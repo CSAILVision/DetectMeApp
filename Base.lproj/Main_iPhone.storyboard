@@ -332,7 +332,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="executeAction:" destination="tjj-Hg-oo8" eventType="touchUpInside" id="Bdv-cc-ztj"/>
+                                    <segue destination="XS7-CC-cf8" kind="push" identifier="ExecuteDetectorMultiple" id="ZhR-dT-EN5"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SzC-2f-ffh">
@@ -993,6 +993,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="qoV-C6-q3a"/>
         <segue reference="nAj-kx-A7M"/>
+        <segue reference="ZhR-dT-EN5"/>
         <segue reference="iBb-Sq-DZc"/>
     </inferredMetricsTieBreakers>
 </document>

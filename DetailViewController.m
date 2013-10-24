@@ -76,7 +76,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"ExecuteDetector"]) {
-        [(ExecuteDetectorViewController *)segue.destinationViewController setDetector:self.detector];
+        NSArray *detectors = [NSArray arrayWithObject:self.detector];
+        [(ExecuteDetectorViewController *)segue.destinationViewController setDetectors:detectors];
         
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         TrainingImagesCollectionViewController *vc = (TrainingImagesCollectionViewController *)segue.destinationViewController;
