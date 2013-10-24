@@ -14,6 +14,7 @@
 @implementation MultipleDetector
 
 @dynamic name;
+@dynamic image;
 @dynamic author;
 @dynamic detectors;
 

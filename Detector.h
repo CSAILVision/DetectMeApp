@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class AnnotatedImage, Rating, User;
+@class AnnotatedImage, MultipleDetector, Rating, User;
 
 @interface Detector : NSManagedObject
 
@@ -48,8 +48,8 @@
 - (void)addRatings:(NSSet *)values;
 - (void)removeRatings:(NSSet *)values;
 
-- (void)addMultipleDetectorsObject:(NSManagedObject *)value;
-- (void)removeMultipleDetectorsObject:(NSManagedObject *)value;
+- (void)addMultipleDetectorsObject:(MultipleDetector *)value;
+- (void)removeMultipleDetectorsObject:(MultipleDetector *)value;
 - (void)addMultipleDetectors:(NSSet *)values;
 - (void)removeMultipleDetectors:(NSSet *)values;
 

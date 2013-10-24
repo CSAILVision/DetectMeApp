@@ -254,7 +254,6 @@
                                         <connections>
                                             <outlet property="imageView" destination="yBB-ng-65P" id="aH1-Dm-ajh"/>
                                             <outlet property="label" destination="yTd-Bi-j2T" id="bDT-CH-nv2"/>
-                                            <segue destination="eMG-ES-tQK" kind="push" identifier="ShowDetail" id="Hmf-dC-V4t"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -292,6 +291,16 @@
                                     <action selector="refreshAction:" destination="gzV-tb-nhM" eventType="touchUpInside" id="ka7-LT-SjS"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="L04-fL-RvO">
+                                <rect key="frame" x="14" y="120" width="59" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Combos">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="comboAction:" destination="gzV-tb-nhM" eventType="touchUpInside" id="JWx-py-T8p"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -300,11 +309,67 @@
                     <connections>
                         <outlet property="collectionView" destination="z4q-oJ-urB" id="Ubq-cJ-tZL"/>
                         <outlet property="searchBar" destination="meH-oq-ZNN" id="j4U-do-8fJ"/>
+                        <segue destination="eMG-ES-tQK" kind="push" identifier="ShowDetailSimple" id="wR7-vz-Yhe"/>
+                        <segue destination="tjj-Hg-oo8" kind="push" identifier="ShowDetailMultiple" id="VFo-FV-Orz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B08-Jl-9cB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="935" y="-646"/>
+        </scene>
+        <!--Detail Multiple View Controller-->
+        <scene sceneID="4Gu-3G-kKH">
+            <objects>
+                <viewController id="tjj-Hg-oo8" customClass="DetailMultipleViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8gx-6e-GGU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qzk-EH-Wp6">
+                                <rect key="frame" x="244" y="83" width="56" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Execute">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="executeAction:" destination="tjj-Hg-oo8" eventType="touchUpInside" id="Bdv-cc-ztj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SzC-2f-ffh">
+                                <rect key="frame" x="256" y="168" width="44" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" red="1" green="0.2032083227" blue="0.1815025861" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteAction:" destination="tjj-Hg-oo8" eventType="touchUpInside" id="Tbv-hl-DtQ"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sdd-wI-bHE">
+                                <rect key="frame" x="20" y="83" width="168" height="232"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="N1n-Nd-VTd">
+                                <rect key="frame" x="20" y="323" width="280" height="179"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="E2d-tY-KAY"/>
+                    <connections>
+                        <outlet property="imageView" destination="sdd-wI-bHE" id="aBo-3y-3of"/>
+                        <outlet property="textView" destination="N1n-Nd-VTd" id="fXr-9u-6Ce"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ogj-Iy-hJL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1398" y="-1357"/>
         </scene>
         <!--Execute Detector View Controller-->
         <scene sceneID="H9f-o3-7ZK">

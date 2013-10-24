@@ -42,6 +42,7 @@
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="detectors" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="MultipleDetector" representedClassName="MultipleDetector" syncable="YES">
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="author" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="multipleDetectors" inverseEntity="User" syncable="YES"/>
         <relationship name="detectors" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="multipleDetectors" inverseEntity="Detector" syncable="YES"/>
@@ -66,6 +67,6 @@
         <element name="Detector" positionX="466" positionY="-72" width="128" height="358"/>
         <element name="Rating" positionX="-135" positionY="297" width="117" height="103"/>
         <element name="User" positionX="126" positionY="545" width="128" height="148"/>
-        <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="88"/>
+        <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="103"/>
     </elements>
 </model>

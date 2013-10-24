@@ -8,6 +8,7 @@
 
 #import "MultipleDetector+Create.h"
 #import "User+Create.h"
+#import "Detector.h"
 
 @implementation MultipleDetector (Create)
 
@@ -21,6 +22,7 @@
     multipleDetector.name = name;
     multipleDetector.detectors = [[NSSet alloc] initWithArray:detectors];
     multipleDetector.author = [User getCurrentUserInManagedObjectContext:context];
+    multipleDetector.image = [(Detector *)[detectors firstObject] image];
     
     return multipleDetector;
 }

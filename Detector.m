@@ -8,6 +8,7 @@
 
 #import "Detector.h"
 #import "AnnotatedImage.h"
+#import "MultipleDetector.h"
 #import "Rating.h"
 #import "User.h"
 

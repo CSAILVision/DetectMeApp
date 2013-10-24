@@ -14,6 +14,7 @@
 @interface MultipleDetector : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSData * image;
 @property (nonatomic, retain) User *author;
 @property (nonatomic, retain) NSSet *detectors;
 @end

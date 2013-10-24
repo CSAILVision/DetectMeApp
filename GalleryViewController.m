@@ -11,6 +11,7 @@
 #import "DetectorCell.h"
 #import "User.h"
 #import "Detector+Server.h"
+#import "MultipleDetector.h"
 #import "ExecuteDetectorViewController.h"
 #import "ManagedDocumentHelper.h"
 #import "ConstantsServer.h"
@@ -72,6 +73,11 @@
     [self persistentSent:@"Rating"];
 }
 
+- (IBAction)comboAction:(id)sender
+{
+    [self fetchCombos];
+}
+
 #pragma mark -
 #pragma mark UISearchDelegate
 
@@ -95,9 +101,21 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     DetectorCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"DetectorCell" forIndexPath:indexPath];
-    Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
-    cell.imageView.image = [UIImage imageWithData:detector.image];
+    id element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    if([element isKindOfClass:[Detector class]]){
+        Detector *detector = (Detector *)element;
+        [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
+        cell.imageView.image = [UIImage imageWithData:detector.image];
+        
+    }else if([element isKindOfClass:[MultipleDetector class]]){
+        MultipleDetector *multipleDetector = (MultipleDetector *) element;
+        cell.imageView.image = [UIImage imageWithData:multipleDetector.image];
+        cell.label.text = multipleDetector.name;
+    }
+    
+//    Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
+//    [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
+//    cell.imageView.image = [UIImage imageWithData:detector.image];
     
     
     return cell;
@@ -105,8 +123,15 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    [self performSegueWithIdentifier: @"ShowDetectorDetails" sender: self];
+    
+    id element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    if([element isKindOfClass:[Detector class]]){
+        [self performSegueWithIdentifier: @"ShowDetailSimple" sender: self];
+        
+    } else if ([element isKindOfClass:[MultipleDetector class]]){
+        [self performSegueWithIdentifier:@"ShowDetailMultiple" sender:self];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -137,18 +162,22 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
+    
     if ([[segue identifier] isEqualToString:@"ExecuteDetector"]) {
-        NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
         [(ExecuteDetectorViewController *)segue.destinationViewController setDetector:detector];
         
-    }else if([[segue identifier] isEqualToString:@"ShowDetail"]){
-        NSIndexPath *indexPath = [[self.collectionView indexPathsForSelectedItems] lastObject];
+    }else if([[segue identifier] isEqualToString:@"ShowDetailSimple"]){
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
         DetailViewController *detailVC = (DetailViewController *) segue.destinationViewController;
         detailVC.detector = detector;
         detailVC.delegate = self;
+        
+    }else if ([[segue identifier] isEqualToString:@"ShowDetailMultiple"]){
+        MultipleDetector *multipleDetector = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        DetailMultipleViewController *detailMultipleVC = (DetailMultipleViewController *) segue.destinationViewController;
+        detailMultipleVC.multipleDetector = multipleDetector;
     }
 }
 
@@ -202,6 +231,17 @@
             [self performSelectorOnMainThread:@selector(fetchAll) withObject:nil waitUntilDone:NO];
         }];
     });
+}
+
+- (void) fetchCombos
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"MultipleDetector"];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
+                                                                        managedObjectContext:self.detectorDatabase.managedObjectContext
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
+    
 }
 
 - (void) persistentSent:(NSString *)modelName
