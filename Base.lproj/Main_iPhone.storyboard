@@ -591,7 +591,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="pkB-Kb-gbg" kind="relationship" relationship="rootViewController" id="5Oa-Nd-f9w"/>
+                        <segue destination="ZHa-Jg-kdc" kind="relationship" relationship="rootViewController" id="qx4-ID-A33"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MCJ-jn-S8s" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -707,7 +707,102 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ao2-L5-aRh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1461" y="80"/>
+            <point key="canvasLocation" x="1887" y="80"/>
+        </scene>
+        <!--Multiple Detectors Choose View Controller-->
+        <scene sceneID="oEb-zm-8SY">
+            <objects>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="iBt-uv-cAJ" customClass="MultipleDetectorsChooseViewController" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="NTX-cn-eto">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qB7-NG-8ob">
+                            <size key="itemSize" width="175" height="200"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="detectorCell" id="l2v-35-1qh" customClass="TrainingImageCell">
+                                <rect key="frame" x="73" y="64" width="175" height="200"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="175" height="200"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="bx7-lE-i6i">
+                                            <rect key="frame" x="0.0" y="0.0" width="175" height="200"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <connections>
+                                    <outlet property="imageView" destination="bx7-lE-i6i" id="3yl-eu-yg4"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="iBt-uv-cAJ" id="UOL-DY-Hth"/>
+                            <outlet property="delegate" destination="iBt-uv-cAJ" id="Z4H-ld-0zy"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="qED-ps-n4L">
+                        <nil key="title"/>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="V5N-4f-vD9">
+                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal" title="Create">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="createAction:" destination="iBt-uv-cAJ" eventType="touchUpInside" id="edb-Fp-Vv7"/>
+                            </connections>
+                        </button>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g2C-4z-Gkb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1904" y="834"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="nU5-b1-fTj">
+            <objects>
+                <viewController id="ZHa-Jg-kdc" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fni-q1-zne">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="XkV-il-Ub0">
+                                <rect key="frame" x="139" y="206" width="43" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Single">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="pkB-Kb-gbg" kind="push" id="ton-bO-FO8"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xEl-Xx-RF6">
+                                <rect key="frame" x="133" y="269" width="55" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Multiple">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="iBt-uv-cAJ" kind="push" id="QDF-CD-mfc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="QMI-gn-008"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L6F-eG-ws1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1439" y="80"/>
         </scene>
         <!--Input Details View Controller-->
         <scene sceneID="tIW-LZ-tLc">
@@ -770,7 +865,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QgI-V5-RGg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1923" y="86"/>
+            <point key="canvasLocation" x="2349" y="86"/>
         </scene>
         <!--Training View Controller-->
         <scene sceneID="bf8-kR-upC">
@@ -822,7 +917,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHh-dr-JEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2403" y="89"/>
+            <point key="canvasLocation" x="2829" y="89"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -831,8 +926,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="zdo-hz-QnN"/>
-        <segue reference="iBb-Sq-DZc"/>
+        <segue reference="qoV-C6-q3a"/>
         <segue reference="nAj-kx-A7M"/>
+        <segue reference="iBb-Sq-DZc"/>
     </inferredMetricsTieBreakers>
 </document>

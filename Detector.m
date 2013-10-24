@@ -34,5 +34,6 @@
 @dynamic annotatedImages;
 @dynamic ratings;
 @dynamic user;
+@dynamic multipleDetectors;
 
 @end

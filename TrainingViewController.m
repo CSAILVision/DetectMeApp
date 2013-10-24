@@ -121,12 +121,10 @@
 {
     _annotatedImagesSent = 0;
     for(AnnotatedImage *annotatedImage in _detector.annotatedImages){
-        if(!annotatedImage.isSent.boolValue){
-            _annotatedImagesSent++;
-            _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
-            _shareDetector.delegate = self;
-            [_shareDetector shareAnnotatedImage:annotatedImage];
-        }
+        _annotatedImagesSent++;
+        _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
+        _shareDetector.delegate = self;
+        [_shareDetector shareAnnotatedImage:annotatedImage];
     }
 }
 
@@ -138,39 +136,6 @@
         [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
 }
 
-//- (void) endDetectorUploading:(NSDictionary *)detectorJSON
-//{
-//    _detector.serverDatabaseID = [detectorJSON objectForKey:SERVER_DETECTOR_ID];
-//    _detector.isSent = @(TRUE);
-//    
-//    NSLog(@"detector %@ sent", _detector.name);
-//    
-//    // send images
-//    _annotatedImagesSent = 0;
-//    for(AnnotatedImage *annotatedImage in _detector.annotatedImages){
-//        _shareDetector = [[ShareDetector alloc] init]; //distinct memory spaces
-//        _shareDetector.delegate = self;
-//        [_shareDetector shareAnnotatedImage:annotatedImage];
-//    }
-//}
-//
-//- (void) endAnnotatedImageUploading:(NSDictionary *)annotatedImageJSON
-//{
-//    _annotatedImagesSent++;
-//    NSLog(@"%d images sent", _annotatedImagesSent);
-//    
-//    if(_annotatedImagesSent == _detector.annotatedImages.count){ // all the images sent
-//        for(AnnotatedImage *annotatedImage in _detector.annotatedImages)
-//            annotatedImage.isSent = @(TRUE);
-//        
-//        // Forcing save to avoid losing the detector and annotated images if closed before auto-saving
-//        [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
-//    }
-//    
-//    
-//    // Forcing save to avoid losing the detector and annotated images if closed before auto-saving
-//    [self.detectorDatabase saveToURL:self.detectorDatabase.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {}];
-//}
 
 - (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 {

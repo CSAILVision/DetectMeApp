@@ -11,5 +11,6 @@
 @interface TrainingImageCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property BOOL isSelected;
 
 @end

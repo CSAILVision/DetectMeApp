@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class AnnotatedImage, Detector, Rating;
+@class AnnotatedImage, Detector, MultipleDetector, Rating;
 
 @interface User : NSManagedObject
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) NSSet *detectors;
 @property (nonatomic, retain) NSSet *ratings;
+@property (nonatomic, retain) NSSet *multipleDetectors;
 @end
 
 @interface User (CoreDataGeneratedAccessors)
@@ -37,5 +38,10 @@
 - (void)removeRatingsObject:(Rating *)value;
 - (void)addRatings:(NSSet *)values;
 - (void)removeRatings:(NSSet *)values;
+
+- (void)addMultipleDetectorsObject:(MultipleDetector *)value;
+- (void)removeMultipleDetectorsObject:(MultipleDetector *)value;
+- (void)addMultipleDetectors:(NSSet *)values;
+- (void)removeMultipleDetectors:(NSSet *)values;
 
 @end

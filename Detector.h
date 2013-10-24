@@ -33,6 +33,7 @@
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) NSSet *ratings;
 @property (nonatomic, retain) User *user;
+@property (nonatomic, retain) NSSet *multipleDetectors;
 @end
 
 @interface Detector (CoreDataGeneratedAccessors)
@@ -46,5 +47,10 @@
 - (void)removeRatingsObject:(Rating *)value;
 - (void)addRatings:(NSSet *)values;
 - (void)removeRatings:(NSSet *)values;
+
+- (void)addMultipleDetectorsObject:(NSManagedObject *)value;
+- (void)removeMultipleDetectorsObject:(NSManagedObject *)value;
+- (void)addMultipleDetectors:(NSSet *)values;
+- (void)removeMultipleDetectors:(NSSet *)values;
 
 @end

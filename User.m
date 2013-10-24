@@ -9,6 +9,7 @@
 #import "User.h"
 #import "AnnotatedImage.h"
 #import "Detector.h"
+#import "MultipleDetector.h"
 #import "Rating.h"
 
 
@@ -20,5 +21,6 @@
 @dynamic annotatedImages;
 @dynamic detectors;
 @dynamic ratings;
+@dynamic multipleDetectors;
 
 @end
