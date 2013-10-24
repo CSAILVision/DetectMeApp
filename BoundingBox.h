@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Box.h"
 
 @interface BoundingBox : NSObject
 
@@ -29,6 +30,7 @@
 //initialization
 - (id) initWithRect:(CGRect)initialRect label:(int)label imageIndex:(int)imageIndex;
 - (id) initWithBoundingBox:(BoundingBox *)box;
+- (id) initWithBox:(Box *)box;
 
 - (CGRect) rectangleForImage:(UIImage *)image;
 - (double) fractionOfAreaOverlappingWith:(BoundingBox *) cp;

@@ -14,6 +14,7 @@
 #import "Detector.h"
 #import "AYUIButton.h"
 #import "Pyramid.h"
+#import "TagView.h"
 
 
 @protocol ExecuteDetectorViewControllerDelegate <NSObject>
@@ -30,11 +31,10 @@
 @property (nonatomic, strong) id<ExecuteDetectorViewControllerDelegate> delegate;
 
 //model properties
-//@property (nonatomic,strong) NSArray *detectors;
-//@property (strong, nonatomic) Detector *detector;
 @property (strong, nonatomic) NSArray *detectors;
 
 //self views
+@property (weak, nonatomic) IBOutlet TagView *tagView;
 @property (nonatomic, weak) IBOutlet UIImageView *HOGimageView;
 @property (nonatomic, weak) IBOutlet DetectView *detectView;
 @property (weak, nonatomic) IBOutlet UISlider *detectionThresholdSliderButton;
@@ -54,5 +54,10 @@
 - (IBAction)switchValueDidChange:(UISwitch *)sw;
 - (IBAction)sendBoxesToServer:(UIButton *)senderButton;
 
+// test
+@property (weak, nonatomic) IBOutlet UIButton *startTestButton;
+- (IBAction)startTestAction:(UIButton *) startTestButton;
+@property (weak, nonatomic) IBOutlet UIButton *testButton;
+- (IBAction)testAction:(UIButton *) testAction;
 
 @end

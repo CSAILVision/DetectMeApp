@@ -55,6 +55,18 @@ static inline int max_int(int x, int y) { return (x <= y ? y : x); }
     return self;
 }
 
+- (id) initWithBox:(Box *)box;
+{
+    if(self = [self init]){
+        self.xmin = box.upperLeft.x;
+        self.xmax = box.lowerRight.x;
+        self.ymin = box.upperLeft.y;
+        self.ymax = box.lowerRight.y;
+    }
+    
+    return self;
+}
+
 #pragma mark -
 #pragma mark Getters and Setters
 

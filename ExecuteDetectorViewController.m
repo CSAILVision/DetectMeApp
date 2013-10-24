@@ -12,6 +12,7 @@
 #import "BoxSender.h"
 #import "UIImage+HOG.h"
 #import "UIImage+Resize.h"
+#import "TestHelper.h"
 
 
 @interface ExecuteDetectorViewController()
@@ -35,6 +36,8 @@
     BoxSender *_boxSender;
     
     NSMutableArray *_detectorWrappers;
+    
+    TestHelper *_testHelper;
 }
 
 @property (strong, nonatomic) Pyramid *hogPyramid;
@@ -122,6 +125,13 @@
     [self.detectView initializeInTheLayer:_prevLayer forObjectLabels:labels];
 }
 
+- (void) initializeTestViews
+{
+    [self.tagView addBoxInView];
+    self.tagView.hidden = YES;
+    self.startTestButton.hidden = YES;
+}
+
 - (void) initializeDetectorWrappers
 {
     _detectorWrappers = [[NSMutableArray alloc] initWithCapacity:self.detectors.count];
@@ -136,14 +146,12 @@
     
     [self initializeDetectorWrappers];
     
-//    DetectorWrapper *detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.detector];
-//    self.detectors = [NSArray arrayWithObject: detectorWrapper];
-    
     [self initializeConstants];
     [self initializeSlider];
     [self initializeSettingsTableView];
     [self initializeButtons];
     [self initializeDetectView];
+    [self initializeTestViews];
     
     self.infoLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.infoLabel.numberOfLines = 0;
@@ -152,10 +160,7 @@
     [self.view addGestureRecognizer:tgr];
     
     // Add subviews in front of  the prevLayer
-    [self.view.layer addSublayer: _prevLayer];
-    [self.view addSubview:self.HOGimageView];
-    [self.view addSubview:self.detectView];
-    
+    [self.view.layer insertSublayer:_prevLayer atIndex:0];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -247,6 +252,9 @@
     
     //DETECTION
     NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];
+    
+    //TEST
+    [_testHelper receivedDetections:detectedBoxes onRealBox:self.tagView.box];
     
     //DISPLAY BOXES
     [self.detectView drawBoxes:detectedBoxes];
@@ -370,6 +378,27 @@
     }
 }
 
+- (IBAction)testAction:(UIButton *) testAction;
+{
+    if([testAction.titleLabel.text isEqualToString:@"Test"]){
+        self.startTestButton.hidden = NO;
+        self.tagView.hidden = NO;
+        testAction.titleLabel.text = @"Cancel";
+        
+    }else if([testAction.titleLabel.text isEqualToString:@"Cancel"]){
+        self.startTestButton.hidden = YES;
+        self.tagView.hidden = YES;
+        testAction.titleLabel.text = @"Test";
+    }
+}
+
+- (IBAction)startTestAction:(UIButton *) startTestButton;
+{
+    _testHelper = [[TestHelper alloc] init];
+    [_testHelper startTest];
+}
+
+
 
 #pragma mark -
 #pragma mark Table View Data Source and Delegate
@@ -437,7 +466,6 @@
         [self showSettingsAction:nil];
     }
 }
-
 
 @end
 
