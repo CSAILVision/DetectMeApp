@@ -910,17 +910,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Detector name" minimumFontSize="17" id="BFX-Fg-G2W">
-                                <rect key="frame" x="83" y="168" width="154" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="D0w-8Z-7WU" id="Hv7-8b-KNF"/>
-                                </connections>
-                            </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Object" minimumFontSize="17" id="OrT-FB-QOB">
-                                <rect key="frame" x="83" y="130" width="154" height="30"/>
+                                <rect key="frame" x="83" y="168" width="154" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -957,7 +948,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="nameTextField" destination="BFX-Fg-G2W" id="ks3-if-Rli"/>
                         <outlet property="objectTextField" destination="OrT-FB-QOB" id="Ide-6o-u8v"/>
                     </connections>
                 </viewController>
@@ -1024,9 +1014,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qoV-C6-q3a"/>
+        <segue reference="zdo-hz-QnN"/>
+        <segue reference="iBb-Sq-DZc"/>
         <segue reference="nAj-kx-A7M"/>
         <segue reference="ZhR-dT-EN5"/>
-        <segue reference="iBb-Sq-DZc"/>
     </inferredMetricsTieBreakers>
 </document>

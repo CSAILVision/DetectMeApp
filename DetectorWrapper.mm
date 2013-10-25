@@ -615,7 +615,7 @@ using namespace cv;
                 double overlapArea = [detectedBB fractionOfAreaOverlappingWith:groundTruthBB];
                 
                 detectedBB.label = 0;
-                if (overlapArea > 0.8 && overlapArea<1){
+                if (overlapArea > 0.7 && overlapArea<1){
                     detectedBB.label = 1;
                     positives++;
                     [self addExample:detectedBB to:trainingSet];

@@ -51,7 +51,8 @@
             BoundingBox *detectionBoundingBox = [[detectionBoundingBoxes firstObject] firstObject];
             BoundingBox *realBoundingBox = [[BoundingBox alloc] initWithBox:realBox];
             double overlapArea = [detectionBoundingBox fractionOfAreaOverlappingWith:realBoundingBox];
-            if(overlapArea > 0.8 && overlapArea<1){
+            NSLog(@"overlap area: %f", overlapArea);
+            if(overlapArea > 0.5 && overlapArea<1){
                 _truePositives++;
                 
             }else{

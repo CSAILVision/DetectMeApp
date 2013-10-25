@@ -110,9 +110,13 @@
 - (void)initializeSlider
 {
     [self.detectionThresholdSliderButton addTarget:self action:@selector(sliderChangeAction:) forControlEvents:UIControlEventValueChanged];
-    if(_detectorWrappers.count == 1){
-        DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
-        self.detectionThresholdSliderButton.value = detectorWrapper.detectionThreshold.floatValue;
+    if(self.detectors.count == 1){
+        Detector *detector = [self.detectors firstObject];
+        self.detectionThresholdSliderButton.value = detector.detectionThreshold.floatValue;
+    }else{
+        // Slide initially set at the middle point
+        // At the update, all the detectors are moved the same amount
+        self.detectionThresholdSliderButton.value = 0.5;
     }
 }
 
@@ -209,7 +213,7 @@
      //single class detection
     if(_detectorWrappers.count == 1){
         DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
-        float detectionThreshold = 0; //-1 + 2*detectorWrapper.detectionThreshold.floatValue; //in [-1,1]
+        float detectionThreshold = -1 + 2*detectorWrapper.detectionThreshold.floatValue; //in [-1,1]
 
         [nmsArray addObject:[detectorWrapper detect:image
                                    minimumThreshold:detectionThreshold
@@ -322,10 +326,13 @@
     UISlider *slider = (UISlider *)sender;
     
     //if only one detector executing, update the detection threshold property
-    if(_detectorWrappers.count == 1){
+    if(self.detectors.count == 1){
         
-        DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
-        detectorWrapper.detectionThreshold = [NSNumber numberWithFloat:slider.value];
+        Detector *detector = [self.detectors firstObject];
+        detector.detectionThreshold = @(slider.value);
+        
+        DetectorWrapper *detectorWrapper = [_detectorWrappers firstObject];
+        detectorWrapper.detectionThreshold = @(slider.value);
         
     //if more than one, joinly increase/decrease detection threshold
     }else{
@@ -336,7 +343,7 @@
                 float newThreshold = initialThreshold.floatValue + (slider.value - 0.5);
                 newThreshold = newThreshold >= 0 ? newThreshold : 0;
                 newThreshold = newThreshold <= 1 ? newThreshold : 1;
-                detectorWrapper.detectionThreshold = [NSNumber numberWithFloat:newThreshold];
+                detectorWrapper.detectionThreshold = @(newThreshold);
             }
         }
         

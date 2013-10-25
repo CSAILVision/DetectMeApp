@@ -10,8 +10,6 @@
 #import "TrainingViewController.h"
 
 
-#define kClass @"Object"
-#define kName @"Detector name"
 #define kIsPublic 0
 
 
@@ -60,17 +58,8 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     // Add suggestion of a detector name to go faster training
-    
-    if ([textField.placeholder isEqualToString:kName])
-        self.detectorTrainer.name = textField.text;
-    else if([textField.placeholder isEqualToString:kClass]){
-        self.detectorTrainer.targetClass = textField.text;
-        if([textField.text length]!=0 && [self.nameTextField.text length]==0){
-            self.nameTextField.text = [NSString stringWithFormat:@"%@-Detector", textField.text];
-            self.detectorTrainer.name = self.nameTextField.text;
-        }
-    }
-
+    self.detectorTrainer.targetClass = textField.text;
+    self.detectorTrainer.name = textField.text;
 }
 
 @end

@@ -11,7 +11,7 @@
 
 
 // SERVER MISCELLANIA
-#define SERVER_IP @"128.30.99.198" // for node connection
+#define SERVER_IP @"128.52.160.100" // for node connection
 #define SERVER_PORT_NODE 7000
 #define MOBILE_LISTENING_PORT 9000
 #define SERVER_ADDRESS @ "http://128.52.160.100/"

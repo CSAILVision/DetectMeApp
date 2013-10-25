@@ -21,7 +21,7 @@
     <entity name="Detector" representedClassName="Detector" syncable="YES">
         <attribute name="averageRating" optional="YES" attributeType="Float" minValueString="1" maxValueString="5" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="detectionThreshold" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="detectionThreshold" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="0.5" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="isPublic" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="isSent" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -65,8 +65,8 @@
     <elements>
         <element name="AnnotatedImage" positionX="-99" positionY="-27" width="128" height="283"/>
         <element name="Detector" positionX="466" positionY="-72" width="128" height="358"/>
+        <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="103"/>
         <element name="Rating" positionX="-135" positionY="297" width="117" height="103"/>
         <element name="User" positionX="126" positionY="545" width="128" height="148"/>
-        <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="103"/>
     </elements>
 </model>
