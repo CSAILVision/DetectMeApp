@@ -16,8 +16,7 @@
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
-- (IBAction)privateAction:(UISegmentedControl *)segmentedControl;
+- (IBAction)filterAction:(UISegmentedControl *)segmentedControl;
 - (IBAction)refreshAction:(id)sender;
-- (IBAction)comboAction:(id)sender;
 
 @end

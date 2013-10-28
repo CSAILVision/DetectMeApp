@@ -19,6 +19,10 @@
 #define kLowerRight 4
 #define kInteriorBox 5
 
+#define kMaxWidth 0.7
+#define kMinWidth 0.3
+#define kMaxHeight 0.7
+#define kMinHeight 0.3
 
 @interface Box()
 {
@@ -139,7 +143,8 @@
 
 - (void) resizeLowerRightToPoint:(CGPoint)lowerRight
 {
-    self.lowerRight = lowerRight;
+    
+    self.lowerRight = [self boundedLowerRight:lowerRight];
     int rotation = 0;
     if (_upperLeft.x > _lowerRight.x) {
         float copy;
@@ -161,7 +166,8 @@
 
 - (void) resizeUpperLeftToPoint:(CGPoint)upperLeft
 {
-    self.upperLeft = upperLeft;
+    
+    self.upperLeft = [self boundedUpperLeft:upperLeft];
     int rotation = 0;
     if (_upperLeft.x > _lowerRight.x) {
         float copy;
@@ -179,6 +185,33 @@
         rotation+=2;
     }
     _cornerResizing +=rotation;
+}
+
+- (CGPoint) boundedLowerRight:(CGPoint)lowerRight
+{
+    
+    float width = lowerRight.x - self.upperLeft.x;
+    float height = lowerRight.y - self.upperLeft.y;
+    
+    if(width>kMaxWidth) lowerRight.x = self.upperLeft.x + kMaxWidth;
+    if(width<kMinWidth) lowerRight.x = self.upperLeft.x + kMinWidth;
+    if(height>kMaxHeight) lowerRight.y = self.upperLeft.y + kMaxHeight;
+    if(height<kMinHeight) lowerRight.y = self.upperLeft.y + kMinWidth;
+    
+    return lowerRight;
+}
+
+- (CGPoint) boundedUpperLeft:(CGPoint)upperLeft
+{
+    float width = self.lowerRight.x - upperLeft.x;
+    float height = self.lowerRight.y - upperLeft.y;
+    
+    if(width>kMaxWidth) upperLeft.x = self.lowerRight.x - kMaxWidth;
+    if(width<kMinWidth) upperLeft.x = self.lowerRight.x - kMinWidth;
+    if(height>kMaxHeight) upperLeft.y = self.lowerRight.y - kMaxHeight;
+    if(height<kMinHeight) upperLeft.y = self.lowerRight.y - kMinWidth;
+    
+    return upperLeft;
 }
 
 

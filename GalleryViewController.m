@@ -19,6 +19,10 @@
 #import "AnnotatedImage.h"
 
 
+#define FILTER_SERVER 0
+#define FILTER_OWN 1
+#define FILTER_COMBOS 2
+
 @interface GalleryViewController()
 {
     UIRefreshControl *_refreshControl;
@@ -38,7 +42,7 @@
     self.collectionView.alwaysBounceVertical = YES;
     
     _refreshControl = [[UIRefreshControl alloc] init];
-    [_refreshControl addTarget:self action:@selector(startRefresh:) forControlEvents:UIControlEventValueChanged];
+    [_refreshControl addTarget:self action:@selector(refreshAction:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:_refreshControl];
 }
 
@@ -46,12 +50,13 @@
 {
     [super viewDidLoad];
 //    self.debug = YES;
+    [self initializeRefreshControl];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self initializeRefreshControl];
+
     
     if(!self.detectorDatabase){
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
@@ -60,24 +65,22 @@
     }else [self fetchAll];
 }
 
-- (void) startRefresh:(id)sender
-{
-    NSLog(@"Refreshing...");
-    [_refreshControl endRefreshing];
-}
 
 
 #pragma mark -
 #pragma mark IBActions
 
-- (IBAction)privateAction:(UISegmentedControl *)segmentedControl
+- (IBAction)filterAction:(UISegmentedControl *)segmentedControl
 {
-    if (segmentedControl.selectedSegmentIndex == 0) // Server public and own public
+    if (segmentedControl.selectedSegmentIndex == FILTER_SERVER) // Server public and own public
         [self fetchAll];
     
-    else{ // Own private and own public
+    else if(segmentedControl.selectedSegmentIndex == FILTER_OWN){
         NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
         [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"user.username == %@", currentUsername]];
+        
+    }else if(segmentedControl.selectedSegmentIndex == FILTER_COMBOS){
+        [self fetchCombos];
     }
 }
 
@@ -91,12 +94,11 @@
     [self persistentSent:@"Detector"];
     [self persistentSent:@"AnnotatedImage"];
     [self persistentSent:@"Rating"];
+    
+    NSLog(@"Refreshing...");
+    [_refreshControl endRefreshing];
 }
 
-- (IBAction)comboAction:(id)sender
-{
-    [self fetchCombos];
-}
 
 #pragma mark -
 #pragma mark UISearchDelegate
@@ -136,7 +138,6 @@
 //    Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
 //    [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
 //    cell.imageView.image = [UIImage imageWithData:detector.image];
-    
     
     return cell;
 }
@@ -192,6 +193,7 @@
     }else if([[segue identifier] isEqualToString:@"ShowDetailSimple"]){
         Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
         DetailViewController *detailVC = (DetailViewController *) segue.destinationViewController;
+        detailVC.hidesBottomBarWhenPushed = YES;
         detailVC.detector = detector;
         detailVC.delegate = self;
         

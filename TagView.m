@@ -95,11 +95,21 @@ UIViewAutoresizingFlexibleHeight
     CGPoint upperRight = CGPointMake(self.box.lowerRight.x*self.frame.size.width, self.box.upperLeft.y*self.frame.size.height);
     CGPoint lowerLeft = CGPointMake(self.box.upperLeft.x*self.frame.size.width, self.box.lowerRight.y*self.frame.size.height);
     
+    CGRect boxRect = CGRectMake(upperLeft.x, upperLeft.y, lowerRight.x - upperLeft.x, lowerRight.y - upperLeft.y);
+    
+    // DRAW ALL THE SCREEN
+    if(self.translucentBackground){
+        UIColor *backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.5];
+        [backgroundColor setFill];
+        UIRectFill(self.frame);
+        
+        [[UIColor clearColor] setFill];
+        UIRectFill(boxRect);
+    }
+    
     // DRAW RECT
     CGContextSetLineWidth(context, kLineWidth);
-    CGRect boxRect = CGRectMake(upperLeft.x, upperLeft.y, lowerRight.x - upperLeft.x, lowerRight.y - upperLeft.y);
-    const CGFloat *components = CGColorGetComponents([[UIColor redColor] CGColor]);
-    CGContextSetRGBStrokeColor(context, components[0] ,components[1],components[2], 1);
+    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
     CGContextStrokeRect(context, boxRect);
     
     // DRAW CORNERS

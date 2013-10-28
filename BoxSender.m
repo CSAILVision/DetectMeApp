@@ -16,11 +16,11 @@
 #import "ConstantsServer.h"
 
 
-
 @interface BoxSender() <SocketIODelegate>
 {
     SocketIO *_socketIO;
     BLWebSocketsServer *_webSocketServer;
+    NSString *_username;
 }
 
 
@@ -35,6 +35,7 @@
 {
     
     if (self = [super init]) {
+        _username = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
     }
     return self;
 }
@@ -43,12 +44,12 @@
 {    
     _socketIO = [[SocketIO alloc] initWithDelegate:self];
     [_socketIO connectToHost:SERVER_IP onPort:SERVER_PORT_NODE];
-    [_socketIO sendEvent:@"begin_connection" withData:nil];
+    [_socketIO sendEvent:@"iphone_connect" withData:_username];
 }
 
 - (void) disconnectSocketIo
 {
-    [_socketIO sendEvent:@"end_connection" withData:nil];
+    [_socketIO sendEvent:@"iphone_disconnect" withData:_username];
     [_socketIO disconnect];
 }
 
@@ -161,22 +162,22 @@
 
 - (void) socketIODidConnect:(SocketIO *)socket
 {
-    NSLog(@"[socketIO] connected");
+//    NSLog(@"[socketIO] connected");
 }
 
 - (void) socketIODidDisconnect:(SocketIO *)socket disconnectedWithError:(NSError *)error
 {
-    NSLog(@"[socketIO] disconnected");
+//    NSLog(@"[socketIO] disconnected");
 }
 
 - (void) socketIO:(SocketIO *)socket didSendMessage:(SocketIOPacket *)packet
 {
-    NSLog(@"[socketIO] message sent");
+//    NSLog(@"[socketIO] message sent");
 }
 
 - (void) socketIO:(SocketIO *)socket didReceiveMessage:(SocketIOPacket *)packet
 {
-    NSLog(@"[socketIO] didReceiveMessage() >>> data: %@", packet.data);
+//    NSLog(@"[socketIO] didReceiveMessage() >>> data: %@", packet.data);
 }
 
 

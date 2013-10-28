@@ -61,6 +61,12 @@
     
 }
 
+- (void) initializeTagView
+{
+    [self.tagView addBoxInView];
+    self.tagView.translucentBackground = YES;
+}
+
 - (void) stopManagers
 {
     [_locationManager stopUpdatingLocation];
@@ -72,7 +78,7 @@
     [super viewDidLoad];
     
     [self initializeButtons];
-    [self.tagView addBoxInView];
+    [self initializeTagView];
     
     _annotatedImages = [[NSMutableArray alloc] init];
     

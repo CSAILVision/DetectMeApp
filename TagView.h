@@ -21,6 +21,8 @@
 @interface TagView : UIView <UITextFieldDelegate>
 
 
+@property BOOL translucentBackground;
+
 // Responsible to handle when the box has been modified
 @property (nonatomic, weak) id <TagViewDelegate> delegate;
 @property (strong, nonatomic) Box *box;
