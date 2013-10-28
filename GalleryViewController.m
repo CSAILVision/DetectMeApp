@@ -19,6 +19,12 @@
 #import "AnnotatedImage.h"
 
 
+@interface GalleryViewController()
+{
+    UIRefreshControl *_refreshControl;
+}
+@end
+
 
 @implementation GalleryViewController
 
@@ -26,6 +32,15 @@
 
 #pragma mark -  
 #pragma mark Initialization
+
+- (void) initializeRefreshControl
+{
+    self.collectionView.alwaysBounceVertical = YES;
+    
+    _refreshControl = [[UIRefreshControl alloc] init];
+    [_refreshControl addTarget:self action:@selector(startRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:_refreshControl];
+}
 
 - (void)viewDidLoad
 {
@@ -36,7 +51,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self initializeRefreshControl];
     
     if(!self.detectorDatabase){
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
@@ -45,6 +60,11 @@
     }else [self fetchAll];
 }
 
+- (void) startRefresh:(id)sender
+{
+    NSLog(@"Refreshing...");
+    [_refreshControl endRefreshing];
+}
 
 
 #pragma mark -
