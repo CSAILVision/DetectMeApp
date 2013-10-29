@@ -41,24 +41,8 @@
 
 + (User *) getCurrentUserInManagedObjectContext:(NSManagedObjectContext *)context
 {
-    User *user;
     NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
-    
-    // look if the detector is already in the database
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    //TODO: look for the actual titles that have get.
-    request.predicate = [NSPredicate predicateWithFormat:@"username = %@", currentUsername];
-    NSError *error;
-    NSArray *matches = [context executeFetchRequest:request error:&error];
-    
-    if(matches.count==1){
-        user = (User *) [matches firstObject];
-        
-    }else{
-        //handle error
-    }
-    
-    return user;
+    return [User userWithName:currentUsername inManagedObjectContext:context];
 }
 
 @end

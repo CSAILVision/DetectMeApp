@@ -129,7 +129,9 @@
     id element = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if([element isKindOfClass:[Detector class]]){
         Detector *detector = (Detector *)element;
-        [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
+        [cell.label setText:[NSString stringWithFormat:@"%@-%@\n %@",detector.name,
+                                                                     detector.serverDatabaseID,
+                                                                     detector.user.username]];
         cell.imageView.image = [UIImage imageWithData:detector.image];
         
     }else if([element isKindOfClass:[MultipleDetector class]]){

@@ -66,8 +66,6 @@
     // (1) Create a new detector. POST.
     // (2) Update a detector for which the current user is the owner. PUT.
     // (3) Update the detector of other user. Creates a brand new detector. POST.
-    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
-//    BOOL isToUpdate = (detectorTrainer.previousDetector.user == currentUser && detectorTrainer.previousDetector.serverDatabaseID>0); // PUT (case(2))
     
     Detector *detector = detectorTrainer.previousDetector;
     
@@ -77,6 +75,7 @@
     
     detector.name = detectorTrainer.name;
     detector.targetClass = detectorTrainer.targetClass;
+    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
     detector.user = currentUser;
     detector.parentID = isToUpdate? detector.parentID : detectorTrainer.previousDetector.serverDatabaseID;
     detector.isPublic = [NSNumber numberWithBool:detectorTrainer.isPublic];
