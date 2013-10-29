@@ -15,6 +15,7 @@
 #import "AYUIButton.h"
 #import "Pyramid.h"
 #import "TagView.h"
+#import "TestHelper.h"
 
 
 @protocol ExecuteDetectorViewControllerDelegate <NSObject>
@@ -25,7 +26,7 @@
 @end
 
 
-@interface ExecuteDetectorViewController : CameraVideoViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ExecuteDetectorViewController : CameraVideoViewController <UITableViewDataSource, UITableViewDelegate, TestHelperDelegate>
 
 
 @property (nonatomic, strong) id<ExecuteDetectorViewControllerDelegate> delegate;
@@ -42,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet AYUIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet AYUIButton *switchButton;
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
+@property (weak, nonatomic) IBOutlet UIButton *connectButton;
 
 
 //info label
@@ -55,9 +57,10 @@
 - (IBAction)sendBoxesToServer:(UIButton *)senderButton;
 
 // test
+@property BOOL isTest;
 @property (weak, nonatomic) IBOutlet UIButton *startTestButton;
 - (IBAction)startTestAction:(UIButton *) startTestButton;
-@property (weak, nonatomic) IBOutlet UIButton *testButton;
-- (IBAction)testAction:(UIButton *) testAction;
+@property (weak, nonatomic) IBOutlet UIProgressView *countDownProgressView;
+
 
 @end

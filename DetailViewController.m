@@ -79,6 +79,13 @@
         NSArray *detectors = [NSArray arrayWithObject:self.detector];
         [(ExecuteDetectorViewController *)segue.destinationViewController setDetectors:detectors];
         
+    }else if([[segue identifier] isEqualToString:@"TestDetector"]){
+        NSArray *detectors = [NSArray arrayWithObject:self.detector];
+        ExecuteDetectorViewController *executeDetectorVC = (ExecuteDetectorViewController *) segue.destinationViewController;
+        executeDetectorVC.detectors = detectors;
+        executeDetectorVC.isTest = YES;
+        
+        
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         TrainingImagesCollectionViewController *vc = (TrainingImagesCollectionViewController *)segue.destinationViewController;
         vc.detector = self.detector;

@@ -145,6 +145,8 @@
 {
     
     self.lowerRight = [self boundedLowerRight:lowerRight];
+    
+    // used when the sizes are not bounded, so you can "reverse" the box
     int rotation = 0;
     if (_upperLeft.x > _lowerRight.x) {
         float copy;
@@ -168,6 +170,8 @@
 {
     
     self.upperLeft = [self boundedUpperLeft:upperLeft];
+    
+    // used when the sizes are not bounded, so you can "reverse" the box
     int rotation = 0;
     if (_upperLeft.x > _lowerRight.x) {
         float copy;

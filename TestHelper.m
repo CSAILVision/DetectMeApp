@@ -8,6 +8,8 @@
 
 #import "TestHelper.h"
 
+#define MAX_TIME 30
+
 @interface TestHelper()
 {
     int _frames;
@@ -62,17 +64,33 @@
     }
 }
 
+
+- (void) cancelTest
+{
+    [self finishTest];
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
 - (void) increaseTimerCount
 {
     _timerCount++;
-    NSLog(@"Count: %d", _timerCount);
-    if(_timerCount==30){
-        _isTesting = NO;
-        [_timer invalidate];
-        
-        NSLog(@"%d frames: %d TP, %d FN", _frames, _truePositives, _falseNegatives);
-    }
+    [self.delegate updateProgress:_timerCount*1.0/MAX_TIME];
     
+    if(_timerCount==MAX_TIME)
+        [self finishTest];
+    
+    
+}
+
+- (void) finishTest
+{
+    _isTesting = NO;
+    [_timer invalidate];
+    [self.delegate testDidFinishWithMessage:[NSString stringWithFormat:@"%d frames: %d TP, %d FN", _frames, _truePositives, _falseNegatives]];
+    
+    NSLog(@"%d frames: %d TP, %d FN", _frames, _truePositives, _falseNegatives);
 }
 
 @end

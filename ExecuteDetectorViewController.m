@@ -12,7 +12,7 @@
 #import "BoxSender.h"
 #import "UIImage+HOG.h"
 #import "UIImage+Resize.h"
-#import "TestHelper.h"
+#import "UIViewController+ShowAlert.h"
 
 
 @interface ExecuteDetectorViewController()
@@ -132,8 +132,11 @@
 - (void) initializeTestViews
 {
     [self.tagView addBoxInView];
-    self.tagView.hidden = YES;
-    self.startTestButton.hidden = YES;
+    self.tagView.hidden = !self.isTest;
+    self.startTestButton.hidden = !self.isTest;
+    self.connectButton.hidden = self.isTest;
+    self.countDownProgressView.hidden = YES;
+    [self.countDownProgressView setProgress:0.0];
 }
 
 - (void) initializeDetectorWrappers
@@ -308,6 +311,21 @@
 
 
 #pragma mark -
+#pragma mark TestHelperDelegate
+
+- (void) updateProgress:(float) progress
+{
+    [self.countDownProgressView setProgress:progress animated:YES];
+}
+
+- (void) testDidFinishWithMessage:(NSString *)message
+{
+    [self showAlertWithTitle:@"Finish Test" andDescription:message];
+    [self.startTestButton setTitle:@"Start" forState:UIControlStateNormal];
+    self.countDownProgressView.hidden = YES;
+}
+
+#pragma mark -
 #pragma mark IBActions
 
 - (IBAction)switchCameras:(id)sender
@@ -385,24 +403,23 @@
     }
 }
 
-- (IBAction)testAction:(UIButton *) testAction;
-{
-    if([testAction.titleLabel.text isEqualToString:@"Test"]){
-        self.startTestButton.hidden = NO;
-        self.tagView.hidden = NO;
-        testAction.titleLabel.text = @"Cancel";
-        
-    }else if([testAction.titleLabel.text isEqualToString:@"Cancel"]){
-        self.startTestButton.hidden = YES;
-        self.tagView.hidden = YES;
-        testAction.titleLabel.text = @"Test";
-    }
-}
 
 - (IBAction)startTestAction:(UIButton *) startTestButton;
 {
-    _testHelper = [[TestHelper alloc] init];
-    [_testHelper startTest];
+    if([startTestButton.titleLabel.text isEqualToString:@"Start"]){
+        _testHelper = [[TestHelper alloc] init];
+        _testHelper.delegate = self;
+        [_testHelper startTest];
+        self.countDownProgressView.hidden = NO;
+        [startTestButton setTitle:@"Cancel" forState:UIControlStateNormal];
+        
+        
+    }else if([startTestButton.titleLabel.text isEqualToString:@"Cancel"]){
+        self.countDownProgressView.hidden = YES;
+        [_testHelper cancelTest];
+        [startTestButton setTitle:@"Start" forState:UIControlStateNormal];
+        
+    }
 }
 
 

@@ -12,7 +12,8 @@
 
 @protocol TestHelperDelegate <NSObject>
 
-- (void) testDidFinish;
+- (void) updateProgress:(float) progress;
+- (void) testDidFinishWithMessage:(NSString *)message;
 
 @end
 
@@ -22,5 +23,6 @@
 
 - (void) startTest;
 - (void) receivedDetections:(NSArray *)detectionBoundingBoxes onRealBox:(Box *)realBox;
+- (void) cancelTest;
 
 @end
