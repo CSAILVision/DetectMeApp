@@ -51,18 +51,21 @@
     [super viewDidLoad];
 //    self.debug = YES;
     [self initializeRefreshControl];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
+    
+    [self startLoading];
     
     if(!self.detectorDatabase){
         self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
         [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
         
     }else [self fetchAll];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 
@@ -178,6 +181,8 @@
 //    return UIEdgeInsetsMake(0,0,0,0);//(50, 10, 50, 10);
 //}
 
+
+
 #pragma mark -
 #pragma mark Segue
 
@@ -227,6 +232,8 @@
                                                                         managedObjectContext:self.detectorDatabase.managedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
+    
+    [self finishedLoading];
 }
 
 - (void) fetchAll
@@ -291,6 +298,18 @@
     }
 }
 
+
+- (void) startLoading
+{
+    [self.activityIndicator startAnimating];
+    self.activityIndicator.hidden = NO;
+}
+
+-(void) finishedLoading
+{
+    [self.activityIndicator stopAnimating];
+    self.activityIndicator.hidden = YES;
+}
 
 - (void)viewDidUnload
 {

@@ -70,8 +70,6 @@
 //    BOOL isToUpdate = (detectorTrainer.previousDetector.user == currentUser && detectorTrainer.previousDetector.serverDatabaseID>0); // PUT (case(2))
     
     Detector *detector = detectorTrainer.previousDetector;
-    for(AnnotatedImage *annotatedImage in detectorTrainer.previousDetector.annotatedImages)
-        [context deleteObject:annotatedImage];
     
     if(!isToUpdate){ // case (1) and (3)
         detector = [NSEntityDescription insertNewObjectForEntityForName:@"Detector" inManagedObjectContext:context];

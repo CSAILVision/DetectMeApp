@@ -602,14 +602,12 @@ using namespace cv;
             //run the detector on the current image
             NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:10 usingNms:NO deviceOrientation:UIImageOrientationUp learningImageIndex:i];
             
-            dispatch_sync(dispatch_get_main_queue(),^{
-                [self.delegate sendMessage:[NSString stringWithFormat:@"New bb obtained for image %zd: %d", i, detectedBoundingBoxes.count]];
-            });
             
             // max negative bounding boxes detected allowed per image
             // It is done for memory purposes and it also helps keep balanced classes
             int quota = MAX_QUOTA;
             
+            int image_positives = 0;
             for(BoundingBox *detectedBB in detectedBoundingBoxes){
                 
                 double overlapArea = [detectedBB fractionOfAreaOverlappingWith:groundTruthBB];
@@ -618,6 +616,7 @@ using namespace cv;
                 if (overlapArea > 0.7 && overlapArea<1){
                     detectedBB.label = 1;
                     positives++;
+                    image_positives++;
                     [self addExample:detectedBB to:trainingSet];
                 }else if(overlapArea < 0.25 && quota>0){
                     quota--;
@@ -625,6 +624,10 @@ using namespace cv;
                     [self addExample:detectedBB to:trainingSet];
                 }
             }
+            
+            dispatch_sync(dispatch_get_main_queue(),^{
+                [self.delegate sendMessage:[NSString stringWithFormat:@"New bb obtained for image %zd: %d/%d", i,image_positives ,detectedBoundingBoxes.count]];
+            });
         }
     });
     

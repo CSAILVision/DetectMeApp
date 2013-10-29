@@ -282,12 +282,18 @@
                                     <action selector="filterAction:" destination="gzV-tb-nhM" eventType="valueChanged" id="kOf-Nk-BC9"/>
                                 </connections>
                             </segmentedControl>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="ldc-GV-g09">
+                                <rect key="frame" x="20" y="126" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Gallery" id="mJ3-IX-cxV"/>
                     <navigationItem key="navigationItem" title="Gallery" id="41K-p6-SUP"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="ldc-GV-g09" id="J4u-q0-bnj"/>
                         <outlet property="collectionView" destination="z4q-oJ-urB" id="Ubq-cJ-tZL"/>
                         <outlet property="searchBar" destination="meH-oq-ZNN" id="j4U-do-8fJ"/>
                         <segue destination="eMG-ES-tQK" kind="push" identifier="ShowDetailSimple" id="wR7-vz-Yhe"/>
@@ -369,10 +375,6 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="zNu-Uz-4kz">
-                                                <rect key="frame" x="18" y="515" width="284" height="34"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </slider>
                                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="3dU-Of-R1F">
                                                 <rect key="frame" x="85" y="91" width="150" height="2"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -380,6 +382,10 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     </view>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="zNu-Uz-4kz">
+                                        <rect key="frame" x="18" y="515" width="284" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -548,7 +554,7 @@
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Xvq-Q6-YLJ">
                             <size key="itemSize" width="121" height="177"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="108"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -584,6 +590,18 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FooterView" id="4jv-Co-tSN">
+                            <rect key="frame" x="0.0" y="241" width="320" height="108"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new Images to personlize this detector" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Dm-xa-mpJ">
+                                    <rect key="frame" x="0.0" y="-230" width="320" height="568"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="JSg-iz-zBY" id="lXo-xL-rRr"/>
                             <outlet property="delegate" destination="JSg-iz-zBY" id="PrC-rD-OxN"/>
@@ -617,6 +635,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="trainButton" destination="ADR-sB-PVJ" id="JEa-e2-ta9"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qgJ-Dw-U5f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -742,7 +763,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="B8U-r0-Zeg">
-                                        <rect key="frame" x="129" y="486" width="62" height="62"/>
+                                        <rect key="frame" x="139" y="495" width="42" height="42"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <state key="normal" image="camera-icon_150.png">
@@ -770,6 +791,7 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="w9p-9G-FY1"/>
                     <navigationItem key="navigationItem" id="Md7-is-I6v">
@@ -1009,9 +1031,9 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ton-bO-FO8"/>
+        <segue reference="iBb-Sq-DZc"/>
         <segue reference="SfB-Sl-l8o"/>
         <segue reference="rZB-t8-M3R"/>
-        <segue reference="zdo-hz-QnN"/>
+        <segue reference="qoV-C6-q3a"/>
     </inferredMetricsTieBreakers>
 </document>

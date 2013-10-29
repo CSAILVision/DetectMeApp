@@ -14,6 +14,7 @@
 @interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate, TagViewControllerDelegate>
 
 @property (strong, nonatomic) Detector *detector;
+@property (weak, nonatomic) IBOutlet UIButton *trainButton;
 
 - (IBAction)deleteAction:(UIButton *)sender;
 

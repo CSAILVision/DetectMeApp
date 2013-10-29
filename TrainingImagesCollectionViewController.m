@@ -43,6 +43,8 @@
     
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
     
+    [self toggleTrainButton];
+    
 	// Do any additional setup after loading the view.
 }
 
@@ -66,6 +68,26 @@
     return cell;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionFooter) {
+        reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+        
+        if(_annotatedImages.count>0){
+            reusableview.hidden = YES;
+            reusableview.frame = CGRectMake(0, 0, 1, 1);
+        }else{
+            reusableview.hidden = NO;
+            reusableview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        }
+
+    }
+    
+    return reusableview;
+}
+
 #pragma mark -
 #pragma mark IBActions
 - (IBAction)deleteAction:(UIButton *)sender
@@ -77,6 +99,8 @@
     [_detectorDatabase.managedObjectContext deleteObject:deleted];
 
     [self.collectionView reloadData];
+    
+    [self toggleTrainButton];
 }
 
 #pragma mark -
@@ -88,6 +112,7 @@
     [_annotatedImages addObjectsFromArray:annotatedImages];
     [self.collectionView reloadData];
     
+    [self toggleTrainButton];
 }
 
 #pragma mark -
@@ -96,6 +121,7 @@
 - (void) finishEditingWithBoxes:(NSMutableArray *)boxes
 {
     [self updateBoxes:[NSArray arrayWithArray:boxes]];
+    
 }
 
 
@@ -160,6 +186,12 @@
     }
         
     return  images;
+}
+
+- (void) toggleTrainButton
+{
+    if(_annotatedImages.count==0) self.trainButton.hidden = YES;
+    else self.trainButton.hidden = NO;
 }
 
 @end
