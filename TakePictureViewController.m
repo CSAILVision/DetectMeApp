@@ -12,6 +12,7 @@
 #import "UIImage+Resize.h"
 #import "AnnotatedImage+Create.h"
 #import "ManagedDocumentHelper.h"
+#import "UIImage+Rotation.h"
 
 @interface TakePictureViewController()
 {
@@ -145,6 +146,8 @@
         if(UIDeviceOrientationIsLandscape(orientation)){
             image = [UIImage imageWithCGImage:imageRef];
         }else image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight];
+        
+        image = [image fixOrientation];
         
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
         

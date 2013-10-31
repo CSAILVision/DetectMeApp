@@ -137,6 +137,7 @@
     // initiate creation of the request
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PATCH"];
     [_requestConstructor addTokenAuthentication];
+
     
     [_requestConstructor addFieldWithTitle:SERVER_DETECTOR_DELETED forValue:@"True"];
     
@@ -146,6 +147,27 @@
     [conn start];
 }
 
+
+- (void) shareProfilePicture:(UIImage *) profilePicture forUsername:(NSString *)username
+{
+//    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/%@/edit/",SERVER_ADDRESS,username];
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/update/%@/",SERVER_ADDRESS,username];
+    
+    [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
+    [_requestConstructor addTokenAuthentication];
+    
+    //SERVER_PROFILE_IMAGE
+    [_requestConstructor addFileFieldWithTitle:@"mugshot"
+                                  withFilename:[NSString stringWithFormat:@"%@_profile_picture.jpg",username]
+                                  withMIMEType:@"image/jpeg"
+                                       forData:UIImageJPEGRepresentation(profilePicture, 0.5)];
+    
+    
+    // URL Connection
+    _responseData = [[NSMutableData alloc] init];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[_requestConstructor getRequest] delegate:self];
+    [conn start];
+}
 
 #pragma mark -
 #pragma mark NSURLConnectionDataDelegate

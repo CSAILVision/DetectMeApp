@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserProfileViewController : UIViewController
+@interface UserProfileViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *emailLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 - (IBAction)logOutAction:(id)sender;
+- (IBAction)takePictureAction:(id)sender;
+
 
 @end
