@@ -68,14 +68,10 @@ UIViewAutoresizingFlexibleHeight
 
 - (void) addBoxInView
 {
-//    CGPoint newUpperLeft = CGPointMake(visibleRect.origin.x + 0.3*visibleRect.size.width, visibleRect.origin.y + 0.3*visibleRect.size.height);
-//    CGPoint newLowerRight = CGPointMake(visibleRect.origin.x + 0.7*visibleRect.size.width, visibleRect.origin.y + 0.7*visibleRect.size.height);
-//    
     CGPoint newUpperLeft = CGPointMake(0.3, 0.3);
     CGPoint newLowerRight = CGPointMake(0.7, 0.7);
     
-    
-    Box *newBox = [[Box alloc] initWithUpperLeft:newUpperLeft lowerRight:newLowerRight];// forImageSize:self.frame.size];
+    Box *newBox = [[Box alloc] initWithUpperLeft:newUpperLeft lowerRight:newLowerRight];
     self.box = newBox;
 }
 
