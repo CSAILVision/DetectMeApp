@@ -30,6 +30,7 @@
 
 @implementation DetailViewController
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -43,7 +44,7 @@
     _isOwner = [self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]];
     if(!_isOwner){
         self.deleteButton.hidden = YES;
-//        self.shareButton.hidden = YES;
+        self.isPublicControl.hidden = YES;
     }
     
     _shareDetector = [[ShareDetector alloc] init];

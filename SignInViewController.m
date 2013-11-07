@@ -35,6 +35,7 @@
         _username = [[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
         _password = [[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
         [self signIn];
+        //[self signInCompleted];
     }
 }
 

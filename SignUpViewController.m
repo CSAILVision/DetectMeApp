@@ -76,6 +76,13 @@
     return YES;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    // Disable keyboard when the background is touched
+    [self.view endEditing:YES];
+    [super touchesBegan:touches withEvent:event];
+}
+
 #pragma mark -
 #pragma mark Private Methods
 

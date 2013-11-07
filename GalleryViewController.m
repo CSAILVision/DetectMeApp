@@ -103,22 +103,42 @@
 }
 
 
+
 #pragma mark -
 #pragma mark UISearchDelegate
 
+- (void) searchBarTextDidBeginEditing:(UISearchBar *) searchBar
+{
+    searchBar.showsCancelButton = YES;
+}
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    
     // The user clicked the [X] button or otherwise cleared the text.
     if([searchText length] == 0) {
         [self fetchAll];
-        [searchBar performSelector: @selector(resignFirstResponder)
-                        withObject: nil
-                        afterDelay: 0.1];
+
     }else
         [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@ OR targetClass CONTAINS[cd] %@", searchText, searchText]];
 
 }
 
+
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    searchBar.showsCancelButton = NO;
+    [searchBar resignFirstResponder];
+    [self.view endEditing:YES];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    searchBar.showsCancelButton = NO;
+    [searchBar resignFirstResponder];
+    [self.view endEditing:YES];
+}
 
 #pragma mark -
 #pragma mark UICollectionView DataSource & Delegate

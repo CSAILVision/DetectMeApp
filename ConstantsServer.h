@@ -11,13 +11,13 @@
 
 
 // SERVER MISCELLANIA
-#define SERVER_IP @"128.52.160.100" // for node connection
+//#define SERVER_IP @"128.52.160.100" // for node connection
+#define SERVER_IP @"128.52.128.116"
 #define SERVER_PORT_NODE 7000
 #define MOBILE_LISTENING_PORT 9000
-#define SERVER_ADDRESS @ "http://128.30.99.198:8000/"
-//#define SERVER_ADDRESS @ "http://detectme.csail.mit.edu/"
+//#define SERVER_ADDRESS @ "http://128.30.99.242:9000/"
+#define SERVER_ADDRESS @ "http://detectme.csail.mit.edu/"
 #define SERVER_TOKEN @"token"
-//128.30.99.198
 
 
 // AUTHORIZATION IN SERVER

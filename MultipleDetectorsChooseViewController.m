@@ -12,6 +12,7 @@
 #import "ManagedDocumentHelper.h"
 #import "UIViewController+ShowAlert.h"
 #import "MultipleDetector+Create.h"
+#import "DetectorTypeSelectionViewController.h"
 
 
 @interface MultipleDetectorsChooseViewController ()
@@ -52,9 +53,12 @@
                                       forDetectors:_selectedDetectors
                             inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
-        NSLog(@"MU created: %@", mu);
+
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        DetectorTypeSelectionViewController *vc = (DetectorTypeSelectionViewController *)[viewControllers objectAtIndex:viewControllers.count - 2];
+        vc.jump = YES;
+        
         [self.navigationController popToRootViewControllerAnimated:YES];
-        [self.tabBarController setSelectedIndex:0];
     }
 }
 
