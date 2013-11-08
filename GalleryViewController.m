@@ -53,7 +53,6 @@
 
 - (void) initializeFilter
 {
-    NSLog(@"Filter:%@", self.filter);
     
     if([self.filter isEqualToString:FILTER_SINGLE]){
         NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
@@ -77,7 +76,6 @@
 {
     [super viewDidLoad];
 //    self.debug = YES;
-    [self startActivityIndicator];
     
     [self initializeDataBase];
     [self initializeFilter];
@@ -207,22 +205,30 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     // Footer when no images
-    UICollectionReusableView *reusableview = nil;
+    UICollectionReusableView *footerView;
     
     if (kind == UICollectionElementKindSectionFooter) {
-        reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
+        footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
+        
+
         
         if(self.fetchedResultsController.fetchedObjects.count>0){
-            reusableview.hidden = YES;
-            reusableview.frame = CGRectMake(0, 0, 1, 1);
+            footerView.hidden = YES;
+            footerView.frame = CGRectMake(0, 0, 1, 1);
         }else{
-            reusableview.hidden = NO;
-            reusableview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+            footerView.hidden = NO;
+            footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+            if([self.filter isEqualToString:FILTER_SERVER]){
+                
+                // Different label to show
+                UILabel *footerLabel = [footerView.subviews lastObject];
+                footerLabel.text = @"Scroll to refresh \n from the server.";
+            }
         }
         
     }
     
-    return reusableview;
+    return footerView;
 }
 
 // Layout
@@ -293,8 +299,6 @@
                                                                         managedObjectContext:self.detectorDatabase.managedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
-    
-    [self finishActivityIndicator];
 }
 
 - (void) fetchAll
@@ -360,17 +364,6 @@
 }
 
 
-- (void) startActivityIndicator
-{
-    [self.activityIndicator startAnimating];
-    self.activityIndicator.hidden = NO;
-}
-
--(void) finishActivityIndicator
-{
-    [self.activityIndicator stopAnimating];
-    self.activityIndicator.hidden = YES;
-}
 
 - (void)viewDidUnload
 {

@@ -114,7 +114,6 @@
     
     if(token){ //signin
         [self storeSessionForToken:token];
-        [self storeUserInCoreData];
         [self.delegate signInCompleted];
         
         
@@ -136,13 +135,6 @@
     [defaults setObject:_username forKey:USER_DEFAULTS_USERNAME];
     [defaults setObject:_password forKey:USER_DEFAULTS_PASSWORD];
     [defaults synchronize];
-}
-
-- (void) storeUserInCoreData
-{
-    [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
-        [User userWithName:_username inManagedObjectContext:document.managedObjectContext];
-    }];
 }
 
 - (void) handleErrorForJSON:(NSDictionary *)errorJSON

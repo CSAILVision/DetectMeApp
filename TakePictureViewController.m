@@ -203,6 +203,16 @@
 
 - (IBAction)takePictureAction:(id)sender
 {
+    //animation
+    [UIView animateWithDuration:0.2f
+                     animations:^{
+                         [self.view setAlpha:0.5f];
+                     }
+                     completion:^(BOOL finished){
+                         [self.view setAlpha:1];
+                     }
+     ];
+    
     _takePicture = YES;
 }
 

@@ -22,7 +22,7 @@
 @property (strong, nonatomic) NSString *filter;
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UILabel *noImagesHelperLabel;
 
 
 - (IBAction)refreshAction:(id)sender;

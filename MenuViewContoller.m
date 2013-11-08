@@ -30,9 +30,9 @@
 {
     if(!_database){
         _database = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
-            NSLog(@"DATABASE LOADED!! %@", document);
+            _currentUser = [User getCurrentUserInManagedObjectContext:document.managedObjectContext];
+            [self performSelectorOnMainThread:@selector(loadDataOnTable) withObject:nil waitUntilDone:NO];
         }];
-        _currentUser = [User getCurrentUserInManagedObjectContext:_database.managedObjectContext];
     }
 }
 
@@ -44,8 +44,6 @@
 
 - (void) initializeUserProfile
 {
-    NSLog(@"current user: %@", _currentUser.username);
-    NSLog(@"current database: %@", _database);
     self.usernameLabel.text = _currentUser.username;
     self.profileImage.image = [UIImage imageWithData:_currentUser.image];
 }
@@ -54,6 +52,11 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self loadDataOnTable];
+}
+
+- (void) loadDataOnTable
+{
     [self initializeUserProfile];
     [self setNumberOfDetectors];
 }

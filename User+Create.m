@@ -26,7 +26,6 @@
         //handle error
         NSLog(@"error!!");
         NSLog(@"username: %@", name);
-        NSLog(@"Matches: %@", matches);
         
     }else if (matches.count == 0){
         NSLog(@"Creating user:%@", name);
