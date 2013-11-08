@@ -68,6 +68,19 @@
     self.tagView.translucentBackground = YES;
 }
 
+- (void) initializeNextButton
+{
+    
+    // disabled until
+    self.nextButton.enabled = NO;
+    
+    // Used when accessing the controller from the retrain controllers
+    if(self.hideNextButton){
+        self.nextButton.hidden = YES;
+        self.hideNextButton = NO;
+    }
+}
+
 - (void) stopManagers
 {
     [_locationManager stopUpdatingLocation];
@@ -80,6 +93,7 @@
     
     [self initializeButtons];
     [self initializeTagView];
+    [self initializeNextButton];
     
     _annotatedImages = [[NSMutableArray alloc] init];
     
@@ -96,12 +110,6 @@
     
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
-    
-    // Used when accessing the controller from the retrain controllers
-    if(self.hideNextButton){
-        self.nextButton.hidden = YES;
-        self.hideNextButton = NO;
-    }
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -212,6 +220,9 @@
                          [self.view setAlpha:1];
                      }
      ];
+    
+    //enable next button
+    self.nextButton.enabled = YES;
     
     _takePicture = YES;
 }

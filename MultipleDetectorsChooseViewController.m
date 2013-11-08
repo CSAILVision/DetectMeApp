@@ -49,16 +49,14 @@
 {
     if(_selectedDetectors.count<2) [self showAlertWithTitle:@"Error" andDescription:@"You need at least 2 detectors."];
     else{
-        MultipleDetector *mu = [MultipleDetector multipleDetectorWithName:@"combo"
+        [MultipleDetector multipleDetectorWithName:@"mulitple"
                                       forDetectors:_selectedDetectors
                             inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
 
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        DetectorTypeSelectionViewController *vc = (DetectorTypeSelectionViewController *)[viewControllers objectAtIndex:viewControllers.count - 2];
-        vc.jump = YES;
-        
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        // Pop controllers to the gallery
+        NSArray *array = [self.navigationController viewControllers];
+        [self.navigationController popToViewController:[array objectAtIndex:1] animated:YES];
     }
 }
 

@@ -39,7 +39,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.finishButton.hidden = YES;
+    self.doneButton.hidden = YES;
+    self.executeButton.hidden = YES;
     [self.activityIndicator startAnimating];
     [self.progressView setProgress:0];
     
@@ -94,10 +95,7 @@
     _shareDetector.delegate = self;
     [_shareDetector shareDetector:_detector toUpdate:isToUpdate];
     
-    self.imageView.image = self.detectorTrainer.averageImage;
-    
-    [self.activityIndicator stopAnimating];
-    self.finishButton.hidden = NO;
+    [self displayForFinishTraining];
 }
 
 - (void) updateProgess:(float) progress
@@ -108,7 +106,7 @@
 #pragma mark -
 #pragma mark IBActions
 
-- (IBAction)finishAction:(id)sender
+- (IBAction)doneAction:(id)sender
 {
     // Pop controllers to the gallery
     NSArray *array = [self.navigationController viewControllers];
@@ -143,5 +141,19 @@
     [self showAlertWithTitle:title andDescription:message];
 }
 
+#pragma mark -
+#pragma mark Private Methods
+
+- (void) displayForFinishTraining
+{
+    self.imageView.image = self.detectorTrainer.averageImage;
+    
+    [self.activityIndicator stopAnimating];
+    self.activityIndicator.hidden = YES;
+    
+    self.label.text = @"Finished!";
+    self.doneButton.hidden = NO;
+    self.executeButton.hidden = NO;
+}
 
 @end

@@ -20,7 +20,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *label;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
-@property (weak, nonatomic) IBOutlet UIButton *finishButton;
-- (IBAction)finishAction:(id)sender;
+
+// buttons
+@property (weak, nonatomic) IBOutlet UIButton *executeButton;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+- (IBAction)doneAction:(id)sender;
 
 @end

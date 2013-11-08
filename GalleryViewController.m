@@ -83,11 +83,11 @@
     
     [self initializeDataBase];
     [self initializeRefreshControl];
-    [self applyFilter];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    [self applyFilter];
     [super viewWillAppear:animated];
 
 }
