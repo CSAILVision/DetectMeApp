@@ -37,11 +37,13 @@
 
 - (void) initializeRefreshControl
 {
-    self.collectionView.alwaysBounceVertical = YES;
-    
-    _refreshControl = [[UIRefreshControl alloc] init];
-    [_refreshControl addTarget:self action:@selector(refreshAction:) forControlEvents:UIControlEventValueChanged];
-    [self.collectionView addSubview:_refreshControl];
+    if([self.filter isEqualToString:FILTER_SERVER]){
+        self.collectionView.alwaysBounceVertical = YES;
+        
+        _refreshControl = [[UIRefreshControl alloc] init];
+        [_refreshControl addTarget:self action:@selector(refreshAction:) forControlEvents:UIControlEventValueChanged];
+        [self.collectionView addSubview:_refreshControl];
+    }
 }
 
 - (void) initializeDataBase
@@ -51,12 +53,12 @@
     }
 }
 
-- (void) initializeFilter
+- (void) applyFilter
 {
     
     if([self.filter isEqualToString:FILTER_SINGLE]){
-        NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
-        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"user.username == %@", currentUsername]];
+        [self fetchSingle];
+        
         self.title = @"My Single";
         
     }else if([self.filter isEqualToString:FILTER_MULTIPLE]){
@@ -65,8 +67,7 @@
         self.title = @"My Multiple";
         
     }else if([self.filter isEqualToString:FILTER_SERVER]){
-        [self fetchAll];
-        [self initializeRefreshControl];
+        [self fetchServer];
         
         self.title = @"Server";
     }
@@ -77,8 +78,12 @@
     [super viewDidLoad];
 //    self.debug = YES;
     
+    // Remove extra top margin
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     [self initializeDataBase];
-    [self initializeFilter];
+    [self initializeRefreshControl];
+    [self applyFilter];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -97,7 +102,7 @@
 {
     // Update from server
     [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
-    [self fetchAll];
+    [self fetchServer];
     
     // Try to send all the detectors/images/ratings that have not been send
     [self persistentSent:@"Detector"];
@@ -135,7 +140,7 @@
     
     // The user clicked the [X] button or otherwise cleared the text.
     if([searchText length] == 0) {
-        [self fetchAll];
+        [self applyFilter];
 
     }else
         [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@ OR targetClass CONTAINS[cd] %@", searchText, searchText]];
@@ -299,12 +304,30 @@
                                                                         managedObjectContext:self.detectorDatabase.managedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
+    [_refreshControl endRefreshing];
 }
 
-- (void) fetchAll
+- (void) fetchSingle
 {
-    [self fetchResultsForPredicate:nil];
+    NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
+    [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"user.username == %@", currentUsername]];
 }
+
+- (void) fetchServer
+{
+    [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"isPublic == YES"]];
+}
+
+- (void) fetchMultiples
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"MultipleDetector"];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
+                                                                        managedObjectContext:self.detectorDatabase.managedObjectContext
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
+}
+
 
 - (void) fetchDetectorsFromServerIntoDocument:(UIManagedDocument *) document
 {
@@ -323,20 +346,9 @@
             }
             
             // when finished, present them on the screen
-            [self performSelectorOnMainThread:@selector(initializeFilter) withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(applyFilter) withObject:nil waitUntilDone:NO];
         }];
     });
-}
-
-- (void) fetchMultiples
-{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"MultipleDetector"];
-    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
-                                                                        managedObjectContext:self.detectorDatabase.managedObjectContext
-                                                                          sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
-    
 }
 
 - (void) persistentSent:(NSString *)modelName
