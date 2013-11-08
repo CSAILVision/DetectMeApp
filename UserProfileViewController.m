@@ -14,8 +14,6 @@
 
 @interface UserProfileViewController ()
 {
-    User *_currentUser;
-    UIManagedDocument *_detectorDatabase;
     UIImagePickerController *_imagePicker;
 }
 
@@ -25,12 +23,16 @@
 
 - (void) initializeImagePicker
 {
-    _imagePicker = [[UIImagePickerController alloc] init];
-    _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    _imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-    _imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-    _imagePicker.navigationBarHidden = YES;
-    _imagePicker.delegate = self;
+//    dispatch_queue_t queue = dispatch_queue_create("queue", NULL);
+//    dispatch_async(queue, ^{
+        _imagePicker = [[UIImagePickerController alloc] init];
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        _imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+        _imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+        _imagePicker.navigationBarHidden = YES;
+        _imagePicker.delegate = self;
+//    });
+    
 }
 
 
@@ -39,17 +41,19 @@
     [super viewDidLoad];
     [self initializeImagePicker];
     
-    _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     [self outputValuesForCurrentUser];
 }
 
+
 - (void) outputValuesForCurrentUser
 {
-    _currentUser = [User getCurrentUserInManagedObjectContext:_detectorDatabase.managedObjectContext];
-    self.usernameLabel.text = _currentUser.username;
-    self.emailLabel.text = _currentUser.email;
-    self.imageView.image = [UIImage imageWithData:_currentUser.image];
+    self.usernameLabel.text = self.currentUser.username;
+    self.emailLabel.text = self.currentUser.email;
+    self.imageView.image = [UIImage imageWithData:self.currentUser.image];
 }
+
+
+
 
 
 
@@ -85,11 +89,11 @@
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     self.imageView.image = image;
-    _currentUser.image = UIImageJPEGRepresentation(image, 0.5);
+    self.currentUser.image = UIImageJPEGRepresentation(image, 0.5);
     [_imagePicker dismissViewControllerAnimated:YES completion:nil];
     
     ShareDetector *sh = [[ShareDetector alloc] init];
-    [sh shareProfilePicture:image forUsername:_currentUser.username];
+    [sh shareProfilePicture:image forUsername:self.currentUser.username];
     
 }
 

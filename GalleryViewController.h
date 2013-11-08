@@ -11,13 +11,22 @@
 #import "DetailViewController.h"
 #import "DetailMultipleViewController.h"
 
+
+#define FILTER_SINGLE @"MySingleDetectors"
+#define FILTER_MULTIPLE @"MyMultipleDetectors"
+#define FILTER_SERVER @"ServerDetectors"
+
+
 @interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate, DetailViewControllerDelegate>
 
+@property (strong, nonatomic) NSString *filter;
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
-- (IBAction)filterAction:(UISegmentedControl *)segmentedControl;
+
 - (IBAction)refreshAction:(id)sender;
+- (IBAction)addAction:(id)sender;
+
 
 @end

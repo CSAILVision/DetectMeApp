@@ -110,8 +110,9 @@
 
 - (IBAction)finishAction:(id)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
-//    [self.tabBarController setSelectedIndex:0];
+    // Pop controllers to the gallery
+    NSArray *array = [self.navigationController viewControllers];
+    [self.navigationController popToViewController:[array objectAtIndex:1] animated:YES];
 }
 
 #pragma mark -

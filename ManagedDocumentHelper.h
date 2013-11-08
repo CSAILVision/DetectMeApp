@@ -20,7 +20,7 @@
  */
 
 
-typedef void (^completion_block_t)(UIManagedDocument *);
+typedef void (^completion_block_t)(UIManagedDocument *document);
 
 @interface ManagedDocumentHelper : NSObject
 

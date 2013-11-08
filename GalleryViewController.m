@@ -19,9 +19,7 @@
 #import "AnnotatedImage.h"
 
 
-#define FILTER_SERVER 0
-#define FILTER_OWN 1
-#define FILTER_COMBOS 2
+
 
 @interface GalleryViewController()
 {
@@ -46,26 +44,49 @@
     [self.collectionView addSubview:_refreshControl];
 }
 
+- (void) initializeDataBase
+{
+    if(!self.detectorDatabase){
+        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
+    }
+}
+
+- (void) initializeFilter
+{
+    NSLog(@"Filter:%@", self.filter);
+    
+    if([self.filter isEqualToString:FILTER_SINGLE]){
+        NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
+        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"user.username == %@", currentUsername]];
+        self.title = @"My Single";
+        
+    }else if([self.filter isEqualToString:FILTER_MULTIPLE]){
+        [self fetchMultiples];
+        
+        self.title = @"My Multiple";
+        
+    }else if([self.filter isEqualToString:FILTER_SERVER]){
+        [self fetchAll];
+        [self initializeRefreshControl];
+        
+        self.title = @"Server";
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 //    self.debug = YES;
-    [self initializeRefreshControl];
+    [self startActivityIndicator];
     
-    [self startLoading];
-    
-    if(!self.detectorDatabase){
-        self.detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
-        [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
-        
-    }else [self fetchAll];
+    [self initializeDataBase];
+    [self initializeFilter];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 
@@ -73,19 +94,6 @@
 #pragma mark -
 #pragma mark IBActions
 
-- (IBAction)filterAction:(UISegmentedControl *)segmentedControl
-{
-    if (segmentedControl.selectedSegmentIndex == FILTER_SERVER) // Server public and own public
-        [self fetchAll];
-    
-    else if(segmentedControl.selectedSegmentIndex == FILTER_OWN){
-        NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
-        [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"user.username == %@", currentUsername]];
-        
-    }else if(segmentedControl.selectedSegmentIndex == FILTER_COMBOS){
-        [self fetchCombos];
-    }
-}
 
 - (IBAction)refreshAction:(id)sender
 {
@@ -100,6 +108,18 @@
     
     NSLog(@"Refreshing...");
     [_refreshControl endRefreshing];
+}
+
+
+
+- (IBAction)addAction:(id)sender
+{
+    if([self.filter isEqualToString:FILTER_MULTIPLE]){
+        [self performSegueWithIdentifier:@"AddMultipleDetector" sender:self];
+    
+    }else{
+        [self performSegueWithIdentifier:@"AddSingleDetector" sender:self];
+    }
 }
 
 
@@ -123,7 +143,6 @@
         [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@ OR targetClass CONTAINS[cd] %@", searchText, searchText]];
 
 }
-
 
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -185,6 +204,26 @@
     // TODO: Deselect item
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    // Footer when no images
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionFooter) {
+        reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
+        
+        if(self.fetchedResultsController.fetchedObjects.count>0){
+            reusableview.hidden = YES;
+            reusableview.frame = CGRectMake(0, 0, 1, 1);
+        }else{
+            reusableview.hidden = NO;
+            reusableview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        }
+        
+    }
+    
+    return reusableview;
+}
 
 // Layout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -255,7 +294,7 @@
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
     
-    [self finishedLoading];
+    [self finishActivityIndicator];
 }
 
 - (void) fetchAll
@@ -280,12 +319,12 @@
             }
             
             // when finished, present them on the screen
-            [self performSelectorOnMainThread:@selector(fetchAll) withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(initializeFilter) withObject:nil waitUntilDone:NO];
         }];
     });
 }
 
-- (void) fetchCombos
+- (void) fetchMultiples
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"MultipleDetector"];
     request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
@@ -321,13 +360,13 @@
 }
 
 
-- (void) startLoading
+- (void) startActivityIndicator
 {
     [self.activityIndicator startAnimating];
     self.activityIndicator.hidden = NO;
 }
 
--(void) finishedLoading
+-(void) finishActivityIndicator
 {
     [self.activityIndicator stopAnimating];
     self.activityIndicator.hidden = YES;

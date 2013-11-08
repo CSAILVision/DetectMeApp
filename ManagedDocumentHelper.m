@@ -15,24 +15,30 @@
 {
     NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     url = [url URLByAppendingPathComponent:@"detector_database"];
-        
-    static DebugManagedDocument *managedDocument;
+    //DebugManagedDocument
+    static UIManagedDocument *managedDocument;
     static dispatch_once_t mngddoc;
     
-    
+    // synchronous
     dispatch_once(&mngddoc, ^{
-        managedDocument = [[DebugManagedDocument alloc] initWithFileURL:url];
+        managedDocument = [[UIManagedDocument alloc] initWithFileURL:url];
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]){
             
+            NSLog(@"Creating...");
             [managedDocument saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+                NSLog(@"Created!");
                 completionBlock(managedDocument);
             }];
             
         } else if(managedDocument.documentState == UIDocumentStateClosed){
             
+            NSLog(@"Openning...");
             [managedDocument openWithCompletionHandler:^(BOOL success){
-                completionBlock(managedDocument);
+                if(success){
+                    NSLog(@"Open!");
+                    completionBlock(managedDocument);
+                }
             }];
 
         } else if(managedDocument.documentState == UIDocumentStateNormal){
@@ -42,7 +48,6 @@
  
     return (UIManagedDocument *) managedDocument;
 }
-
 
 
 @end

@@ -24,8 +24,12 @@
     
     if(!matches || matches.count>1){
         //handle error
+        NSLog(@"error!!");
+        NSLog(@"username: %@", name);
+        NSLog(@"Matches: %@", matches);
         
     }else if (matches.count == 0){
+        NSLog(@"Creating user:%@", name);
         user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
         user.username = name;
         
