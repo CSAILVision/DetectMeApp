@@ -12,7 +12,7 @@
 #import "ExecuteDetectorViewController.h"
 
 
-@interface DetailMultipleViewController : UIViewController <UITableViewDataSource>
+@interface DetailMultipleViewController : UIViewController <UITableViewDataSource, UIActionSheetDelegate>
 
 @property (strong, nonatomic) MultipleDetector *multipleDetector;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;

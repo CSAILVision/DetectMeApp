@@ -175,15 +175,29 @@
     return cell;
 }
 
+#pragma mark -
+#pragma mark UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == actionSheet.destructiveButtonIndex) {
+        [self deleteDetector];
+    }
+}
+
 
 #pragma mark -
 #pragma mark IBActions
 
+
 - (IBAction)deleteAction:(id)sender
 {
-    [_shareDetector deleteDetector:self.detector];
-    [self.delegate deleteDetector:self.detector];
-    [self.navigationController popViewControllerAnimated:YES];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:@"Delete"
+                                              otherButtonTitles:nil];
+    
+    [sheet showInView:self.view];
 }
 
 - (IBAction)isPublicAction:(UISegmentedControl *) isPublicControl;
@@ -201,6 +215,15 @@
 }
 
 
+#pragma mark -
+#pragma mark Private Methods
+
+- (void) deleteDetector
+{
+    [_shareDetector deleteDetector:self.detector];
+    [self.delegate deleteDetector:self.detector];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 
 @end

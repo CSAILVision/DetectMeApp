@@ -64,10 +64,24 @@
 
 - (IBAction)deleteAction:(id)sender
 {
-    [_detectorDatabase.managedObjectContext deleteObject:self.multipleDetector];
-    [self.navigationController popViewControllerAnimated:YES];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:@"Delete"
+                                              otherButtonTitles:nil];
+    
+    [sheet showInView:self.view];
 }
 
+
+#pragma mark -
+#pragma mark UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == actionSheet.destructiveButtonIndex) {
+        [self deleteDetector];
+    }
+}
 
 #pragma mark -
 #pragma mark UITableViewDataSource & Delegate
@@ -142,6 +156,12 @@
 #pragma mark -
 #pragma mark Private Methods
 
+- (void) deleteDetector
+{
+    [_detectorDatabase.managedObjectContext deleteObject:self.multipleDetector];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (UIImage *) captureImageFromView:(UIView *) captureView
 {
     CGRect rect = [captureView bounds];
@@ -153,6 +173,8 @@
     
     return capturedImage;
 }
+
+
 
 
 @end

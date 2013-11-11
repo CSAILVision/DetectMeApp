@@ -16,7 +16,7 @@
 
 @end
 
-@interface DetailViewController : UIViewController <UITableViewDataSource>
+@interface DetailViewController : UIViewController <UITableViewDataSource, UIActionSheetDelegate>
 
 @property (strong, nonatomic) id<DetailViewControllerDelegate> delegate;
 
