@@ -31,7 +31,6 @@
             imageView.image = [UIImage imageWithData:[(Detector *)[_singleDetectors objectAtIndex:i] image]];
         }
     
-    UIImage *imageCapture = [self captureImageFromView:self.captureView];
     self.multipleDetector.image = UIImageJPEGRepresentation([self captureImageFromView:self.captureView], 0.5);
 }
 
@@ -39,7 +38,7 @@
 {
     [super viewDidLoad];
     
-    self.nameLabel.text = self.multipleDetector.name;
+    self.nameLabel.text = [NSString stringWithFormat:@"%@ - %@", self.multipleDetector.name, self.multipleDetector.objectID];
     
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];

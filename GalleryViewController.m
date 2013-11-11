@@ -17,20 +17,20 @@
 #import "ConstantsServer.h"
 #import "ShareDetector.h"
 #import "AnnotatedImage.h"
-
+#import "UIViewController+ShowAlert.h"
+#import "MultipleDetector+Create.h"
 
 
 
 @interface GalleryViewController()
 {
     UIRefreshControl *_refreshControl;
+    NSMutableArray *_selectedDetectors;
 }
 @end
 
 
 @implementation GalleryViewController
-
-
 
 #pragma mark -  
 #pragma mark Initialization
@@ -64,12 +64,26 @@
     }else if([self.filter isEqualToString:FILTER_MULTIPLE]){
         [self fetchMultiples];
         
+        // show add and back button
+        self.addButton.enabled = YES;
+        self.navigationItem.hidesBackButton = NO;
+        
         self.title = @"My Multiple";
         
     }else if([self.filter isEqualToString:FILTER_SERVER]){
         [self fetchServer];
         
         self.title = @"Server";
+        
+    }else if([self.filter isEqualToString:FILTER_SELECTION]){
+        [self fetchSingle];
+        self.title = @"Select Detectors!";
+        
+        // hide add and back button
+        self.addButton.enabled = NO;
+        self.navigationItem.hidesBackButton = YES;
+        
+        _selectedDetectors = [[NSMutableArray alloc] init];
     }
 }
 
@@ -87,9 +101,8 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self applyFilter];
     [super viewWillAppear:animated];
-
+    [self applyFilter];
 }
 
 
@@ -118,13 +131,31 @@
 - (IBAction)addAction:(id)sender
 {
     if([self.filter isEqualToString:FILTER_MULTIPLE]){
-        [self performSegueWithIdentifier:@"AddMultipleDetector" sender:self];
+        
+        self.filter = FILTER_SELECTION;
+        [self applyFilter];
+        
+        //[self performSegueWithIdentifier:@"AddMultipleDetector" sender:self];
     
     }else{
         [self performSegueWithIdentifier:@"AddSingleDetector" sender:self];
     }
 }
 
+- (IBAction)doneSelectingAction:(id)sender
+{
+    if(_selectedDetectors.count<2) [self showAlertWithTitle:@"Error" andDescription:@"You need at least 2 detectors."];
+    else{
+        [MultipleDetector multipleDetectorWithName:@"mulitple"
+                                      forDetectors:_selectedDetectors
+                            inManagedObjectContext:_detectorDatabase.managedObjectContext];
+        
+        
+        // Restore previous
+        self.filter = FILTER_MULTIPLE;
+        [self applyFilter];
+    }
+}
 
 
 #pragma mark -
@@ -180,25 +211,39 @@
         MultipleDetector *multipleDetector = (MultipleDetector *) element;
         cell.imageView.image = [UIImage imageWithData:multipleDetector.image];
         cell.label.text = multipleDetector.name;
+        
+        // hack to avoid keeping the cell selected after creating a new multiple detector
+        [self deselectCell:cell];
     }
-    
-//    Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
-//    [cell.label setText:[NSString stringWithFormat:@"%@-%@",detector.name, detector.serverDatabaseID]];
-//    cell.imageView.image = [UIImage imageWithData:detector.image];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    id element = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    if([element isKindOfClass:[Detector class]]){
-        [self performSegueWithIdentifier: @"ShowDetailSimple" sender: self];
+    if([self.filter isEqualToString:FILTER_SELECTION]){
         
-    } else if ([element isKindOfClass:[MultipleDetector class]]){
-        [self performSegueWithIdentifier:@"ShowDetailMultiple" sender:self];
+        DetectorCell *imageCell = (DetectorCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        Detector *detector = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        if([_selectedDetectors containsObject:detector]){
+            [self deselectCell:imageCell];
+            [_selectedDetectors removeObject:detector];
+        }else{
+            [self selectCell:imageCell];
+            [_selectedDetectors addObject:detector];
+        }
+        
+    }else{
+        
+        id element = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        if([element isKindOfClass:[Detector class]]){
+            [self performSegueWithIdentifier: @"ShowDetailSimple" sender: self];
+            
+        } else if ([element isKindOfClass:[MultipleDetector class]]){
+            [self performSegueWithIdentifier:@"ShowDetailMultiple" sender:self];
+        }
     }
 }
 
@@ -210,10 +255,10 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     // Footer when no images
-    UICollectionReusableView *footerView;
+    UICollectionReusableView *reusableView;
     
     if (kind == UICollectionElementKindSectionFooter) {
-        footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
+        UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
         
 
         
@@ -231,9 +276,22 @@
             }
         }
         
+        reusableView = footerView;
+        
+    }else if(kind == UICollectionElementKindSectionHeader){
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"CollectionHeaderView" forIndexPath:indexPath];
+        
+        //show help header if we are selecting detectors
+        if([self.filter isEqualToString:FILTER_SELECTION]){
+            headerView.hidden = NO;
+        }else{
+            headerView.hidden = YES;
+        }
+        
+        reusableView = headerView;
     }
     
-    return footerView;
+    return reusableView;
 }
 
 // Layout
@@ -376,6 +434,17 @@
 }
 
 
+
+- (void) selectCell:(DetectorCell *)cell
+{
+    [cell.imageView.layer setBorderColor: [[UIColor redColor] CGColor]];
+    [cell.imageView.layer setBorderWidth: 3.0];
+}
+
+- (void) deselectCell:(DetectorCell *)cell
+{
+    [cell.imageView.layer setBorderWidth: 0.0];
+}
 
 - (void)viewDidUnload
 {
