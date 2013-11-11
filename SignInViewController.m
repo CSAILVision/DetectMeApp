@@ -31,11 +31,18 @@
     
     self.activityIndicator.hidden = YES;
     
+
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"isUserStored"]){
         _username = [[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
         _password = [[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
-        [self signIn];
-        //[self signInCompleted];
+        //[self signIn];
+        [self signInCompleted];
     }
 }
 
@@ -63,7 +70,7 @@
 - (void) signInCompleted
 {
     [self stopAnimation];
-    [self performSegueWithIdentifier: @"SignInComplete" sender: self];
+    [self performSegueWithIdentifier: @"SignInComplete" sender:self];
 }
 
 
@@ -74,6 +81,7 @@
     
 }
 
+    
 #pragma mark -
 #pragma mark UITextFieldDelegate
 

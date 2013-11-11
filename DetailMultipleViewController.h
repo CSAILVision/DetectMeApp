@@ -12,11 +12,12 @@
 #import "ExecuteDetectorViewController.h"
 
 
-@interface DetailMultipleViewController : UIViewController
+@interface DetailMultipleViewController : UIViewController <UITableViewDataSource>
 
 @property (strong, nonatomic) MultipleDetector *multipleDetector;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 
 - (IBAction)deleteAction:(id)sender;

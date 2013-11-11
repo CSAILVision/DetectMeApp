@@ -20,9 +20,18 @@
 {
     // default initial value
     self.detectorTrainer.isPublic = YES;
+    [self displayExplanatoryText];
 }
 
 
+- (void) displayExplanatoryText
+{
+    if(self.detectorTrainer.isPublic){
+        self.textView.text = @"Public: this detector will be visible for all the other DetectMe users. They will be able to execute it and retrain it.";
+    }else{
+        self.textView.text = @"Private: you will be the only one with access to the detecctor.";
+    }
+}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -38,6 +47,7 @@
 - (IBAction)isPublicAction:(UISegmentedControl *)sender
 {
     self.detectorTrainer.isPublic = sender.selectedSegmentIndex == kIsPublic ? YES : NO;
+    [self displayExplanatoryText];
 }
 
 #pragma mark -

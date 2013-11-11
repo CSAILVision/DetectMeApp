@@ -22,7 +22,6 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
 // buttons
-@property (weak, nonatomic) IBOutlet UIButton *executeButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 - (IBAction)doneAction:(id)sender;
 

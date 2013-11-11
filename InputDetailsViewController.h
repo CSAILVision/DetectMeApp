@@ -13,8 +13,10 @@
 
 @property (strong, nonatomic) DetectorTrainer *detectorTrainer;
 @property (weak, nonatomic) IBOutlet UITextField *objectTextField;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 
 - (IBAction)isPublicAction:(UISegmentedControl *)sender;
+
 
 
 @end

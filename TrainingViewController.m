@@ -7,6 +7,7 @@
 //
 
 #import "TrainingViewController.h"
+#import "ExecuteDetectorViewController.h"
 #import "Box.h"
 #import "DetectorWrapper.h"
 #import "Detector.h"
@@ -40,7 +41,6 @@
 {
     [super viewDidLoad];
     self.doneButton.hidden = YES;
-    self.executeButton.hidden = YES;
     [self.activityIndicator startAnimating];
     [self.progressView setProgress:0];
     
@@ -142,6 +142,18 @@
 }
 
 #pragma mark -
+#pragma mark Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+
+    if ([[segue identifier] isEqualToString:@"ExecuteDetector"]) {
+        NSArray *detectors = [NSArray arrayWithObject:_detector];
+        [(ExecuteDetectorViewController *)segue.destinationViewController setDetectors:detectors];
+    }
+}
+
+#pragma mark -
 #pragma mark Private Methods
 
 - (void) displayForFinishTraining
@@ -153,7 +165,6 @@
     
     self.label.text = @"Finished!";
     self.doneButton.hidden = NO;
-    self.executeButton.hidden = NO;
 }
 
 @end
