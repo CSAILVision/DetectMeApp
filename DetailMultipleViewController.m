@@ -22,6 +22,18 @@
 @implementation DetailMultipleViewController
 
 
+- (void) loadMultiplePictures
+{
+    NSArray *imageViews = [NSArray arrayWithObjects:self.imageView1, self.imageView2, self.imageView3, self.imageView4, nil];
+    for(int i=0; i<4; i++)
+        if(i<_singleDetectors.count){
+            UIImageView *imageView = [imageViews objectAtIndex:i];
+            imageView.image = [UIImage imageWithData:[(Detector *)[_singleDetectors objectAtIndex:i] image]];
+        }
+    
+    UIImage *imageCapture = [self captureImageFromView:self.captureView];
+    self.multipleDetector.image = UIImageJPEGRepresentation([self captureImageFromView:self.captureView], 0.5);
+}
 
 - (void)viewDidLoad
 {
@@ -31,8 +43,6 @@
     
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];
-    
-    self.imageView.image = [UIImage imageWithData:self.multipleDetector.image];
     
     NSString *text = @"Detectors:";
     for(Detector *detector in self.multipleDetector.detectors)
@@ -45,6 +55,8 @@
 {
     [super viewWillAppear:animated];
     _singleDetectors = [self.multipleDetector.detectors allObjects];
+    
+    [self loadMultiplePictures];
 }
 
 #pragma mark -
@@ -126,6 +138,21 @@
     }
 }
 
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (UIImage *) captureImageFromView:(UIView *) captureView
+{
+    CGRect rect = [captureView bounds];
+    UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [captureView.layer renderInContext:context];
+    UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return capturedImage;
+}
 
 
 @end

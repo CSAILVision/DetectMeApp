@@ -307,16 +307,35 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="197"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sdd-wI-bHE">
-                                            <rect key="frame" x="20" y="20" width="132" height="157"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TnQ-Lb-pAA">
                                             <rect key="frame" x="160" y="20" width="140" height="51"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" id="icV-2O-1Ef" userLabel="captureView">
+                                            <rect key="frame" x="20" y="20" width="132" height="157"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="0aV-7M-vdN">
+                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="OSw-dv-6MC">
+                                                    <rect key="frame" x="72" y="0.0" width="60" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="fEs-n3-3mY">
+                                                    <rect key="frame" x="0.0" y="82" width="60" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="juz-Vm-brk">
+                                                    <rect key="frame" x="72" y="82" width="60" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
@@ -398,7 +417,11 @@
                     <navigationItem key="navigationItem" id="E2d-tY-KAY"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="imageView" destination="sdd-wI-bHE" id="aBo-3y-3of"/>
+                        <outlet property="captureView" destination="icV-2O-1Ef" id="jwa-Hj-CVB"/>
+                        <outlet property="imageView1" destination="0aV-7M-vdN" id="rrO-IQ-oKZ"/>
+                        <outlet property="imageView2" destination="OSw-dv-6MC" id="xhI-Gk-jIF"/>
+                        <outlet property="imageView3" destination="fEs-n3-3mY" id="X54-Jt-6D4"/>
+                        <outlet property="imageView4" destination="juz-Vm-brk" id="VdT-pZ-VKs"/>
                         <outlet property="nameLabel" destination="TnQ-Lb-pAA" id="Hrt-nV-ETm"/>
                         <outlet property="tableView" destination="CjO-Tg-ebV" id="yVJ-ot-C7x"/>
                     </connections>
