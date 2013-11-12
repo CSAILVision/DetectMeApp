@@ -65,6 +65,7 @@
     AnnotatedImage *annotatedImage = [_annotatedImages objectAtIndex:indexPath.row];
     UIImage *image = [UIImage imageWithData:annotatedImage.image];
     cell.imageView.image = image;
+    cell.deleteButton.tag = indexPath.row;
     return cell;
 }
 
@@ -90,12 +91,11 @@
 
 #pragma mark -
 #pragma mark IBActions
+
 - (IBAction)deleteAction:(UIButton *)sender
 {
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero fromView:self.collectionView];
-    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:buttonPosition];
-    AnnotatedImage *deleted = [_annotatedImages objectAtIndex:indexPath.row];
-    [_annotatedImages removeObjectAtIndex:indexPath.row];
+    AnnotatedImage *deleted = [_annotatedImages objectAtIndex:sender.tag];
+    [_annotatedImages removeObjectAtIndex:sender.tag];
     [_detectorDatabase.managedObjectContext deleteObject:deleted];
 
     [self.collectionView reloadData];

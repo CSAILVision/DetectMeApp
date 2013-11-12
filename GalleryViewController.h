@@ -33,6 +33,8 @@
 - (IBAction)refreshAction:(id)sender;
 - (IBAction)addAction:(id)sender;
 - (IBAction)doneSelectingAction:(id)sender;
+- (IBAction)cancelSelectingAction:(id)sender;
+
 
 
 

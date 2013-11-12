@@ -241,7 +241,7 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionHeaderView" id="2Sl-Qw-XL1">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" reuseIdentifier="CollectionHeaderView" id="2Sl-Qw-XL1">
                                     <rect key="frame" x="0.0" y="64" width="320" height="114"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <subviews>
@@ -252,7 +252,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bog-Zq-85m">
-                                            <rect key="frame" x="133" y="64" width="54" height="30"/>
+                                            <rect key="frame" x="246" y="64" width="54" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <state key="normal" title="Done!">
@@ -260,6 +260,18 @@
                                             </state>
                                             <connections>
                                                 <action selector="doneSelectingAction:" destination="gzV-tb-nhM" eventType="touchUpInside" id="6wx-T4-vXR"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zlD-XX-qN6">
+                                            <rect key="frame" x="20" y="64" width="60" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <state key="normal" title="Cancel">
+                                                <color key="titleColor" red="1" green="0.2032083227" blue="0.1815025861" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="cancelSelectingAction:" destination="gzV-tb-nhM" eventType="touchUpInside" id="DJE-Io-cjt"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -559,7 +571,7 @@
                                                 <action selector="ratingAction:" destination="eMG-ES-tQK" eventType="valueChanged" id="SMN-bU-7Tw"/>
                                             </connections>
                                         </segmentedControl>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="XTR-Jg-eQX">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="XTR-Jg-eQX">
                                             <rect key="frame" x="20" y="20" width="132" height="158"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </imageView>
@@ -1313,8 +1325,8 @@
         <segue reference="SfB-Sl-l8o"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="UpZ-xg-pQM"/>
+        <segue reference="wR7-vz-Yhe"/>
         <segue reference="zdo-hz-QnN"/>
-        <segue reference="UGB-w7-tpx"/>
-        <segue reference="ZhR-dT-EN5"/>
+        <segue reference="rZB-t8-M3R"/>
     </inferredMetricsTieBreakers>
 </document>

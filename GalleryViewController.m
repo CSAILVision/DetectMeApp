@@ -72,6 +72,7 @@
         
     }else if([self.filter isEqualToString:FILTER_SERVER]){
         [self fetchServer];
+        [self.navigationItem setRightBarButtonItem:nil animated:NO];
         
         self.title = @"Server";
         
@@ -97,6 +98,7 @@
     
     [self initializeDataBase];
     [self initializeRefreshControl];
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -155,6 +157,13 @@
         self.filter = FILTER_MULTIPLE;
         [self applyFilter];
     }
+}
+
+- (IBAction)cancelSelectingAction:(id)sender
+{
+    // Restore previous
+    self.filter = FILTER_MULTIPLE;
+    [self applyFilter];
 }
 
 
@@ -261,13 +270,10 @@
         UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
         
 
-        
         if(self.fetchedResultsController.fetchedObjects.count>0){
             footerView.hidden = YES;
-            footerView.frame = CGRectMake(0, 0, 1, 1);
         }else{
             footerView.hidden = NO;
-            footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
             if([self.filter isEqualToString:FILTER_SERVER]){
                 
                 // Different label to show
@@ -281,13 +287,6 @@
     }else if(kind == UICollectionElementKindSectionHeader){
         UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"CollectionHeaderView" forIndexPath:indexPath];
         
-        //show help header if we are selecting detectors
-        if([self.filter isEqualToString:FILTER_SELECTION]){
-            headerView.hidden = NO;
-        }else{
-            headerView.hidden = YES;
-        }
-        
         reusableView = headerView;
     }
     
@@ -297,12 +296,22 @@
 // Layout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    //    NSString *searchTerm = self.searches[indexPath.section]; FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
-    //    CGSize retval = photo.thumbnail.size.width > 0 ? photo.thumbnail.size : CGSizeMake(100, 100);
-    //    retval.height += 35; retval.width += 35;
-    
     CGSize retval = CGSizeMake(100, 100);
     return retval;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    CGSize headerSize;
+    
+    if([self.filter isEqualToString:FILTER_SELECTION]){
+        headerSize = CGSizeMake(collectionView.frame.size.width, 120);
+        
+    }else{
+        headerSize = CGSizeMake(0, 0);
+    }
+    
+    return headerSize;
 }
 
 
@@ -437,13 +446,16 @@
 
 - (void) selectCell:(DetectorCell *)cell
 {
-    [cell.imageView.layer setBorderColor: [[UIColor redColor] CGColor]];
-    [cell.imageView.layer setBorderWidth: 3.0];
+    //using defautl iOS 7 blue color
+    [cell.imageView.layer setBorderColor: [[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] CGColor]];
+    [cell.imageView.layer setBorderWidth: 4.0];
+    cell.imageView.alpha = 0.5;
 }
 
 - (void) deselectCell:(DetectorCell *)cell
 {
     [cell.imageView.layer setBorderWidth: 0.0];
+    cell.imageView.alpha = 1;
 }
 
 - (void)viewDidUnload
