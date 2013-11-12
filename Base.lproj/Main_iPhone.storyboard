@@ -320,12 +320,11 @@
                         <segue destination="eMG-ES-tQK" kind="push" identifier="ShowDetailSimple" id="wR7-vz-Yhe"/>
                         <segue destination="tjj-Hg-oo8" kind="push" identifier="ShowDetailMultiple" id="VFo-FV-Orz"/>
                         <segue destination="pkB-Kb-gbg" kind="push" identifier="AddSingleDetector" id="UpZ-xg-pQM"/>
-                        <segue destination="iBt-uv-cAJ" kind="push" identifier="AddMultipleDetector" id="gmc-5D-VjH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B08-Jl-9cB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="957" y="89"/>
+            <point key="canvasLocation" x="1071" y="89"/>
         </scene>
         <!--Detail Multiple View Controller-->
         <scene sceneID="4Gu-3G-kKH">
@@ -464,7 +463,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ogj-Iy-hJL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1788" y="-1347"/>
+            <point key="canvasLocation" x="1755" y="-811"/>
         </scene>
         <!--Execute Detector View Controller-->
         <scene sceneID="H9f-o3-7ZK">
@@ -483,7 +482,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="3dU-Of-R1F">
-                                                <rect key="frame" x="85" y="91" width="150" height="2"/>
+                                                <rect key="frame" x="85" y="99" width="150" height="2"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </progressView>
                                         </subviews>
@@ -493,6 +492,16 @@
                                         <rect key="frame" x="18" y="515" width="284" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </slider>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CN6-0N-t2b" customClass="AYUIButton">
+                                        <rect key="frame" x="253" y="78" width="47" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Switch">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchCameras:" destination="XS7-CC-cf8" eventType="touchUpInside" id="JK8-ss-Ayj"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -534,12 +543,13 @@
                         <outlet property="detectView" destination="X4M-y2-sdp" id="ZIW-lG-IWL"/>
                         <outlet property="detectionThresholdSliderButton" destination="zNu-Uz-4kz" id="H4w-to-6uR"/>
                         <outlet property="startTestButton" destination="zVT-j3-b36" id="iaV-BI-5Ml"/>
+                        <outlet property="switchButton" destination="CN6-0N-t2b" id="6sZ-xj-Mvr"/>
                         <outlet property="tagView" destination="QJG-12-lmw" id="zwr-cI-YmH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="31s-BC-5Xv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2267" y="-1337"/>
+            <point key="canvasLocation" x="2362" y="-810"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="qJH-0G-lvD">
@@ -708,7 +718,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ouv-3B-cQR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1787" y="-636"/>
+            <point key="canvasLocation" x="1755" y="88"/>
         </scene>
         <!--Training Images Collection View Controller-->
         <scene sceneID="Cas-do-Udc">
@@ -808,7 +818,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qgJ-Dw-U5f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2267" y="-636"/>
+            <point key="canvasLocation" x="2363" y="79"/>
         </scene>
         <!--Tag View Controller-->
         <scene sceneID="5JC-Ga-DUu">
@@ -833,7 +843,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kWc-tz-8Xg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2773" y="-636"/>
+            <point key="canvasLocation" x="2869" y="79"/>
         </scene>
         <!--User Profile View Controller - Profile-->
         <scene sceneID="FPJ-rk-Q0D">
@@ -928,7 +938,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jwd-RI-eQm" customClass="AYUIButton">
-                                <rect key="frame" x="254" y="84" width="47" height="30"/>
+                                <rect key="frame" x="254" y="78" width="47" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Switch">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -966,80 +976,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ao2-L5-aRh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1787" y="152"/>
-        </scene>
-        <!--Multiple Detectors Choose View Controller-->
-        <scene sceneID="oEb-zm-8SY">
-            <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" hidesBottomBarWhenPushed="YES" id="iBt-uv-cAJ" customClass="MultipleDetectorsChooseViewController" sceneMemberID="viewController">
-                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="NTX-cn-eto">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qB7-NG-8ob">
-                            <size key="itemSize" width="175" height="200"/>
-                            <size key="headerReferenceSize" width="50" height="92"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                        <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="detectorCell" id="l2v-35-1qh" customClass="TrainingImageCell">
-                                <rect key="frame" x="73" y="156" width="175" height="200"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="175" height="200"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="bx7-lE-i6i">
-                                            <rect key="frame" x="0.0" y="0.0" width="175" height="200"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </imageView>
-                                    </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
-                                <connections>
-                                    <outlet property="imageView" destination="bx7-lE-i6i" id="3yl-eu-yg4"/>
-                                </connections>
-                            </collectionViewCell>
-                        </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="hJr-vQ-fRU">
-                            <rect key="frame" x="0.0" y="64" width="320" height="92"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <subviews>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose single detectors to form a multiple detector that will execute them all simultanously." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="J3V-Ye-mpR">
-                                    <rect key="frame" x="20" y="0.0" width="280" height="92"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                        </collectionReusableView>
-                        <connections>
-                            <outlet property="dataSource" destination="iBt-uv-cAJ" id="UOL-DY-Hth"/>
-                            <outlet property="delegate" destination="iBt-uv-cAJ" id="Z4H-ld-0zy"/>
-                        </connections>
-                    </collectionView>
-                    <navigationItem key="navigationItem" id="qED-ps-n4L">
-                        <nil key="title"/>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="KRG-wf-2qj">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="V5N-4f-vD9">
-                                <rect key="frame" x="256" y="5" width="48" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Finish">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="createAction:" destination="iBt-uv-cAJ" eventType="touchUpInside" id="edb-Fp-Vv7"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
-                </collectionViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="g2C-4z-Gkb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1788" y="897"/>
+            <point key="canvasLocation" x="1755" y="876"/>
         </scene>
         <!--Menu View Contoller - Menu-->
         <scene sceneID="XG1-YR-x3k">
@@ -1240,7 +1177,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QgI-V5-RGg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2249" y="158"/>
+            <point key="canvasLocation" x="2345" y="873"/>
         </scene>
         <!--Training View Controller-->
         <scene sceneID="bf8-kR-upC">
@@ -1292,7 +1229,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHh-dr-JEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2729" y="161"/>
+            <point key="canvasLocation" x="2869" y="873"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="T1u-Ys-Rgl">
@@ -1325,9 +1262,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="SfB-Sl-l8o"/>
         <segue reference="obR-1V-epL"/>
-        <segue reference="UpZ-xg-pQM"/>
         <segue reference="wR7-vz-Yhe"/>
+        <segue reference="UpZ-xg-pQM"/>
         <segue reference="zdo-hz-QnN"/>
-        <segue reference="rZB-t8-M3R"/>
+        <segue reference="ZhR-dT-EN5"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -100,10 +100,11 @@
     [self.cancelButton transformButtonForCamera];
     [self.settingsButton transformButtonForCamera];
     [self.settingsButton setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8] forState:UIControlStateSelected];
+    
     [self.switchButton transformButtonForCamera];
     [self.switchButton setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8] forState:UIControlStateSelected];
     self.switchButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.switchButton.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10);
+    self.switchButton.contentEdgeInsets = UIEdgeInsetsMake(2, 10, 2, 10);
     [self.switchButton setImage:[UIImage imageNamed:@"switchCamera"] forState:UIControlStateNormal];
 }
 
