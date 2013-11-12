@@ -11,10 +11,9 @@
 #import "TakePictureViewController.h"
 #import "TagViewController.h"
 
-@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate, TagViewControllerDelegate>
+@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate, TagViewControllerDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (strong, nonatomic) Detector *detector;
-@property (weak, nonatomic) IBOutlet UIButton *trainButton;
 
 - (IBAction)deleteAction:(UIButton *)sender;
 

@@ -730,25 +730,26 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Xvq-Q6-YLJ">
                             <size key="itemSize" width="121" height="177"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="headerReferenceSize" width="50" height="85"/>
                             <size key="footerReferenceSize" width="50" height="108"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="trainingCell" id="ypN-ZW-m1T" customClass="TrainingImageCell">
-                                <rect key="frame" x="0.0" y="64" width="121" height="177"/>
+                                <rect key="frame" x="0.0" y="149" width="121" height="177"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="121" height="177"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RZU-9e-eeg">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RZU-9e-eeg">
                                             <rect key="frame" x="0.0" y="0.0" width="121" height="147"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7tI-bj-szl">
-                                            <rect key="frame" x="37" y="147" width="46" height="30"/>
+                                            <rect key="frame" x="0.0" y="147" width="121" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <state key="normal" title="delete">
                                                 <color key="titleColor" red="1" green="0.2032083227" blue="0.1815025861" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -767,8 +768,25 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HeaderView" id="Y7D-6m-yJn">
+                            <rect key="frame" x="0.0" y="64" width="320" height="85"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gQZ-eC-WAL">
+                                    <rect key="frame" x="110" y="21" width="100" height="43"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    <state key="normal" title="Retrain!">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <segue destination="BVg-c3-mya" kind="push" identifier="Retrain" id="b1e-7T-Bde"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </collectionReusableView>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FooterView" id="4jv-Co-tSN">
-                            <rect key="frame" x="0.0" y="241" width="320" height="108"/>
+                            <rect key="frame" x="0.0" y="326" width="320" height="108"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new Images to personlize this detector" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Dm-xa-mpJ">
@@ -786,35 +804,13 @@
                     </collectionView>
                     <navigationItem key="navigationItem" id="A7Q-v8-cRQ">
                         <nil key="title"/>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Wte-om-nMf">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="Add">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="aL6-6W-8eG">
                             <connections>
-                                <segue destination="pkB-Kb-gbg" kind="push" identifier="TakePicture" id="iBb-Sq-DZc"/>
+                                <segue destination="pkB-Kb-gbg" kind="push" identifier="TakePicture" id="SZr-VP-6Sq"/>
                             </connections>
-                        </button>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="YGH-kG-dkG">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ADR-sB-PVJ">
-                                <rect key="frame" x="233" y="5" width="71" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Train!">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="BVg-c3-mya" kind="push" identifier="Retrain" id="qoV-C6-q3a"/>
-                                </connections>
-                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <connections>
-                        <outlet property="trainButton" destination="ADR-sB-PVJ" id="JEa-e2-ta9"/>
-                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qgJ-Dw-U5f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1263,8 +1259,8 @@
         <segue reference="SfB-Sl-l8o"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="wR7-vz-Yhe"/>
-        <segue reference="UpZ-xg-pQM"/>
-        <segue reference="zdo-hz-QnN"/>
+        <segue reference="b1e-7T-Bde"/>
+        <segue reference="SZr-VP-6Sq"/>
         <segue reference="ZhR-dT-EN5"/>
     </inferredMetricsTieBreakers>
 </document>

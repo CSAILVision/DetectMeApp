@@ -42,16 +42,14 @@
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
+    [self unlinkAnnotatedImages:_annotatedImages]; // Prevent to erase
     
-    [self toggleTrainButton];
-    
-	// Do any additional setup after loading the view.
 }
 
 
 
 #pragma mark -
-#pragma mark Data Source
+#pragma mark UICollectionView data source and delegate
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -76,17 +74,27 @@
     if (kind == UICollectionElementKindSectionFooter) {
         reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
         
-        if(_annotatedImages.count>0){
-            reusableview.hidden = YES;
-            reusableview.frame = CGRectMake(0, 0, 1, 1);
-        }else{
-            reusableview.hidden = NO;
-            reusableview.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-        }
-
+        reusableview.hidden = _annotatedImages.count>0 ? YES:NO;
+        
+    }else if(kind == UICollectionElementKindSectionHeader){
+        reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
     }
     
     return reusableview;
+}
+
+// Layout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGSize cellSize = CGSizeMake(100, 200);
+    return cellSize;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    
+    CGSize headerSize = _annotatedImages.count>0 ? CGSizeMake(collectionView.frame.size.width, 85):CGSizeMake(0, 0);
+    return headerSize;
 }
 
 #pragma mark -
@@ -99,8 +107,6 @@
     [_detectorDatabase.managedObjectContext deleteObject:deleted];
 
     [self.collectionView reloadData];
-    
-    [self toggleTrainButton];
 }
 
 #pragma mark -
@@ -111,8 +117,6 @@
 {
     [_annotatedImages addObjectsFromArray:annotatedImages];
     [self.collectionView reloadData];
-    
-    [self toggleTrainButton];
 }
 
 #pragma mark -
@@ -188,10 +192,11 @@
     return  images;
 }
 
-- (void) toggleTrainButton
+
+- (void) unlinkAnnotatedImages:(NSArray *) annotatedImages
 {
-    if(_annotatedImages.count==0) self.trainButton.hidden = YES;
-    else self.trainButton.hidden = NO;
+    for(AnnotatedImage *ai in annotatedImages)
+        ai.detector = nil;
 }
 
 @end
