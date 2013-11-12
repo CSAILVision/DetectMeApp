@@ -34,9 +34,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
 // trick to hide next button when accessing from retrain
-@property BOOL hideNextButton;
+@property BOOL isRetraining;
 
 - (IBAction)switchCameras:(id)sender;
 - (IBAction)takePictureAction:(id)sender;
+- (IBAction)nextAction:(id)sender;
 
 @end

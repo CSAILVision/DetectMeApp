@@ -345,6 +345,10 @@
         MultipleDetector *multipleDetector = [self.fetchedResultsController objectAtIndexPath:indexPath];
         DetailMultipleViewController *detailMultipleVC = (DetailMultipleViewController *) segue.destinationViewController;
         detailMultipleVC.multipleDetector = multipleDetector;
+        
+    }else if([[segue identifier] isEqualToString:@"AddSingleDetector"]){
+        // Set the title for the back button of the next controller
+        self.title = @"Dismiss";
     }
 }
 

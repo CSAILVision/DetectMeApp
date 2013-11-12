@@ -950,7 +950,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="D0w-8Z-7WU" kind="push" identifier="showInputDetails" id="uoo-Xx-aj6"/>
+                                    <action selector="nextAction:" destination="pkB-Kb-gbg" eventType="touchUpInside" id="Azi-dU-tPT"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -961,6 +961,7 @@
                         <outlet property="nextButton" destination="PLL-t5-5gM" id="eBw-aT-iem"/>
                         <outlet property="switchButton" destination="jwd-RI-eQm" id="dTP-Qa-XSE"/>
                         <outlet property="tagView" destination="Q73-hw-ckl" id="ieT-MZ-HER"/>
+                        <segue destination="D0w-8Z-7WU" kind="push" identifier="showInputDetails" id="NnJ-1a-EN8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ao2-L5-aRh" userLabel="First Responder" sceneMemberID="firstResponder"/>

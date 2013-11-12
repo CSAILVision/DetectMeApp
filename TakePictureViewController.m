@@ -70,15 +70,8 @@
 
 - (void) initializeNextButton
 {
-    
     // disabled until
     self.nextButton.enabled = NO;
-    
-    // Used when accessing the controller from the retrain controllers
-    if(self.hideNextButton){
-        self.nextButton.hidden = YES;
-        self.hideNextButton = NO;
-    }
 }
 
 - (void) stopManagers
@@ -130,9 +123,9 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
     self.imageView.image = nil;
     self.title = @"Add";
-    [self.delegate takenAnnotatedImages:_annotatedImages];
     
     [self stopManagers];
 }
@@ -227,6 +220,17 @@
     _takePicture = YES;
 }
 
+- (IBAction)nextAction:(id)sender
+{
+    if(self.isRetraining){
+        [self.delegate takenAnnotatedImages:_annotatedImages];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    }else{
+        [self performSegueWithIdentifier:@"showInputDetails" sender:self];
+    }
+}
+
 
 #pragma mark -
 #pragma mark - CLLocationManagerDelegate
@@ -254,7 +258,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showInputDetails"]) {
-
+        
         InputDetailsViewController *destinationVC = (InputDetailsViewController *)segue.destinationViewController;
         self.detectorTrainer.annotatedImages = [NSArray arrayWithArray:_annotatedImages];
         destinationVC.detectorTrainer = self.detectorTrainer;

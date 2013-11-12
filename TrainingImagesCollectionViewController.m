@@ -148,7 +148,7 @@
     }else if([[segue identifier] isEqualToString:@"TakePicture"]){
         TakePictureViewController *takePictureVC = (TakePictureViewController *) segue.destinationViewController;
         takePictureVC.delegate = self;
-        takePictureVC.hideNextButton = YES;
+        takePictureVC.isRetraining = YES;
         
     }
 }
