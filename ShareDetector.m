@@ -13,6 +13,12 @@
 #import "User.h"
 #import "Rating.h"
 
+#define OBJECTIVE_DELETE_DETECTOR 1
+#define OBJECTIVE_SEND_DETECTOR 2
+#define OBJECTIVE_SEND_AIMAGE 3
+#define OBJECTIVE_SEND_RATING 4
+#define OBJECTIVE_SEND_PROFILE 5
+
 @interface ShareDetector()
 {
     NSString *_user;
@@ -23,6 +29,8 @@
     Detector *_detector;
     AnnotatedImage *_annotatedImage;
     Rating *_rating;
+    
+    int _objective;
 }
 @end
 
@@ -45,6 +53,8 @@
 
 -(void) shareDetector:(Detector *)detector toUpdate:(BOOL)isToUpdate;
 {
+    
+    _objective = OBJECTIVE_SEND_DETECTOR;
     _detector = detector;
     
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
@@ -83,6 +93,7 @@
 
 - (void) shareAnnotatedImage:(AnnotatedImage *)annotatedImage
 {
+    _objective = OBJECTIVE_SEND_AIMAGE;
     _annotatedImage = annotatedImage;
     
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/annotatedimages/",SERVER_ADDRESS];
@@ -110,7 +121,9 @@
 
 - (void) shareRating:(Rating *)rating
 {
+    _objective = OBJECTIVE_SEND_RATING;
     _rating = rating;
+    
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/ratings/",SERVER_ADDRESS];
     
     // initiate creation of the request
@@ -131,6 +144,9 @@
 
 - (void) deleteDetector:(Detector *)detector
 {
+    _objective = OBJECTIVE_DELETE_DETECTOR;
+    _detector = detector;
+
     NSString *urlWebServer = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     urlWebServer = [NSString stringWithFormat:@"%@%@/",urlWebServer,detector.serverDatabaseID];
     
@@ -150,7 +166,9 @@
 
 - (void) shareProfilePicture:(UIImage *) profilePicture forUsername:(NSString *)username
 {
-//    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/%@/edit/",SERVER_ADDRESS,username];
+    
+    _objective = OBJECTIVE_SEND_PROFILE;
+
     NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/update/%@/",SERVER_ADDRESS,username];
     
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
@@ -196,13 +214,15 @@
         [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Parsing JSON"];
         NSLog(@"objectJSON %@", objectJSON);
     }else {
-    
+
         if([objectJSON objectForKey:SERVER_DETECTOR_NAME]){ // detector returned
             _detector.serverDatabaseID = [objectJSON objectForKey:SERVER_DETECTOR_ID];
             _detector.isSent = @(YES);
             NSLog(@"detector %@ sent", _detector.name);
             
-            [self.delegate detectorDidSent];
+            // Inform the delegate
+            if(_objective==OBJECTIVE_SEND_DETECTOR) [self.delegate detectorDidSent];
+            else if(_objective==OBJECTIVE_DELETE_DETECTOR) [self.delegate detectorDeleted];
 
         }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){ // annotated image returned
             _annotatedImage.isSent = @(YES);

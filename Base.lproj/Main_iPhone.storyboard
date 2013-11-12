@@ -572,7 +572,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="ZA3-zN-saR">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="259"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="259.00000000000006"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="RfU-2c-lGT">
@@ -617,6 +617,10 @@
                                                 <action selector="isPublicAction:" destination="eMG-ES-tQK" eventType="valueChanged" id="jCL-qh-CgC"/>
                                             </connections>
                                         </segmentedControl>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="BLg-A3-6tl">
+                                            <rect key="frame" x="160" y="135" width="20" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
@@ -718,6 +722,7 @@
                     <navigationItem key="navigationItem" id="Dvl-NJ-Ynk"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="BLg-A3-6tl" id="n3u-9m-FAp"/>
                         <outlet property="authorLabel" destination="kWQ-fa-YZB" id="Hfh-N6-VE0"/>
                         <outlet property="deleteButton" destination="OLo-A2-bQf" id="lCL-1e-DJK"/>
                         <outlet property="imageView" destination="XTR-Jg-eQX" id="gcu-vP-Dex"/>
@@ -1266,10 +1271,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="nAj-kx-A7M"/>
-        <segue reference="obR-1V-epL"/>
+        <segue reference="rZB-t8-M3R"/>
         <segue reference="UGB-w7-tpx"/>
-        <segue reference="ZhR-dT-EN5"/>
+        <segue reference="obR-1V-epL"/>
+        <segue reference="nAj-kx-A7M"/>
         <segue reference="SZr-VP-6Sq"/>
         <segue reference="zdo-hz-QnN"/>
     </inferredMetricsTieBreakers>

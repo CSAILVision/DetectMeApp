@@ -339,7 +339,6 @@
         DetailViewController *detailVC = (DetailViewController *) segue.destinationViewController;
         detailVC.hidesBottomBarWhenPushed = YES;
         detailVC.detector = detector;
-        detailVC.delegate = self;
         
     }else if ([[segue identifier] isEqualToString:@"ShowDetailMultiple"]){
         MultipleDetector *multipleDetector = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -352,14 +351,6 @@
     }
 }
 
-#pragma mark -
-#pragma mark DetailViewControllerDelegate
-
-- (void) deleteDetector:(Detector *) detector
-{
-    [self.detectorDatabase.managedObjectContext deleteObject:detector];
-    [self.collectionView reloadData];
-}
 
 #pragma mark -
 #pragma mark Private methods

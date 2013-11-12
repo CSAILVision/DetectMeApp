@@ -20,7 +20,7 @@
 #define FILTER_SELECTION @"Selection"
 
 
-@interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate, DetailViewControllerDelegate>
+@interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 
 @property (strong, nonatomic) NSString *filter;
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;

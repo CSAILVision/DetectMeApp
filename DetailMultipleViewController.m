@@ -159,6 +159,8 @@
 {
     [_detectorDatabase.managedObjectContext deleteObject:self.multipleDetector];
     [self.navigationController popViewControllerAnimated:YES];
+    
+    
 }
 
 - (UIImage *) captureImageFromView:(UIView *) captureView
@@ -173,7 +175,6 @@
     return capturedImage;
 }
 
-
-
+ 
 
 @end

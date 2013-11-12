@@ -13,9 +13,9 @@
 #import "AnnotatedImage.h"
 #import "Box.h"
 #import "User.h"
-#import "ShareDetector.h"
 #import "Rating+Create.h"
 #import "ManagedDocumentHelper.h"
+#import "UIViewController+ShowAlert.h"
 
 @interface DetailViewController ()
 {
@@ -27,6 +27,8 @@
     
     NSArray *_detectorKeys;
     NSArray *_detectorValues;
+    
+    BOOL _successDelete;
 }
 
 @end
@@ -77,6 +79,7 @@
     }
     
     _shareDetector = [[ShareDetector alloc] init];
+    _shareDetector.delegate = self;
 
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
@@ -214,6 +217,43 @@
     [_shareDetector shareRating:_rating];
 }
 
+#pragma mark -
+#pragma mark Share detector delegate
+
+- (void) detectorDeleted
+{
+    [_detectorDatabase.managedObjectContext deleteObject:self.detector];
+    [self stopActivityIndicator];
+    
+    _successDelete = YES;
+    
+    //show alert
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success"
+                                                    message:@"The detector has been deleted."
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(_successDelete)
+        [self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark -
 #pragma mark Private Methods
@@ -221,9 +261,22 @@
 - (void) deleteDetector
 {
     [_shareDetector deleteDetector:self.detector];
-    [self.delegate deleteDetector:self.detector];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self startActivityIndicator];
+
 }
+
+- (void) startActivityIndicator
+{
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+}
+
+- (void) stopActivityIndicator
+{
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
+}
+
 
 
 @end

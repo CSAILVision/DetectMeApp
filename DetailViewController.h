@@ -9,16 +9,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Detector.h"
+#import "ShareDetector.h"
 
-@protocol DetailViewControllerDelegate <NSObject>
 
-- (void) deleteDetector:(Detector *) detector;
+@interface DetailViewController : UIViewController <UITableViewDataSource, UIActionSheetDelegate, ShareDectorDelegate, UIAlertViewDelegate>
 
-@end
-
-@interface DetailViewController : UIViewController <UITableViewDataSource, UIActionSheetDelegate>
-
-@property (strong, nonatomic) id<DetailViewControllerDelegate> delegate;
 
 @property (strong, nonatomic) Detector *detector;
 
@@ -28,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *ratingControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *isPublicControl;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 
 
