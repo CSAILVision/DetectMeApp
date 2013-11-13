@@ -44,6 +44,7 @@
     <entity name="MultipleDetector" representedClassName="MultipleDetector" syncable="YES">
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" minValueString="0" syncable="YES"/>
         <relationship name="author" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="multipleDetectors" inverseEntity="User" syncable="YES"/>
         <relationship name="detectors" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Detector" inverseName="multipleDetectors" inverseEntity="Detector" syncable="YES"/>
     </entity>
@@ -66,7 +67,7 @@
     <elements>
         <element name="AnnotatedImage" positionX="-99" positionY="-27" width="128" height="283"/>
         <element name="Detector" positionX="466" positionY="-72" width="128" height="358"/>
-        <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="103"/>
+        <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="118"/>
         <element name="Rating" positionX="-135" positionY="297" width="117" height="103"/>
         <element name="User" positionX="126" positionY="545" width="128" height="163"/>
     </elements>

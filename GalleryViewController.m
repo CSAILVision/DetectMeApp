@@ -219,7 +219,7 @@
     }else if([element isKindOfClass:[MultipleDetector class]]){
         MultipleDetector *multipleDetector = (MultipleDetector *) element;
         cell.imageView.image = [UIImage imageWithData:multipleDetector.image];
-        cell.label.text = multipleDetector.name;
+        cell.label.text = [NSString stringWithFormat:@"%@ %@", multipleDetector.name, [multipleDetector.uuid substringToIndex:3]];
         
         // hack to avoid keeping the cell selected after creating a new multiple detector
         [self deselectCell:cell];

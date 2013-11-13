@@ -349,7 +349,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="197"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TnQ-Lb-pAA">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TnQ-Lb-pAA">
                                             <rect key="frame" x="160" y="20" width="140" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
@@ -593,7 +593,7 @@
                                             <rect key="frame" x="20" y="20" width="132" height="158"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="A5N-PT-pkS">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="A5N-PT-pkS">
                                             <rect key="frame" x="160" y="20" width="140" height="42"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="32"/>
@@ -1304,10 +1304,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="zdo-hz-QnN"/>
-        <segue reference="SZr-VP-6Sq"/>
-        <segue reference="UGB-w7-tpx"/>
+        <segue reference="UpZ-xg-pQM"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="SfB-Sl-l8o"/>
-        <segue reference="rZB-t8-M3R"/>
+        <segue reference="UGB-w7-tpx"/>
+        <segue reference="ZhR-dT-EN5"/>
     </inferredMetricsTieBreakers>
 </document>

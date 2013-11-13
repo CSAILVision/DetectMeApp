@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     
-    self.nameLabel.text = [NSString stringWithFormat:@"%@ - %@", self.multipleDetector.name, self.multipleDetector.objectID];
+    self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.multipleDetector.name, [self.multipleDetector.uuid substringToIndex:3]];
     
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];
