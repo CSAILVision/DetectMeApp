@@ -572,7 +572,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="ZA3-zN-saR">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="259.00000000000006"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="259"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="RfU-2c-lGT">
@@ -897,17 +897,24 @@
                                                 <segue destination="xO6-5e-Ij7" kind="modal" identifier="LogOut" id="SfB-Sl-l8o"/>
                                             </connections>
                                         </button>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="e-mail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y3Z-ij-Sdu">
-                                            <rect key="frame" x="138" y="95" width="48" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tJb-aU-ch9">
                                             <rect key="frame" x="138" y="20" width="121" height="29"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="hRs-R1-spn">
+                                            <rect key="frame" x="220" y="90" width="51" height="31"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <connections>
+                                                <action selector="wifiOnlyAction:" destination="crB-GQ-33Z" eventType="valueChanged" id="EjR-3r-wKd"/>
+                                            </connections>
+                                        </switch>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wifi Only:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9cW-CN-Tew">
+                                            <rect key="frame" x="138" y="95" width="74" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -934,9 +941,9 @@
                     <tabBarItem key="tabBarItem" title="Profile" id="3dk-X8-Z2z"/>
                     <navigationItem key="navigationItem" title="Profile" id="tSn-Ah-5Ma"/>
                     <connections>
-                        <outlet property="emailLabel" destination="Y3Z-ij-Sdu" id="x9Q-p1-5Iz"/>
                         <outlet property="imageView" destination="C7a-jq-DxE" id="Jgt-f8-ome"/>
                         <outlet property="usernameLabel" destination="tJb-aU-ch9" id="4E4-9E-4Lc"/>
+                        <outlet property="wifiOnlyButton" destination="hRs-R1-spn" id="wGl-fh-Lqz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dJP-Xi-kfI" userLabel="First Responder" sceneMemberID="firstResponder"/>

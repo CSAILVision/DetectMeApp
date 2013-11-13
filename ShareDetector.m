@@ -12,6 +12,7 @@
 #import "AnnotatedImage.h"
 #import "User.h"
 #import "Rating.h"
+#import "Reachability+DetectMe.h"
 
 #define OBJECTIVE_DELETE_DETECTOR 1
 #define OBJECTIVE_SEND_DETECTOR 2
@@ -31,8 +32,6 @@
     Rating *_rating;
     
     int _objective;
-    
-    BOOL _isNetworkReachable;
 }
 @end
 
@@ -46,27 +45,10 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (void) initializeNetworkReachability
-{
-//    //check settings for wifi only.
-//    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[objectpath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"settings.plist"]];
-//    NSNumber *wifiOnly = [dict objectForKey:@"wifi"];
-//    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
-//    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
-//    if (wifiOnly.boolValue) {
-//        if ((networkStatus != ReachableViaWiFi) && (networkStatus !=NotReachable)) {
-//            [self errorWithTitle:@"Check your connection" andDescription:@"Sorry, wifi connection is required."];
-//            [self.delegate sendPhotoError];
-//            return;
-//        }
-//    }
-}
-
 - (id)init
 {
     if (self = [super init]) {
         _requestConstructor = [[PostHTTPConstructor alloc] init];
-        
     }
     return self;
 } 
@@ -76,6 +58,11 @@
 
 -(void) shareDetector:(Detector *)detector toUpdate:(BOOL)isToUpdate;
 {
+    
+    if(![Reachability isNetworkReachable]){
+        detector.isSent = NO;
+        return;
+    }
     
     _objective = OBJECTIVE_SEND_DETECTOR;
     _detector = detector;
@@ -116,6 +103,11 @@
 
 - (void) shareAnnotatedImage:(AnnotatedImage *)annotatedImage
 {
+    if(![Reachability isNetworkReachable]){
+        annotatedImage.isSent = NO;
+        return;
+    }
+    
     _objective = OBJECTIVE_SEND_AIMAGE;
     _annotatedImage = annotatedImage;
     
@@ -144,6 +136,11 @@
 
 - (void) shareRating:(Rating *)rating
 {
+    if(![Reachability isNetworkReachable]){
+        rating.isSent = NO;
+        return;
+    }
+    
     _objective = OBJECTIVE_SEND_RATING;
     _rating = rating;
     
@@ -167,6 +164,11 @@
 
 - (void) deleteDetector:(Detector *)detector
 {
+    if(![Reachability isNetworkReachable]){
+        [self.delegate requestFailedWithErrorTitle:@"Network not reachable" errorMessage:@"Detector could not be deleted from the server. Try again with internet connection."];
+        return;
+    }
+    
     _objective = OBJECTIVE_DELETE_DETECTOR;
     _detector = detector;
 
@@ -189,7 +191,10 @@
 
 - (void) shareProfilePicture:(UIImage *) profilePicture forUsername:(NSString *)username
 {
-    
+    if(![Reachability isNetworkReachable]){
+        [self.delegate requestFailedWithErrorTitle:@"Network not reachable" errorMessage:@"Picture could not be send to the server. Try again with internet connection."];
+        return;
+    }
     _objective = OBJECTIVE_SEND_PROFILE;
 
     NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/update/%@/",SERVER_ADDRESS,username];

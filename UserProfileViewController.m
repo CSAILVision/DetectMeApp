@@ -48,8 +48,8 @@
 - (void) outputValuesForCurrentUser
 {
     self.usernameLabel.text = self.currentUser.username;
-    self.emailLabel.text = self.currentUser.email;
     self.imageView.image = [UIImage imageWithData:self.currentUser.image];
+    [self.wifiOnlyButton setOn:self.currentUser.isWifiOnly.boolValue];
 }
 
 
@@ -81,6 +81,11 @@
     [self presentViewController:_imagePicker animated:YES completion:nil];
 }
 
+- (IBAction)wifiOnlyAction:(UISwitch *)sender
+{
+    self.currentUser.isWifiOnly = @(sender.on);
+}
+
 
 #pragma mark -
 #pragma mark ImagePickerControllerDelegate
@@ -101,5 +106,21 @@
 {
     [_imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
+
+
+#pragma mark -
+#pragma mark TableViewDataSource and Delegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 0;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 0;
+}
+
+
 
 @end

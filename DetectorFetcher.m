@@ -9,6 +9,7 @@
 #import "DetectorFetcher.h"
 #import "Detector.h"
 #import "ConstantsServer.h"
+#import "Reachability+DetectMe.h"
 
 
 @interface DetectorFetcher()
@@ -24,6 +25,7 @@
 
 #pragma mark -
 #pragma mark Initialization
+
 
 
 + (NSURLRequest *) createRequest
@@ -42,6 +44,9 @@
 
 - (void) fetchDetectorsASync
 {
+    if(![Reachability isNetworkReachable])
+        return;
+    
     NSURLRequest *request = [self.class createRequest];
     
     _responseData = [[NSMutableData alloc] init];
@@ -53,9 +58,12 @@
 
 + (NSArray *) fetchDetectorsSync
 {
+    
+    if(![Reachability isNetworkReachable])
+        return nil;
+    
     NSURLRequest *request = [self createRequest];
     
-
     NSError *error;
     NSURLResponse *response;
     NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];

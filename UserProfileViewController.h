@@ -12,13 +12,14 @@
 @interface UserProfileViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *emailLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) User *currentUser;
+@property (weak, nonatomic) IBOutlet UISwitch *wifiOnlyButton;
 
 
 - (IBAction)logOutAction:(id)sender;
 - (IBAction)takePictureAction:(id)sender;
+- (IBAction)wifiOnlyAction:(UISwitch *)sender;
 
 
 @end

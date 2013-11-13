@@ -56,6 +56,7 @@
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="isWifiOnly" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="annotatedImages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AnnotatedImage" inverseName="user" inverseEntity="AnnotatedImage" syncable="YES"/>
         <relationship name="detectors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Detector" inverseName="user" inverseEntity="Detector" syncable="YES"/>
@@ -67,6 +68,6 @@
         <element name="Detector" positionX="466" positionY="-72" width="128" height="358"/>
         <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="103"/>
         <element name="Rating" positionX="-135" positionY="297" width="117" height="103"/>
-        <element name="User" positionX="126" positionY="545" width="128" height="148"/>
+        <element name="User" positionX="126" positionY="545" width="128" height="163"/>
     </elements>
 </model>

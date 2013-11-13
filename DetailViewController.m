@@ -66,17 +66,28 @@
     self.isPublicControl.selectedSegmentIndex = self.detector.isPublic.boolValue ? 0:1;
 }
 
+- (void) initializeForOwner
+{
+    _isOwner = [self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]];
+    if(!_isOwner){
+        self.deleteButton.hidden = YES;
+        self.isPublicControl.hidden = YES;
+    }
+}
+
+- (void) initializeRating
+{
+    _rating = [Rating ratingforDetector:self.detector inManagedObjectContext:_detectorDatabase.managedObjectContext];
+    if(_rating.rating.integerValue != 0)
+        self.ratingControl.selectedSegmentIndex = _rating.rating.integerValue - 1;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self loadDetectorDetails];
     
-    _isOwner = [self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]];
-    if(!_isOwner){
-        self.deleteButton.hidden = YES;
-        self.isPublicControl.hidden = YES;
-    }
+    [self initializeForOwner];
     
     _shareDetector = [[ShareDetector alloc] init];
     _shareDetector.delegate = self;
@@ -84,11 +95,9 @@
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
+    self.activityIndicator.hidden = YES;
     
-    _rating = [Rating ratingforDetector:self.detector inManagedObjectContext:_detectorDatabase.managedObjectContext];
-    if(_rating.rating.integerValue != 0)
-        self.ratingControl.selectedSegmentIndex = _rating.rating.integerValue - 1;
-    
+    [self initializeRating];
     [self setDetectorProperties];
 }
 
@@ -244,6 +253,11 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
+}
+
+- (void) networkNotReachable
+{
+    [self showAlertWithTitle:@"Network not reachable" andDescription:@"The detector could not be deleted from the server"];
 }
 
 #pragma mark -
