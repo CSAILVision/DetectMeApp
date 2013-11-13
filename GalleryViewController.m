@@ -77,7 +77,7 @@
         self.title = @"Server";
         
     }else if([self.filter isEqualToString:FILTER_SELECTION]){
-        [self fetchSingle];
+        [self fetchAll];
         self.title = @"Select Detectors!";
         
         // hide add and back button
@@ -378,6 +378,11 @@
 - (void) fetchServer
 {
     [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"isPublic == YES"]];
+}
+
+- (void) fetchAll
+{
+    [self fetchResultsForPredicate:nil];
 }
 
 - (void) fetchMultiples
