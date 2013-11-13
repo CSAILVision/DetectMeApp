@@ -11,7 +11,7 @@
 #import "MultipleDetector.h"
 #import "Rating.h"
 #import "User.h"
-
+#import "MultipleDetector.h"
 
 @implementation Detector
 
@@ -36,5 +36,16 @@
 @dynamic ratings;
 @dynamic user;
 @dynamic multipleDetectors;
+
+
+
+- (void)prepareForDeletion
+{
+    // Delete multiple detectors with just this detector
+    NSSet *multipleDetectors = self.multipleDetectors;
+    for(MultipleDetector *md in multipleDetectors)
+        if(md.detectors.count==1)
+            [self.managedObjectContext deleteObject:md];
+}
 
 @end

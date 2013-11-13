@@ -8,6 +8,7 @@
 
 #import "User+Create.h"
 #import "ConstantsServer.h"
+#import "MultipleDetector.h"
 
 @implementation User (Create)
 
@@ -47,5 +48,7 @@
     NSString *currentUsername = [[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME];
     return [User userWithName:currentUsername inManagedObjectContext:context];
 }
+
+
 
 @end

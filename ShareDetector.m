@@ -31,8 +31,14 @@
     Rating *_rating;
     
     int _objective;
+    
+    BOOL _isNetworkReachable;
 }
 @end
+
+
+
+
 
 
 @implementation ShareDetector
@@ -40,10 +46,27 @@
 #pragma mark -
 #pragma mark Initialization
 
+- (void) initializeNetworkReachability
+{
+//    //check settings for wifi only.
+//    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[objectpath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"settings.plist"]];
+//    NSNumber *wifiOnly = [dict objectForKey:@"wifi"];
+//    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+//    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+//    if (wifiOnly.boolValue) {
+//        if ((networkStatus != ReachableViaWiFi) && (networkStatus !=NotReachable)) {
+//            [self errorWithTitle:@"Check your connection" andDescription:@"Sorry, wifi connection is required."];
+//            [self.delegate sendPhotoError];
+//            return;
+//        }
+//    }
+}
+
 - (id)init
 {
     if (self = [super init]) {
         _requestConstructor = [[PostHTTPConstructor alloc] init];
+        
     }
     return self;
 } 
