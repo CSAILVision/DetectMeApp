@@ -13,7 +13,7 @@
 #import "UIImage+HOG.h"
 #import "UIImage+Resize.h"
 #import "UIViewController+ShowAlert.h"
-
+#import "Reachability+DetectMe.h"
 
 @interface ExecuteDetectorViewController()
 {
@@ -390,6 +390,12 @@
 
 - (IBAction)sendBoxesToServer:(UIButton *)senderButton
 {
+    // Check reachability
+    if(![Reachability isNetworkReachable]){
+        [self showAlertWithTitle:@"Error" andDescription:@"Connection not available."];
+        return;
+    }
+    
     if(!_sendBoxesToServer){
         _sendBoxesToServer = YES;
         [_boxSender openConnection];
