@@ -158,6 +158,7 @@
                                                                        forMotion:_motionManager.deviceMotion
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
+        NSLog(@"box:%@", [self convertBoxForView:self.tagView.box]);
         [_annotatedImages addObject:annotatedImage];
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];

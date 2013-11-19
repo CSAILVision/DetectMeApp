@@ -107,7 +107,7 @@ using namespace cv;
         self.weights = [[NSArray arrayFromJSON:detector.weights] mutableCopy]; //[NSKeyedUnarchiver unarchiveObjectWithData:detector.weights];
         self.sizes = [NSArray arrayFromJSON:detector.sizes]; //[NSKeyedUnarchiver unarchiveObjectWithData:detector.sizes];
 
-        self.scaleFactor = @(IMAGE_SCALE_FACTOR);
+        //self.scaleFactor = @(IMAGE_SCALE_FACTOR);
         self.detectionThreshold = detector.detectionThreshold;
         
         
@@ -170,14 +170,12 @@ using namespace cv;
     _receivedImageIndex = [[NSMutableArray alloc] init];
     
     //set hog dimension according to the max Hog set in user preferences
-    float ratio;
-    if(trainingSet.templateSize.height > trainingSet.templateSize.width){
-        ratio = trainingSet.templateSize.width/trainingSet.templateSize.height;
-        _sizesP[0] = MAX_HOG; //set in user preferences
+    float ratio = [trainingSet getAverageGroundTruthAspectRatio]; // w/h
+    if(ratio<1){
+        _sizesP[0] = MAX_HOG;
         _sizesP[1] = round(_sizesP[0]*ratio);
 
     }else{
-        ratio = trainingSet.templateSize.height/trainingSet.templateSize.width;
         _sizesP[1] = MAX_HOG;
         _sizesP[0] = round(_sizesP[1]*ratio);
     }
@@ -186,13 +184,12 @@ using namespace cv;
     // scalefactor for detection. Used to ajust hog size with images resolution
     // It allows you to work with distinct image resolution and still have the same number
     // of hogfeatures to homogenize performance (e.g. in ipad vs iphone)
-    self.scaleFactor = [NSNumber numberWithDouble:MAX_HOG*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio)];
+    //self.scaleFactor = @(MAX_HOG*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio));
     //self.scaleFactor = @(IMAGE_SCALE_FACTOR);
     
     _numOfFeatures = _sizesP[0]*_sizesP[1]*_sizesP[2];
     
     [self.delegate sendMessage:[NSString stringWithFormat:@"Hog features: %d %d %d for ratio:%f", _sizesP[0],_sizesP[1],_sizesP[2], ratio]];
-    [self.delegate sendMessage:[NSString stringWithFormat:@"area ratio: %f", trainingSet.areaRatio]];
     
     //define buffer sizes
     //TODO: max size for the buffers
@@ -295,8 +292,9 @@ using namespace cv;
 
     //scaling factor for the image
     float ratio = image.size.width*1.0 / image.size.height;
-    double initialScale = self.scaleFactor.doubleValue/sqrt(image.size.width*image.size.width);
-    if(ratio>1) initialScale = initialScale * 1.3; 
+//    double initialScale = self.scaleFactor.doubleValue/sqrt(image.size.width*image.size.width);
+    double initialScale = SCALE_FACTOR;
+    if(ratio>1) initialScale = initialScale * 1.3;
     double scale = pow(2, 1.0/SCALES_PER_OCTAVE);
 
     //Pyramid limits
@@ -319,6 +317,7 @@ using namespace cv;
     
     dispatch_queue_t pyramidQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     UIImage *im = [image scaleImageTo:initialScale/pow(scale,_iniPyramid)];
+    
     dispatch_apply(_finPyramid - _iniPyramid, pyramidQueue, ^(size_t i) {
         HogFeature *imageHog;
         int imageHogIndex = 0;
@@ -570,7 +569,6 @@ using namespace cv;
                         _trainingImageFeatures[index*_numOfFeatures + sweeping1] = (float) imageHog.features[boundingBoxPosition + sweeping2];
                     }
 
-            
             _numberOfTrainingExamples++;
         }
     });
@@ -631,10 +629,9 @@ using namespace cv;
         }
     });
     
-//    NSLog(@"Training Image Labels (SV + new points)");
+    
     int positius = 0;
     for(int i=0; i<_numberOfTrainingExamples;i++){
-//        NSLog(@"%f", _trainingImageLabels[i]);
         if(_trainingImageLabels[i]==1.0) positius++;
     }
     
@@ -724,6 +721,7 @@ using namespace cv;
 
 - (void) initializeDetectorWithSupportVectors
 {
+    // Initialize the detector with the previous weights
     _numSupportVectors = self.supportVectors.count;
     _numOfFeatures = [(SupportVector *)[self.supportVectors firstObject] weights].count;
     _sizesP[0] = [(NSNumber *) [self.sizes objectAtIndex:0] intValue];
@@ -742,10 +740,6 @@ using namespace cv;
             _trainingImageFeatures[i*_numOfFeatures + j] = weight;
         }
     }
-    
-    NSLog(@"Labels for initial sv:");
-    for(int i=0; i<_numSupportVectors;i++)
-        NSLog(@"%f", _trainingImageLabels[i]);
 }
 
 

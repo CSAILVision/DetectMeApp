@@ -2,8 +2,7 @@
 //  CoreDataCollectionViewController.h
 //  DetecTube
 //
-//  Created by Josep Marc Mingot Hidalgo on 18/09/13.
-//  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
+// Created at CS193P Stanford iPhone Development Course
 //
 
 #import <UIKit/UIKit.h>

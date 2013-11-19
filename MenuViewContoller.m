@@ -86,7 +86,6 @@
 
 - (void) setNumberOfDetectors
 {
-    
     int number;
     NSFetchRequest *request;
     

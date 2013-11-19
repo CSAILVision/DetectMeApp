@@ -11,13 +11,14 @@
 #import "DetectorWrapper.h"
 
 
+
 #define SCALES_PER_OCTAVE 10
 
 
 @interface Pyramid()
 
 //send the average of all the detectors
-@property (nonatomic, strong) NSNumber *scaleFactor;
+//@property (nonatomic, strong) NSNumber *scaleFactor;
 
 @end
 
@@ -39,12 +40,12 @@
     if(self){
         self.numPyramids = numPyramids;
         
-        //compute average scale factor
-        float average = 0;
-        for(DetectorWrapper *detector in detectors)
-            average = average + detector.scaleFactor.floatValue;
-        average = average/detectors.count;
-        self.scaleFactor = [NSNumber numberWithFloat:average];
+//        //compute average scale factor
+//        float average = 0;
+//        for(DetectorWrapper *detector in detectors)
+//            average = average + detector.scaleFactor.floatValue;
+//        average = average/detectors.count;
+//        self.scaleFactor = [NSNumber numberWithFloat:average];
     }
     
     return self;
@@ -91,7 +92,8 @@
         image = [UIImage imageWithCGImage:image.CGImage scale:1.0 orientation:UIImageOrientationUp];
     
     //scaling factor for the image
-    double initialScale = self.scaleFactor.doubleValue/sqrt(image.size.width*image.size.width);
+//    double initialScale = self.scaleFactor.doubleValue/sqrt(image.size.width*image.size.width);
+    double initialScale = 3;
     double scale = pow(2, 1.0/SCALES_PER_OCTAVE);
     UIImage *scaledImage = [image scaleImageTo:initialScale/pow(scale,0)]; //TODO: optimize to start to the first true index
     

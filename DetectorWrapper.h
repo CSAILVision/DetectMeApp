@@ -12,6 +12,10 @@
 #import "Detector.h"
 #import "SupportVector.h"
 
+
+#define SCALE_FACTOR 0.3
+
+
 @class TrainingSet;
 
 @protocol DetectorWrapperDelegate <NSObject>
@@ -35,7 +39,7 @@
 @property (strong, nonatomic) NSNumber *numberOfPositives;
 @property (strong, nonatomic) NSArray *precisionRecall;
 @property (strong, nonatomic) NSNumber *timeLearning;
-@property (strong, nonatomic) NSNumber *scaleFactor; //average ratio height/width of the positive bb of the training set
+//@property (strong, nonatomic) NSNumber *scaleFactor; //average ratio height/width of the positive bb of the training set
 @property (strong, nonatomic) NSNumber *detectionThreshold;
 
 // In case of error training, provide specific detail of what has happened

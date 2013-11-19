@@ -411,6 +411,7 @@
                 //start creating objects in document's context
                 [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
             }
+        
             
             // when finished, present them on the screen
             [self performSelectorOnMainThread:@selector(applyFilter) withObject:nil waitUntilDone:NO];

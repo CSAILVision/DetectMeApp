@@ -44,10 +44,11 @@
         self.averageImage = [UIImage imageAverageFromImages:listOfImages];
 
         // check if training from a previous one
-        if(self.previousDetector){
-            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.previousDetector];
-        }else
-            self.detectorWrapper = [[DetectorWrapper alloc] init];
+//        if(self.previousDetector){
+//            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.previousDetector];
+//        }else
+//            self.detectorWrapper = [[DetectorWrapper alloc] init];
+        self.detectorWrapper = [[DetectorWrapper alloc] init];
         
         self.detectorWrapper.delegate = self;
         int trainingState = [self.detectorWrapper trainOnSet:trainingSet];
@@ -62,6 +63,7 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             if(trainingState == SUCCESS){
+                NSLog(@"train succeed");
                 [self trainingDidEnd];
                 
                 
