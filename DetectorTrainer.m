@@ -51,8 +51,11 @@
         self.detectorWrapper = [[DetectorWrapper alloc] init];
         
         self.detectorWrapper.delegate = self;
+        
+        NSDate * start = [NSDate date];
         int trainingState = [self.detectorWrapper trainOnSet:trainingSet];
-
+        NSLog(@"TIME TRAINING: %f", [start timeIntervalSinceNow]);
+        
         
         if (trainingState == SUCCESS) {
             TrainingSet *testSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];

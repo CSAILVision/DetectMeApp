@@ -255,7 +255,6 @@
         }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){ // annotated image returned
             _annotatedImage.isSent = @(YES);
             NSLog(@"Image sent");
-            
             [self.delegate annotatedImageDidSent];
 
         }else if([objectJSON objectForKey:SERVER_RATING_RATING]){ // rating returned

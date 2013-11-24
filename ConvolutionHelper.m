@@ -66,7 +66,6 @@
    maxOverlapArea:(double)overlap
 minScoreThreshold:(double)scoreThreshold
 {
-
     NSMutableArray *result = [[NSMutableArray alloc] init];
     
     // select only those bounding boxes with score above the threshold and non overlapping areas

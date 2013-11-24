@@ -56,8 +56,6 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
             y = max(0,p.ymin);
             w = min(self.frame.size.width,p.xmax) - x;
             h = min(self.frame.size.height,p.ymax) - y;
-        
-            NSLog(@"score: %f", p.score);
             
             CGRect box = CGRectMake(x, y, w, h);
             

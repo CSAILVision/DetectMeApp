@@ -20,21 +20,26 @@
 
 using namespace cv;
 
+// training parameters
 #define MAX_QUOTA 100 //max negative examples (bb) per iteration
-#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*20 //max number of examples in buffer, (500neg + 200pos)*20images
-#define STOP_CRITERIA 0.05 
-#define MAX_IMAGE_SIZE 300.0
-#define SCALES_PER_OCTAVE 10
-#define MAX_TRAINING_ITERATIONS 10
-#define MAX_HOG 8
+#define MAX_TEMPLATE_SIZE 8
+#define STOP_CRITERIA 0.01
+#define MAX_TRAINING_ITERATIONS 5
+#define NUM_TRAINING_PYRAMIDS 10
+#define SVM_C 0.02
+#define POSITIVE_OVERLAP_AREA 0.7
+#define NEGATIVE_OVERLAP_AREA 0.5
+#define TRAINING_SCALE_FACTOR 0.5 //scale factor for detection on training images
 
-// Scaling image on detection for being faster
-#define IMAGE_SCALE_FACTOR 100.0
+// alloc size
+#define MAX_TRAINING_IMAGES 50
+#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*MAX_TRAINING_IMAGES //max number of examples in buffer, (500neg + 200pos)*20images
 
 //training results
 #define SUCCESS 1
 #define INTERRUPTED 2 //and not trained
 #define FAIL 0
+
 
 @interface DetectorWrapper ()
 {
@@ -86,7 +91,7 @@ using namespace cv;
 
 
 #pragma mark -
-#pragma mark Initialization & Encoding
+#pragma mark Initialization
 
 - (id) init
 {
@@ -104,12 +109,10 @@ using namespace cv;
 {
     if (self = [super init]) {
         self.targetClasses = [NSArray arrayWithObject:detector.targetClass];
-        self.weights = [[NSArray arrayFromJSON:detector.weights] mutableCopy]; //[NSKeyedUnarchiver unarchiveObjectWithData:detector.weights];
-        self.sizes = [NSArray arrayFromJSON:detector.sizes]; //[NSKeyedUnarchiver unarchiveObjectWithData:detector.sizes];
+        self.weights = [[NSArray arrayFromJSON:detector.weights] mutableCopy];
+        self.sizes = [NSArray arrayFromJSON:detector.sizes];
 
-        //self.scaleFactor = @(IMAGE_SCALE_FACTOR);
         self.detectionThreshold = detector.detectionThreshold;
-        
         
         // set _sizesP
         free(_sizesP);
@@ -134,7 +137,6 @@ using namespace cv;
     return self;
     
 }
-
 
 
 - (void) dealloc
@@ -165,30 +167,23 @@ using namespace cv;
     
     //array initialization
     _imagesHogPyramid = [[NSMutableArray alloc] init];
-    for (int i = 0; i < trainingSet.images.count*10; ++i)
+    for (int i = 0; i < trainingSet.images.count*NUM_TRAINING_PYRAMIDS; ++i)
         [_imagesHogPyramid addObject:[NSNull null]];
     _receivedImageIndex = [[NSMutableArray alloc] init];
     
     //set hog dimension according to the max Hog set in user preferences
     float ratio = [trainingSet getAverageGroundTruthAspectRatio]; // w/h
     if(ratio<1){
-        _sizesP[0] = MAX_HOG;
+        _sizesP[0] = MAX_TEMPLATE_SIZE;
         _sizesP[1] = round(_sizesP[0]*ratio);
 
     }else{
-        _sizesP[1] = MAX_HOG;
-        _sizesP[0] = round(_sizesP[1]*ratio);
+        _sizesP[1] = MAX_TEMPLATE_SIZE;
+        _sizesP[0] = round(_sizesP[1]/ratio);
     }
     _sizesP[2] = 31;
     
-    // scalefactor for detection. Used to ajust hog size with images resolution
-    // It allows you to work with distinct image resolution and still have the same number
-    // of hogfeatures to homogenize performance (e.g. in ipad vs iphone)
-    //self.scaleFactor = @(MAX_HOG*pixelsPerHogCell*sqrt(ratio/trainingSet.areaRatio));
-    //self.scaleFactor = @(IMAGE_SCALE_FACTOR);
-    
     _numOfFeatures = _sizesP[0]*_sizesP[1]*_sizesP[2];
-    
     [self.delegate sendMessage:[NSString stringWithFormat:@"Hog features: %d %d %d for ratio:%f", _sizesP[0],_sizesP[1],_sizesP[2], ratio]];
     
     //define buffer sizes
@@ -207,7 +202,7 @@ using namespace cv;
     BOOL firstTimeError = YES;
     
     // Used to train detectors from the server that just have the support vectors
-    if(self.supportVectors) [self initializeDetectorWithSupportVectors];
+    //if(self.supportVectors) [self initializeDetectorWithSupportVectors];
     
     
     while(_diff > STOP_CRITERIA && iter<MAX_TRAINING_ITERATIONS && !_isTrainCancelled){
@@ -217,8 +212,7 @@ using namespace cv;
         //Get Bounding Boxes from detection
         [self getBoundingBoxesForTrainingSet:trainingSet];
         
-        
-        
+
         //The first time that not enough positive or negative bb have been generated (due to bb with different geometries), try to unify all the sizes of the bounding boxes. This solve the problem in most of the cases at the cost of losing accuracy. However if still not solved, give an error saying not possible training done due to the ground truth bouning boxes shape.
         if(self.numberOfPositives.intValue < 2 || self.numberOfPositives.intValue == _numberOfTrainingExamples){
             if(firstTimeError){
@@ -292,7 +286,6 @@ using namespace cv;
 
     //scaling factor for the image
     float ratio = image.size.width*1.0 / image.size.height;
-//    double initialScale = self.scaleFactor.doubleValue/sqrt(image.size.width*image.size.width);
     double initialScale = SCALE_FACTOR;
     if(ratio>1) initialScale = initialScale * 1.3;
     double scale = pow(2, 1.0/SCALES_PER_OCTAVE);
@@ -303,6 +296,9 @@ using namespace cv;
     //locate pyramids already calculated in the buffer
     BOOL found=NO;
     if(_isLearning){
+        
+        //SCALE
+        initialScale = TRAINING_SCALE_FACTOR;
         
         //pyramid limits
         _iniPyramid = 0; _finPyramid = numberPyramids;
@@ -317,6 +313,7 @@ using namespace cv;
     
     dispatch_queue_t pyramidQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     UIImage *im = [image scaleImageTo:initialScale/pow(scale,_iniPyramid)];
+    NSLog(@"Scaled image size: %@", NSStringFromCGSize(im.size));
     
     dispatch_apply(_finPyramid - _iniPyramid, pyramidQueue, ^(size_t i) {
         HogFeature *imageHog;
@@ -598,7 +595,7 @@ using namespace cv;
                 groundTruthBB = [trainingSet.groundTruthBoundingBoxes objectAtIndex:i];
             
             //run the detector on the current image
-            NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:10 usingNms:NO deviceOrientation:UIImageOrientationUp learningImageIndex:i];
+            NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:NUM_TRAINING_PYRAMIDS usingNms:NO deviceOrientation:UIImageOrientationUp learningImageIndex:i];
             
             
             // max negative bounding boxes detected allowed per image
@@ -611,12 +608,12 @@ using namespace cv;
                 double overlapArea = [detectedBB fractionOfAreaOverlappingWith:groundTruthBB];
                 
                 detectedBB.label = 0;
-                if (overlapArea > 0.7 && overlapArea<1){
+                if (overlapArea > POSITIVE_OVERLAP_AREA && overlapArea<1){
                     detectedBB.label = 1;
                     positives++;
                     image_positives++;
                     [self addExample:detectedBB to:trainingSet];
-                }else if(overlapArea < 0.25 && quota>0){
+                }else if(overlapArea < NEGATIVE_OVERLAP_AREA && quota>0){
                     quota--;
                     detectedBB.label = -1;
                     [self addExample:detectedBB to:trainingSet];
@@ -624,7 +621,7 @@ using namespace cv;
             }
             
             dispatch_sync(dispatch_get_main_queue(),^{
-                [self.delegate sendMessage:[NSString stringWithFormat:@"New bb obtained for image %zd: %d/%d", i,image_positives ,detectedBoundingBoxes.count]];
+                [self.delegate sendMessage:[NSString stringWithFormat:@"New bb obtained for image %zd: %d/%d", i, image_positives,detectedBoundingBoxes.count]];
             });
         }
     });
@@ -654,6 +651,7 @@ using namespace cv;
     CvSVMParams params;
     params.svm_type    = CvSVM::C_SVC;
     params.kernel_type = CvSVM::LINEAR;
+    params.C = SVM_C;
     params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 1000, 1e-6);
     
     CvSVM SVM;
