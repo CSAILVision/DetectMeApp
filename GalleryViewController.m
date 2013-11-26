@@ -123,7 +123,6 @@
     [self persistentSent:@"Detector"];
     [self persistentSent:@"AnnotatedImage"];
     [self persistentSent:@"Rating"];
-    [self unrelatedImages];
     
     NSLog(@"Refreshing...");
     [_refreshControl endRefreshing];
@@ -446,23 +445,23 @@
 
 - (void) unrelatedImages
 {
-    NSError *error;
-    
-    // get chair
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
-    request.predicate = [NSPredicate predicateWithFormat:@"serverDatabaseID == 26"];
-    NSArray *matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
-    Detector *detector = [matches firstObject];
-    
-    
-    request = [NSFetchRequest fetchRequestWithEntityName:@"AnnotatedImage"];
-    request.predicate = [NSPredicate predicateWithFormat:@"detector == nil"];
-    matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
-    
-    for(AnnotatedImage *ai in matches)
-        ai.detector = detector;
-    
-    NSLog(@"Number of unrelated images: %lu", (unsigned long)matches.count);
+//    NSError *error;
+//    
+//    // get chair
+//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
+//    request.predicate = [NSPredicate predicateWithFormat:@"serverDatabaseID == 26"];
+//    NSArray *matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
+//    Detector *detector = [matches firstObject];
+//    
+//    
+//    request = [NSFetchRequest fetchRequestWithEntityName:@"AnnotatedImage"];
+//    request.predicate = [NSPredicate predicateWithFormat:@"detector == nil"];
+//    matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
+//    
+//    for(AnnotatedImage *ai in matches)
+//        ai.detector = detector;
+//    
+//    NSLog(@"Number of unrelated images: %lu", (unsigned long)matches.count);
     
 }
 
