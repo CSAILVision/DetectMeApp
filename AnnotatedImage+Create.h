@@ -21,6 +21,10 @@
                                    forMotion:(CMDeviceMotion *) motion
                       inManagedObjectContext:(NSManagedObjectContext *)context;
 
++ (AnnotatedImage *) annotatedImageWithDictionaryInfo:(NSDictionary *)annotatedImageInfo
+                               inManagedObjectContext:(NSManagedObjectContext *)context
+                                          forDetector:(Detector *)detector;
+
 - (Box *) boxForAnnotatedImage;
 - (void) setBox:(Box *) box;
 

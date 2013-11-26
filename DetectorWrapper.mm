@@ -32,8 +32,8 @@ using namespace cv;
 #define TRAINING_SCALE_FACTOR 0.5 //scale factor for detection on training images
 
 // alloc size
-#define MAX_TRAINING_IMAGES 50
-#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*MAX_TRAINING_IMAGES //max number of examples in buffer, (500neg + 200pos)*20images
+#define MAX_TRAINING_IMAGES 35
+#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 100)*MAX_TRAINING_IMAGES //max number of examples in buffer, (500neg + 200pos)*20images
 
 //training results
 #define SUCCESS 1
@@ -313,7 +313,6 @@ using namespace cv;
     
     dispatch_queue_t pyramidQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     UIImage *im = [image scaleImageTo:initialScale/pow(scale,_iniPyramid)];
-    NSLog(@"Scaled image size: %@", NSStringFromCGSize(im.size));
     
     dispatch_apply(_finPyramid - _iniPyramid, pyramidQueue, ^(size_t i) {
         HogFeature *imageHog;
