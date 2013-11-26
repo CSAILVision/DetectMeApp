@@ -27,10 +27,20 @@
 #pragma mark Initialization
 
 
-
 + (NSURLRequest *) createRequest
 {
     NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestURLString]
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                       timeoutInterval:10];
+    
+    [request setHTTPMethod: @"GET"];
+    return request;
+}
+
++ (NSURLRequest *) createRequestForDetector:(Detector *) detector
+{
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/annotatedimages/fordetector/%@/",SERVER_ADDRESS, detector.serverDatabaseID];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestURLString]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:10];
@@ -63,6 +73,23 @@
         return nil;
     
     NSURLRequest *request = [self createRequest];
+    
+    NSError *error;
+    NSURLResponse *response;
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    NSArray *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
+    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    
+    return results;
+}
+
++ (NSArray *) fetchAnnotatedImagesSyncForDetector:(Detector *)detector
+{
+    if(![Reachability isNetworkReachable])
+        return nil;
+    
+    NSURLRequest *request = [self createRequestForDetector:detector];
     
     NSError *error;
     NSURLResponse *response;

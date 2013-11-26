@@ -13,6 +13,8 @@
 #import "AnnotatedImage.h"
 #import "ManagedDocumentHelper.h"
 #import "AnnotatedImage+Create.h"
+#import "DetectorFetcher.h"
+
 
 @interface TrainingImagesCollectionViewController ()
 {
@@ -109,6 +111,31 @@
     [self.collectionView reloadData];
 }
 
+
+- (IBAction)resetImagesAction:(id)sender
+{
+    UIManagedDocument *document = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];
+    
+    // delete current images
+    for(AnnotatedImage *ai in self.detector.annotatedImages)
+        [document.managedObjectContext deleteObject:ai];
+    
+    // get all the current images from the server
+    dispatch_queue_t fetchQ = dispatch_queue_create("AnnotatedImage Fetcher", NULL);
+    dispatch_async(fetchQ, ^{
+        NSArray *annotatedImages = [DetectorFetcher fetchAnnotatedImagesSyncForDetector:self.detector];
+        [document.managedObjectContext performBlock:^{
+            NSLog(@"received  %d images", annotatedImages.count);
+            for(NSDictionary *annotatedIageInfo in annotatedImages){
+                [AnnotatedImage annotatedImageWithDictionaryInfo:annotatedIageInfo
+                                          inManagedObjectContext:document.managedObjectContext
+                                                     forDetector:self.detector];
+            }
+            
+        }];
+    });
+}
+
 #pragma mark -
 #pragma mark TakePictureViewControllerDelegate
 
@@ -198,5 +225,6 @@
     for(AnnotatedImage *ai in annotatedImages)
         ai.detector = nil;
 }
+
 
 @end

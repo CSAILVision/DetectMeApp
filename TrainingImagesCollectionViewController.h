@@ -16,5 +16,6 @@
 @property (strong, nonatomic) Detector *detector;
 
 - (IBAction)deleteAction:(UIButton *)sender;
+- (IBAction)resetImagesAction:(id)sender;
 
 @end
