@@ -85,6 +85,7 @@
     detector.weights = [detectorTrainer.weights convertToJSON];
     detector.sizes = [detectorTrainer.sizes convertToJSON];
     detector.supportVectors = [SupportVector JSONFromSupportVectors:detectorTrainer.supportVectors];
+    detector.trainingLog = detectorTrainer.trainingLog;
     
     return detector;
 }

@@ -24,7 +24,7 @@ using namespace cv;
 #define MAX_QUOTA 100 //max negative examples (bb) per iteration
 #define MAX_TEMPLATE_SIZE 8
 #define STOP_CRITERIA 0.01
-#define MAX_TRAINING_ITERATIONS 5
+#define MAX_TRAINING_ITERATIONS 10
 #define NUM_TRAINING_PYRAMIDS 10
 #define SVM_C 0.02
 #define POSITIVE_OVERLAP_AREA 0.7
@@ -33,7 +33,7 @@ using namespace cv;
 
 // alloc size
 #define MAX_TRAINING_IMAGES 35
-#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 100)*MAX_TRAINING_IMAGES //max number of examples in buffer, (500neg + 200pos)*20images
+#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*MAX_TRAINING_IMAGES //max number of examples in buffer, (500neg + 200pos)*20images
 
 //training results
 #define SUCCESS 1
@@ -620,7 +620,7 @@ using namespace cv;
             }
             
             dispatch_sync(dispatch_get_main_queue(),^{
-                [self.delegate sendMessage:[NSString stringWithFormat:@"New bb obtained for image %zd: %d/%d", i, image_positives,detectedBoundingBoxes.count]];
+                [self.delegate sendMessage:[NSString stringWithFormat:@"BB for image %zd (positive/total): %d/%d", i, image_positives,detectedBoundingBoxes.count]];
             });
         }
     });
@@ -632,14 +632,14 @@ using namespace cv;
     }
     
     [self.delegate sendMessage:[NSString stringWithFormat:@"added %d NEW positives", positives]];
-    NSLog(@"RATIO of POSITIVES(with new and previous SV): %d/%d", positius, _numberOfTrainingExamples);
+    [self.delegate sendMessage:[NSString stringWithFormat:@"positives/total (inlcuding previous SV): %d/%d", positius, _numberOfTrainingExamples]];
+    
     self.numberOfPositives = @(positives);
 }
 
 
 -(void) trainSVMAndGetWeights
 {
-    [self.delegate sendMessage:[NSString stringWithFormat:@"Number of Training Examples: %d", _numberOfTrainingExamples]];
     int positives=0;
     
     Mat labelsMat(_numberOfTrainingExamples,1,CV_32FC1, _trainingImageLabels);
@@ -686,6 +686,8 @@ using namespace cv;
     }
     _weightsP[_numOfFeatures] = - (double) dec[0].rho; // The sign of the bias and rho have opposed signs.
     self.numberOfPositives = [[NSNumber alloc] initWithInt:positives];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"Finished training!"]];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"SV (positives/total): %d/%d", positives,_numSupportVectors]];
     [self.delegate sendMessage:[NSString stringWithFormat:@"bias: %f", _weightsP[_numOfFeatures]]];
 }
 
@@ -706,9 +708,7 @@ using namespace cv;
         _diff += (_weightsP[i]/norm - weightsPLast[i]/normLast)*(_weightsP[i]/norm - weightsPLast[i]/normLast);
         weightsPLast[i] = _weightsP[i];
     }
-    
-    [self.delegate sendMessage:[NSString stringWithFormat:@"norms: %f, %f", norm, normLast]];
-    [self.delegate sendMessage:[NSString stringWithFormat:@"difference: %f", sqrt(_diff)]];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"difference of norms: %f", sqrt(_diff)]];
     
     return sqrt(_diff);
 }

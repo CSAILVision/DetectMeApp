@@ -44,8 +44,6 @@
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
-    [self unlinkAnnotatedImages:_annotatedImages]; // Prevent to erase
-    
 }
 
 
@@ -218,13 +216,5 @@
         
     return  images;
 }
-
-
-- (void) unlinkAnnotatedImages:(NSArray *) annotatedImages
-{
-    for(AnnotatedImage *ai in annotatedImages)
-        ai.detector = nil;
-}
-
 
 @end

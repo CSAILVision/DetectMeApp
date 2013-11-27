@@ -361,6 +361,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
     if(predicate) request.predicate = predicate;
     request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    [request setIncludesSubentities:NO]; //Omit subentities. Default is YES (i.e. include subentities)
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:self.detectorDatabase.managedObjectContext

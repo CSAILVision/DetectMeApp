@@ -281,7 +281,9 @@
                                                            //detector.updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
                                                            [NSString stringWithFormat:@"%@",detector.weights],
-                                                           detector.supportVectors, nil]
+                                                           detector.supportVectors,
+                                                           detector.trainingLog,
+                                                           nil]
                                  
                                                                    forKeys:
                                  [NSArray arrayWithObjects:SERVER_DETECTOR_NAME,
@@ -291,7 +293,9 @@
                                                            //SERVER_DETECTOR_UPDATED_AT,
                                                            SERVER_DETECTOR_SIZES,
                                                            SERVER_DETECTOR_WEIGHTS,
-                                                           SERVER_DETECTOR_SUPPORT_VECTORS,nil]];
+                                                           SERVER_DETECTOR_SUPPORT_VECTORS,
+                                                           SERVER_DETECTOR_TRAINING_LOG,
+                                                           nil]];
     
     // if we are updating, specify for which detector
     if(!detector.serverDatabaseID.integerValue > 0)

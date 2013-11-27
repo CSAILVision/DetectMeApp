@@ -126,6 +126,9 @@
 - (void) sendMessage:(NSString *) message
 {
     NSLog(@"%@", message);
+    
+    if(!self.trainingLog) self.trainingLog = @"";
+    self.trainingLog = [self.trainingLog stringByAppendingString:[NSString stringWithFormat:@"%@\n",message]];
 }
 
 - (void) updateProgress:(float) prog

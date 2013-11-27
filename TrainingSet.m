@@ -51,9 +51,9 @@
         
         //Add abstract pictures to the training set to generate false positives when the bb is very big.
         //guess the relationship with the artists...
-        [self.images addObject:[UIImage imageNamed:@"picaso.jpg"]];
-        [self.images addObject:[UIImage imageNamed:@"dali.jpg"]];
-        [self.images addObject:[UIImage imageNamed:@"miro.jpg"]];
+        //[self.images addObject:[UIImage imageNamed:@"picaso.jpg"]];
+        //[self.images addObject:[UIImage imageNamed:@"dali.jpg"]];
+        //[self.images addObject:[UIImage imageNamed:@"miro.jpg"]];
     }
     return self;
 }

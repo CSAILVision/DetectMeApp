@@ -2,7 +2,7 @@
 //  Detector.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 23/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 27/11/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 #import "MultipleDetector.h"
 #import "Rating.h"
 #import "User.h"
-#import "MultipleDetector.h"
+
 
 @implementation Detector
 
@@ -32,12 +32,11 @@
 @dynamic type;
 @dynamic updatedAt;
 @dynamic weights;
+@dynamic trainingLog;
 @dynamic annotatedImages;
+@dynamic multipleDetectors;
 @dynamic ratings;
 @dynamic user;
-@dynamic multipleDetectors;
-
-
 
 - (void)prepareForDeletion
 {

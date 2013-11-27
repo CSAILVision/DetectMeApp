@@ -33,6 +33,7 @@
         <attribute name="supportVectors" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="targetClass" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timeLearning" optional="YES" attributeType="Float" minValueString="0" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="trainingLog" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" maxValueString="50" defaultValueString="LINEAR_SVM" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="weights" optional="YES" attributeType="String" syncable="YES"/>
@@ -66,7 +67,7 @@
     </entity>
     <elements>
         <element name="AnnotatedImage" positionX="-99" positionY="-27" width="128" height="283"/>
-        <element name="Detector" positionX="466" positionY="-72" width="128" height="358"/>
+        <element name="Detector" positionX="466" positionY="-72" width="128" height="373"/>
         <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="118"/>
         <element name="Rating" positionX="-135" positionY="297" width="117" height="103"/>
         <element name="User" positionX="126" positionY="545" width="128" height="163"/>
