@@ -2,7 +2,7 @@
 //  Detector.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 23/10/13.
+//  Created by Josep Marc Mingot Hidalgo on 12/12/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -24,16 +24,17 @@
 @property (nonatomic, retain) NSNumber * precisionRecall;
 @property (nonatomic, retain) NSNumber * serverDatabaseID;
 @property (nonatomic, retain) NSString * sizes;
-@property (nonatomic, retain) NSString * supportVectors;
+@property (nonatomic, retain) NSData * supportVectors;
 @property (nonatomic, retain) NSString * targetClass;
 @property (nonatomic, retain) NSNumber * timeLearning;
+@property (nonatomic, retain) NSString * trainingLog;
 @property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSString * weights;
 @property (nonatomic, retain) NSSet *annotatedImages;
+@property (nonatomic, retain) NSSet *multipleDetectors;
 @property (nonatomic, retain) NSSet *ratings;
 @property (nonatomic, retain) User *user;
-@property (nonatomic, retain) NSSet *multipleDetectors;
 @end
 
 @interface Detector (CoreDataGeneratedAccessors)
@@ -43,14 +44,14 @@
 - (void)addAnnotatedImages:(NSSet *)values;
 - (void)removeAnnotatedImages:(NSSet *)values;
 
-- (void)addRatingsObject:(Rating *)value;
-- (void)removeRatingsObject:(Rating *)value;
-- (void)addRatings:(NSSet *)values;
-- (void)removeRatings:(NSSet *)values;
-
 - (void)addMultipleDetectorsObject:(MultipleDetector *)value;
 - (void)removeMultipleDetectorsObject:(MultipleDetector *)value;
 - (void)addMultipleDetectors:(NSSet *)values;
 - (void)removeMultipleDetectors:(NSSet *)values;
+
+- (void)addRatingsObject:(Rating *)value;
+- (void)removeRatingsObject:(Rating *)value;
+- (void)addRatings:(NSSet *)values;
+- (void)removeRatings:(NSSet *)values;
 
 @end

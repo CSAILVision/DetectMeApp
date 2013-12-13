@@ -26,11 +26,8 @@
 #pragma mark -
 #pragma mark Initialization
 
-
-
-+ (NSURLRequest *) createRequest
++ (NSURLRequest *) createRequestForURLString:(NSString *) requestURLString
 {
-    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestURLString]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:10];
@@ -47,7 +44,8 @@
     if(![Reachability isNetworkReachable])
         return;
     
-    NSURLRequest *request = [self.class createRequest];
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
+    NSURLRequest *request = [self.class createRequestForURLString:requestURLString];
     
     _responseData = [[NSMutableData alloc] init];
     [NSURLConnection connectionWithRequest:request delegate:self];
@@ -62,7 +60,8 @@
     if(![Reachability isNetworkReachable])
         return nil;
     
-    NSURLRequest *request = [self createRequest];
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/",SERVER_ADDRESS];
+    NSURLRequest *request = [self createRequestForURLString:requestURLString];
     
     NSError *error;
     NSURLResponse *response;
@@ -73,6 +72,43 @@
     
     return results;
 }
+
++ (NSArray *) fetchAnnotatedImagesSyncForDetector:(Detector *)detector
+{
+    if(![Reachability isNetworkReachable])
+        return nil;
+    
+    
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/annotatedimages/fordetector/%@/",SERVER_ADDRESS, detector.serverDatabaseID];
+    NSURLRequest *request = [self createRequestForURLString:requestURLString];
+    
+    NSError *error;
+    NSURLResponse *response;
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    NSArray *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
+    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    
+    return results;
+}
+
++ (NSData *) fetchSupportVectorsSyncForDetector:(Detector *)detector
+{
+    if(![Reachability isNetworkReachable])
+        return nil;
+    
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/supportvectors/%@/",SERVER_ADDRESS, detector.serverDatabaseID];
+    NSURLRequest *request = [self createRequestForURLString:requestURLString];
+    
+    NSError *error;
+    NSURLResponse *response;
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    
+    return jsonData;
+}
+
 
 #pragma mark -
 #pragma mark NSURLConnectionDataDelegate
@@ -85,7 +121,6 @@
         
         // TODO: sent error message correctly after seeing http header.
     }
-    
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error

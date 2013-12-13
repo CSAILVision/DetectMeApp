@@ -44,7 +44,6 @@
     detector.user = [User userWithName:authorUsername inManagedObjectContext:context];
     detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
     detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
-    detector.supportVectors = [detectorInfo objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
     NSNumber *averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
     if(averageRating.integerValue>0) detector.averageRating = averageRating;
     detector.parentID = @(0);
@@ -84,7 +83,8 @@
     detector.updatedAt = [NSDate date];
     detector.weights = [detectorTrainer.weights convertToJSON];
     detector.sizes = [detectorTrainer.sizes convertToJSON];
-    detector.supportVectors = [SupportVector JSONFromSupportVectors:detectorTrainer.supportVectors];
+    detector.supportVectors = [[SupportVector JSONFromSupportVectors:detectorTrainer.supportVectors] dataUsingEncoding:NSUTF8StringEncoding];
+    detector.trainingLog = detectorTrainer.trainingLog;
     
     return detector;
 }

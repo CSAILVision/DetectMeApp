@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Detector.h"
 
 
 
@@ -21,6 +22,9 @@
 
 // SYNC (needs to go inside a queue)
 + (NSArray *) fetchDetectorsSync;
++ (NSArray *) fetchAnnotatedImagesSyncForDetector:(Detector *)detector;
++ (NSData *) fetchSupportVectorsSyncForDetector:(Detector *)detector;
+
 
 // ASYNC
 - (void) fetchDetectorsASync;

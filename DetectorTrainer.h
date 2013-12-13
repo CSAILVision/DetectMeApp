@@ -24,6 +24,8 @@
 @protocol DetectorTrainerDelegate <NSObject>
 
 - (void) trainDidEndWithDetector:(DetectorWrapper *)detector;
+- (void) updateMessage:(NSString *)message;
+- (void) trainFailed;
 - (void) updateProgess:(float) progress;
 
 @end
@@ -38,6 +40,7 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *targetClass;
 @property (strong, nonatomic) UIImage *averageImage;
+@property (strong, nonatomic) NSString *trainingLog;
 @property BOOL isPublic;
 
 // Information about the previous detector (in case of retrain)

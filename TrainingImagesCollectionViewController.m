@@ -13,12 +13,19 @@
 #import "AnnotatedImage.h"
 #import "ManagedDocumentHelper.h"
 #import "AnnotatedImage+Create.h"
+#import "DetectorFetcher.h"
+#import "ConstantsServer.h"
+#import "UIViewController+ShowAlert.h"
+#import "WaitingView.h"
+
 
 @interface TrainingImagesCollectionViewController ()
 {
     DetectorTrainer *_detectorTrainer;
     UIManagedDocument *_detectorDatabase;
     NSMutableArray *_annotatedImages;
+    
+    WaitingView *_waitingView;
 }
 
 @end
@@ -27,6 +34,15 @@
 
 #pragma mark -
 #pragma mark initialization
+
+
+- (void) initializeWaitingView
+{
+    _waitingView = [[WaitingView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:_waitingView];
+}
+
+
 
 - (void)viewDidLoad
 {
@@ -42,10 +58,43 @@
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
-    [self unlinkAnnotatedImages:_annotatedImages]; // Prevent to erase
     
+    [self initializeWaitingView];
 }
 
+- (void) getSupportVectors
+{
+    // download support vectors if not own detector to retrain.
+    // if the download fails, shows connection error and returns to the previous page
+    dispatch_queue_t downloadSVQueue = dispatch_queue_create("Support Vectors Fetcher", NULL);
+    dispatch_async(downloadSVQueue, ^{
+        NSData *jsonData = [DetectorFetcher fetchSupportVectorsSyncForDetector:self.detector];
+        if(jsonData){
+            NSError *error;
+            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+            NSString *jsonString = [jsonDictionary objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
+            self.detector.supportVectors = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{[_waitingView stopWatingViewWithMessage:@"Support Vectors downloaded!"];});
+        }else{
+            //handle communication error
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showAlertWithTitle:@"Connection Error" andDescription:@"SV not downloaded"];
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+    });
+
+}
+
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    if(!self.detector.supportVectors){
+        [_waitingView startWaitingViewWithMessage:@"Downloading support vectors..."];
+        [self getSupportVectors];
+    }
+}
 
 
 #pragma mark -
@@ -107,6 +156,31 @@
     [_detectorDatabase.managedObjectContext deleteObject:deleted];
 
     [self.collectionView reloadData];
+}
+
+
+- (IBAction)resetImagesAction:(id)sender
+{
+    UIManagedDocument *document = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];
+    
+    // delete current images
+    for(AnnotatedImage *ai in self.detector.annotatedImages)
+        [document.managedObjectContext deleteObject:ai];
+    
+    // get all the current images from the server
+    dispatch_queue_t fetchQ = dispatch_queue_create("AnnotatedImage Fetcher", NULL);
+    dispatch_async(fetchQ, ^{
+        NSArray *annotatedImages = [DetectorFetcher fetchAnnotatedImagesSyncForDetector:self.detector];
+        [document.managedObjectContext performBlock:^{
+            NSLog(@"received  %d images", annotatedImages.count);
+            for(NSDictionary *annotatedIageInfo in annotatedImages){
+                [AnnotatedImage annotatedImageWithDictionaryInfo:annotatedIageInfo
+                                          inManagedObjectContext:document.managedObjectContext
+                                                     forDetector:self.detector];
+            }
+            
+        }];
+    });
 }
 
 #pragma mark -
@@ -193,10 +267,6 @@
 }
 
 
-- (void) unlinkAnnotatedImages:(NSArray *) annotatedImages
-{
-    for(AnnotatedImage *ai in annotatedImages)
-        ai.detector = nil;
-}
+
 
 @end

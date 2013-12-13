@@ -8,6 +8,7 @@
 
 #import "AnnotatedImage+Create.h"
 #import "User+Create.h"
+#import "ConstantsServer.h"
 
 @implementation AnnotatedImage (Create)
 
@@ -19,7 +20,7 @@
 {
     AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
     
-    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+
     
     annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
     annotatedImage.imageHeight = @(image.size.height);
@@ -27,6 +28,7 @@
     
     [annotatedImage setBox:box];
     
+    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
     annotatedImage.user = currentUser;
     
     annotatedImage.locationLatitude = @(location.coordinate.latitude);
@@ -39,6 +41,35 @@
     
     return annotatedImage;
 }
+
+
++ (AnnotatedImage *) annotatedImageWithDictionaryInfo:(NSDictionary *)annotatedImageInfo
+                               inManagedObjectContext:(NSManagedObjectContext *)context
+                                          forDetector:(Detector *)detector
+{
+    AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
+    
+    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
+    annotatedImage.user = currentUser;
+    
+    annotatedImage.detector = detector;
+    annotatedImage.boxX = [annotatedImageInfo objectForKey:SERVER_AIMAGE_BOX_X];
+    annotatedImage.boxY = [annotatedImageInfo objectForKey:SERVER_AIMAGE_BOX_Y];
+    annotatedImage.boxWidth = [annotatedImageInfo objectForKey:SERVER_AIMAGE_BOX_WIDTH];
+    annotatedImage.boxHeight = [annotatedImageInfo objectForKey:SERVER_AIMAGE_BOX_HEIGHT];
+    annotatedImage.locationLatitude = [annotatedImageInfo objectForKey:SERVER_AIMAGE_LOC_LATITUDE];
+    annotatedImage.locationLongitude = [annotatedImageInfo objectForKey:SERVER_AIMAGE_LOC_LONGITUDE];
+    annotatedImage.motionQuaternionX = [annotatedImageInfo objectForKey:SERVER_AIMAGE_MOT_QUATX];
+    annotatedImage.motionQuaternionY = [annotatedImageInfo objectForKey:SERVER_AIMAGE_MOT_QUATY];
+    annotatedImage.motionQuaternionZ = [annotatedImageInfo objectForKey:SERVER_AIMAGE_MOT_QUATZ];
+    annotatedImage.motionQuaternionW = [annotatedImageInfo objectForKey:SERVER_AIMAGE_MOT_QUATW];
+    
+    NSURL *imageURL =[NSURL URLWithString:[NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,[annotatedImageInfo       objectForKey:SERVER_AIMAGE_IMAGE]]];
+    annotatedImage.image = [NSData dataWithContentsOfURL:imageURL];
+    
+    return annotatedImage;
+}
+
 
 - (void) setBox:(Box *) box
 {

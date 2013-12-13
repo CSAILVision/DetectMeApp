@@ -111,10 +111,12 @@
 
 - (int) resultsForRequest:(NSFetchRequest *)request
 {
-    NSError *error;
-    NSArray *matches = [_database.managedObjectContext executeFetchRequest:request error:&error];
+    [request setIncludesSubentities:NO]; //Omit subentities. Default is YES (i.e. include subentities)
     
-    return matches.count;
+    NSError *err;
+    NSUInteger count = [_database.managedObjectContext countForFetchRequest:request error:&err];
+    
+    return count;
 }
 
 

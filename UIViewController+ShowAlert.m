@@ -14,7 +14,7 @@
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:description
-                                                   delegate:self
+                                                   delegate:nil
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil, nil];
     [alert show];

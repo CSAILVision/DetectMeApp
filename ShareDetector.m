@@ -255,7 +255,6 @@
         }else if([objectJSON objectForKey:SERVER_AIMAGE_BOX_HEIGHT]){ // annotated image returned
             _annotatedImage.isSent = @(YES);
             NSLog(@"Image sent");
-            
             [self.delegate annotatedImageDidSent];
 
         }else if([objectJSON objectForKey:SERVER_RATING_RATING]){ // rating returned
@@ -274,6 +273,7 @@
 
 - (NSDictionary *) dictionaryFromDetector:(Detector *) detector
 {
+    NSString *supportVectors = [[NSString alloc] initWithData:detector.supportVectors encoding:NSUTF8StringEncoding];
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:
                                  [NSArray arrayWithObjects:detector.name,
                                                            detector.targetClass,
@@ -282,7 +282,9 @@
                                                            //detector.updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
                                                            [NSString stringWithFormat:@"%@",detector.weights],
-                                                           detector.supportVectors, nil]
+                                                           supportVectors,
+                                                           detector.trainingLog,
+                                                           nil]
                                  
                                                                    forKeys:
                                  [NSArray arrayWithObjects:SERVER_DETECTOR_NAME,
@@ -292,7 +294,9 @@
                                                            //SERVER_DETECTOR_UPDATED_AT,
                                                            SERVER_DETECTOR_SIZES,
                                                            SERVER_DETECTOR_WEIGHTS,
-                                                           SERVER_DETECTOR_SUPPORT_VECTORS,nil]];
+                                                           SERVER_DETECTOR_SUPPORT_VECTORS,
+                                                           SERVER_DETECTOR_TRAINING_LOG,
+                                                           nil]];
     
     // if we are updating, specify for which detector
     if(!detector.serverDatabaseID.integerValue > 0)

@@ -124,7 +124,6 @@
     [self persistentSent:@"AnnotatedImage"];
     [self persistentSent:@"Rating"];
     
-    NSLog(@"Refreshing...");
     [_refreshControl endRefreshing];
 }
 
@@ -361,12 +360,12 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
     if(predicate) request.predicate = predicate;
     request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    [request setIncludesSubentities:NO]; //Omit subentities. Default is YES
     
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:self.detectorDatabase.managedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
-    [_refreshControl endRefreshing];
 }
 
 - (void) fetchSingle
@@ -400,8 +399,8 @@
 {
     // Populate the table if it was not.
     // |document| as an argument for thread safe: someone could change the propertie in parallel
-    dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
-    dispatch_async(fetchQ, ^{
+//    dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
+//    dispatch_async(fetchQ, ^{
         NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
         [document.managedObjectContext performBlock:^{
             if (detectors.count>0) {
@@ -416,7 +415,7 @@
             // when finished, present them on the screen
             [self performSelectorOnMainThread:@selector(applyFilter) withObject:nil waitUntilDone:NO];
         }];
-    });
+//    });
 }
 
 - (void) persistentSent:(NSString *)modelName
@@ -443,6 +442,27 @@
     }
 }
 
+- (void) unrelatedImages
+{
+//    NSError *error;
+//    
+//    // get chair
+//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
+//    request.predicate = [NSPredicate predicateWithFormat:@"serverDatabaseID == 48"];
+//    NSArray *matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
+//    Detector *detector = [matches firstObject];
+//    
+//    
+//    request = [NSFetchRequest fetchRequestWithEntityName:@"AnnotatedImage"];
+//    request.predicate = [NSPredicate predicateWithFormat:@"detector == nil"];
+//    matches = [self.detectorDatabase.managedObjectContext executeFetchRequest:request error:&error];
+//    
+//    for(AnnotatedImage *ai in matches)
+//        ai.detector = detector;
+//    
+//    NSLog(@"Number of unrelated images: %lu", (unsigned long)matches.count);
+    
+}
 
 
 - (void) selectCell:(DetectorCell *)cell

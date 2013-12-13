@@ -10,8 +10,6 @@
 #import "Box.h"
 
 
-#define DET 2 //Factor that represents the touchable area of the box corners
-
 #define kExteriorBox 0
 #define kUpperLeft 1
 #define kUpperRight 2
@@ -19,9 +17,9 @@
 #define kLowerRight 4
 #define kInteriorBox 5
 
-#define kMaxWidth 0.7
+#define kMaxWidth 0.6
 #define kMinWidth 0.3
-#define kMaxHeight 0.7
+#define kMaxHeight 0.6
 #define kMinHeight 0.3
 
 @interface Box()
@@ -64,32 +62,32 @@
 
     int boxCorner = kExteriorBox;
 
-    if ((CGRectContainsPoint(CGRectMake(self.upperLeft.x - DET*self.lineWidth,
-                                        self.upperLeft.y - DET*self.lineWidth,
-                                        2*DET*self.lineWidth,
-                                        2*DET*self.lineWidth), point)))  {
+    if ((CGRectContainsPoint(CGRectMake(self.upperLeft.x - CORNER_RADIUS*self.lineWidth,
+                                        self.upperLeft.y - CORNER_RADIUS*self.lineWidth,
+                                        2*CORNER_RADIUS*self.lineWidth,
+                                        2*CORNER_RADIUS*self.lineWidth), point)))  {
         
         
         boxCorner = kUpperLeft;
         
-    } else if ((CGRectContainsPoint(CGRectMake(self.lowerRight.x - DET*self.lineWidth,
-                                               self.lowerRight.y - DET*self.lineWidth,
-                                               2*DET*self.lineWidth,
-                                               2*DET*self.lineWidth), point)))  {
+    } else if ((CGRectContainsPoint(CGRectMake(self.lowerRight.x - CORNER_RADIUS*self.lineWidth,
+                                               self.lowerRight.y - CORNER_RADIUS*self.lineWidth,
+                                               2*CORNER_RADIUS*self.lineWidth,
+                                               2*CORNER_RADIUS*self.lineWidth), point)))  {
         
         boxCorner = kLowerRight;
         
-    } else if ((CGRectContainsPoint(CGRectMake(self.lowerRight.x - DET*self.lineWidth,
-                                               self.upperLeft.y - DET*self.lineWidth,
-                                               2*DET*self.lineWidth,
-                                               2*DET*self.lineWidth), point)))  {
+    } else if ((CGRectContainsPoint(CGRectMake(self.lowerRight.x - CORNER_RADIUS*self.lineWidth,
+                                               self.upperLeft.y - CORNER_RADIUS*self.lineWidth,
+                                               2*CORNER_RADIUS*self.lineWidth,
+                                               2*CORNER_RADIUS*self.lineWidth), point)))  {
         
         boxCorner = kUpperRight;
         
-    } else if ((CGRectContainsPoint(CGRectMake(self.upperLeft.x - DET*self.lineWidth,
-                                               self.lowerRight.y - DET*self.lineWidth,
-                                               2*DET*self.lineWidth,
-                                               2*DET*self.lineWidth), point)))  {
+    } else if ((CGRectContainsPoint(CGRectMake(self.upperLeft.x - CORNER_RADIUS*self.lineWidth,
+                                               self.lowerRight.y - CORNER_RADIUS*self.lineWidth,
+                                               2*CORNER_RADIUS*self.lineWidth,
+                                               2*CORNER_RADIUS*self.lineWidth), point)))  {
         
         boxCorner = kLowerLeft;
         

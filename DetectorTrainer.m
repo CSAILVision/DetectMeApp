@@ -13,6 +13,9 @@
 #import "UIImage+ImageAveraging.h"
 #import "AnnotatedImage+Create.h"
 
+
+#include <stdlib.h> // for random subsampling of trianing set THESIS!!
+
 //training results
 #define SUCCESS 1
 #define INTERRUPTED 2 //and not trained
@@ -36,6 +39,18 @@
     dispatch_queue_t training_queue = dispatch_queue_create("training_queue", 0);
     dispatch_async(training_queue, ^{
         
+        //subselect ranom
+//        int num = 16;
+//        NSMutableIndexSet *mutableIndexSet = [[NSMutableIndexSet alloc] init];
+//
+//        while(mutableIndexSet.count < num)
+//            [mutableIndexSet addIndex: arc4random() % _boxes.count];
+//
+//        NSLog(@"mutable index set:%@", mutableIndexSet);
+//        
+//        _boxes = [NSMutableArray arrayWithArray:[_boxes objectsAtIndexes:[[NSIndexSet alloc] initWithIndexSet:mutableIndexSet]]];
+//        _images = [NSMutableArray arrayWithArray:[_images objectsAtIndexes:[[NSIndexSet alloc] initWithIndexSet:mutableIndexSet]]];
+        
         
         TrainingSet *trainingSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];
         
@@ -51,8 +66,11 @@
         self.detectorWrapper = [[DetectorWrapper alloc] init];
         
         self.detectorWrapper.delegate = self;
+        
+        NSDate * start = [NSDate date];
         int trainingState = [self.detectorWrapper trainOnSet:trainingSet];
-
+        NSLog(@"TIME TRAINING: %f", -[start timeIntervalSinceNow]);
+        
         
         if (trainingState == SUCCESS) {
             TrainingSet *testSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];
@@ -108,6 +126,10 @@
 - (void) sendMessage:(NSString *) message
 {
     NSLog(@"%@", message);
+    
+    if(!self.trainingLog) self.trainingLog = @"";
+    self.trainingLog = [self.trainingLog stringByAppendingString:[NSString stringWithFormat:@"%@\n",message]];
+    [self.delegate updateMessage:message];
 }
 
 - (void) updateProgress:(float) prog

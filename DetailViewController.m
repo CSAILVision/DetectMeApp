@@ -10,12 +10,13 @@
 #import "ExecuteDetectorViewController.h"
 #import "TrainingImagesCollectionViewController.h"
 #import "ConstantsServer.h"
-#import "AnnotatedImage.h"
 #import "Box.h"
 #import "User.h"
 #import "Rating+Create.h"
 #import "ManagedDocumentHelper.h"
 #import "UIViewController+ShowAlert.h"
+#import "AnnotatedImage.h"
+
 
 @interface DetailViewController ()
 {
@@ -112,7 +113,6 @@
     }
     
 }
-
 
 
 #pragma mark -
@@ -225,6 +225,7 @@
     _rating.rating = @(ratingControl.selectedSegmentIndex + 1);
     [_shareDetector shareRating:_rating];
 }
+
 
 #pragma mark -
 #pragma mark Share detector delegate

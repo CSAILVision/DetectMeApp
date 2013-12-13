@@ -20,6 +20,7 @@
 
 using namespace cv;
 
+// training parameters
 #define MAX_QUOTA 100 //max negative examples (bb) per iteration
 #define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*20 //max number of examples in buffer, (500neg + 200pos)*20images
 
@@ -124,8 +125,13 @@ using namespace cv;
             _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
         // support vectors
-        
-        self.supportVectors = [NSMutableArray arrayWithArray:[SupportVector suppportVectorsFromJSON:detector.supportVectors]];
+        if(detector.supportVectors){
+            NSString *supportVectorsString = [[NSString alloc] initWithData:detector.supportVectors encoding:NSUTF8StringEncoding];
+            self.supportVectors = [NSMutableArray arrayWithArray:
+                                   [SupportVector suppportVectorsFromJSON:supportVectorsString]];
+            supportVectorsString = nil;
+                                
+        }
     }
     
     return self;
@@ -168,12 +174,12 @@ using namespace cv;
     //set hog dimension according to the max Hog set in user preferences
     float ratio = [trainingSet getAverageGroundTruthAspectRatio]; // w/h
     if(ratio<1){
-        _sizesP[0] = MAX_HOG;
+        _sizesP[0] = MAX_TEMPLATE_SIZE;
         _sizesP[1] = round(_sizesP[0]*ratio);
 
     }else{
-        _sizesP[1] = MAX_HOG;
-        _sizesP[0] = round(_sizesP[1]*ratio);
+        _sizesP[1] = MAX_TEMPLATE_SIZE;
+        _sizesP[0] = round(_sizesP[1]/ratio);
     }
     _sizesP[2] = 31;
     
@@ -601,12 +607,12 @@ using namespace cv;
                 double overlapArea = [detectedBB fractionOfAreaOverlappingWith:groundTruthBB];
                 
                 detectedBB.label = 0;
-                if (overlapArea > 0.7 && overlapArea<1){
+                if (overlapArea > POSITIVE_OVERLAP_AREA && overlapArea<1){
                     detectedBB.label = 1;
                     positives++;
                     image_positives++;
                     [self addExample:detectedBB to:trainingSet];
-                }else if(overlapArea < 0.25 && quota>0){
+                }else if(overlapArea < NEGATIVE_OVERLAP_AREA && quota>0){
                     quota--;
                     detectedBB.label = -1;
                     [self addExample:detectedBB to:trainingSet];
@@ -626,14 +632,14 @@ using namespace cv;
     }
     
     [self.delegate sendMessage:[NSString stringWithFormat:@"added %d NEW positives", positives]];
-    NSLog(@"RATIO of POSITIVES(with new and previous SV): %d/%d", positius, _numberOfTrainingExamples);
+    [self.delegate sendMessage:[NSString stringWithFormat:@"positives/total (incl   uding previous SV): %d/%d", positius, _numberOfTrainingExamples]];
+    
     self.numberOfPositives = @(positives);
 }
 
 
 -(void) trainSVMAndGetWeights
 {
-    [self.delegate sendMessage:[NSString stringWithFormat:@"Number of Training Examples: %d", _numberOfTrainingExamples]];
     int positives=0;
     
     Mat labelsMat(_numberOfTrainingExamples,1,CV_32FC1, _trainingImageLabels);
@@ -680,6 +686,8 @@ using namespace cv;
     }
     _weightsP[_numOfFeatures] = - (double) dec[0].rho; // The sign of the bias and rho have opposed signs.
     self.numberOfPositives = [[NSNumber alloc] initWithInt:positives];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"Finished training!"]];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"SV (positives/total): %d/%d", positives,_numSupportVectors]];
     [self.delegate sendMessage:[NSString stringWithFormat:@"bias: %f", _weightsP[_numOfFeatures]]];
 }
 
@@ -700,9 +708,7 @@ using namespace cv;
         _diff += (_weightsP[i]/norm - weightsPLast[i]/normLast)*(_weightsP[i]/norm - weightsPLast[i]/normLast);
         weightsPLast[i] = _weightsP[i];
     }
-    
-    [self.delegate sendMessage:[NSString stringWithFormat:@"norms: %f, %f", norm, normLast]];
-    [self.delegate sendMessage:[NSString stringWithFormat:@"difference: %f", sqrt(_diff)]];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"difference of norms: %f", sqrt(_diff)]];
     
     return sqrt(_diff);
 }
