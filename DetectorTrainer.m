@@ -32,7 +32,7 @@
 @end
 
 @implementation DetectorTrainer
-
+//caca
 - (void) trainDetector
 {
     //train in a different queue
