@@ -273,6 +273,7 @@
 
 - (NSDictionary *) dictionaryFromDetector:(Detector *) detector
 {
+    NSString *supportVectors = [[NSString alloc] initWithData:detector.supportVectors encoding:NSUTF8StringEncoding];
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:
                                  [NSArray arrayWithObjects:detector.name,
                                                            detector.targetClass,
@@ -281,7 +282,7 @@
                                                            //detector.updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
                                                            [NSString stringWithFormat:@"%@",detector.weights],
-                                                           detector.supportVectors,
+                                                           supportVectors,
                                                            detector.trainingLog,
                                                            nil]
                                  

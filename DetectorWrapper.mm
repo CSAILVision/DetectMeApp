@@ -24,9 +24,9 @@ using namespace cv;
 #define MAX_QUOTA 100 //max negative examples (bb) per iteration
 #define MAX_TEMPLATE_SIZE 8
 #define STOP_CRITERIA 0.01
-#define MAX_TRAINING_ITERATIONS 10
+#define MAX_TRAINING_ITERATIONS 20
 #define NUM_TRAINING_PYRAMIDS 10
-#define SVM_C 0.02
+#define SVM_C 0.2
 #define POSITIVE_OVERLAP_AREA 0.7
 #define NEGATIVE_OVERLAP_AREA 0.5
 #define TRAINING_SCALE_FACTOR 0.5 //scale factor for detection on training images
@@ -130,8 +130,13 @@ using namespace cv;
             _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
         // support vectors
-        
-        self.supportVectors = [NSMutableArray arrayWithArray:[SupportVector suppportVectorsFromJSON:detector.supportVectors]];
+        if(detector.supportVectors){
+            NSString *supportVectorsString = [[NSString alloc] initWithData:detector.supportVectors encoding:NSUTF8StringEncoding];
+            self.supportVectors = [NSMutableArray arrayWithArray:
+                                   [SupportVector suppportVectorsFromJSON:supportVectorsString]];
+            supportVectorsString = nil;
+                                
+        }
     }
     
     return self;
@@ -632,7 +637,7 @@ using namespace cv;
     }
     
     [self.delegate sendMessage:[NSString stringWithFormat:@"added %d NEW positives", positives]];
-    [self.delegate sendMessage:[NSString stringWithFormat:@"positives/total (inlcuding previous SV): %d/%d", positius, _numberOfTrainingExamples]];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"positives/total (incl   uding previous SV): %d/%d", positius, _numberOfTrainingExamples]];
     
     self.numberOfPositives = @(positives);
 }

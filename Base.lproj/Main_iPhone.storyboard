@@ -1260,6 +1260,13 @@
                                 <rect key="frame" x="280" y="161" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text=" " selectable="NO" id="wq6-wW-uR8">
+                                <rect key="frame" x="20" y="220" width="280" height="328"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="DHc-Np-1aV">
                                 <rect key="frame" x="67" y="232" width="187" height="244"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -1288,6 +1295,7 @@
                         <outlet property="imageView" destination="DHc-Np-1aV" id="xyN-X6-hIV"/>
                         <outlet property="label" destination="zw2-sD-mBQ" id="atU-VY-KnR"/>
                         <outlet property="progressView" destination="nzn-yf-vTY" id="HBY-MR-e9C"/>
+                        <outlet property="textView" destination="wq6-wW-uR8" id="F3F-lh-pB9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHh-dr-JEX" userLabel="First Responder" sceneMemberID="firstResponder"/>

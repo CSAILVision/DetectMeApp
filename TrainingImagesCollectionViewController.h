@@ -16,6 +16,8 @@
 @property (strong, nonatomic) Detector *detector;
 
 - (IBAction)deleteAction:(UIButton *)sender;
+
+// Get the detector images from the server
 - (IBAction)resetImagesAction:(id)sender;
 
 @end

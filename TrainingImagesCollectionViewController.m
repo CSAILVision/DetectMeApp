@@ -14,6 +14,9 @@
 #import "ManagedDocumentHelper.h"
 #import "AnnotatedImage+Create.h"
 #import "DetectorFetcher.h"
+#import "ConstantsServer.h"
+#import "UIViewController+ShowAlert.h"
+#import "WaitingView.h"
 
 
 @interface TrainingImagesCollectionViewController ()
@@ -21,6 +24,8 @@
     DetectorTrainer *_detectorTrainer;
     UIManagedDocument *_detectorDatabase;
     NSMutableArray *_annotatedImages;
+    
+    WaitingView *_waitingView;
 }
 
 @end
@@ -29,6 +34,15 @@
 
 #pragma mark -
 #pragma mark initialization
+
+
+- (void) initializeWaitingView
+{
+    _waitingView = [[WaitingView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:_waitingView];
+}
+
+
 
 - (void)viewDidLoad
 {
@@ -44,8 +58,43 @@
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
+    
+    [self initializeWaitingView];
 }
 
+- (void) getSupportVectors
+{
+    // download support vectors if not own detector to retrain.
+    // if the download fails, shows connection error and returns to the previous page
+    dispatch_queue_t downloadSVQueue = dispatch_queue_create("Support Vectors Fetcher", NULL);
+    dispatch_async(downloadSVQueue, ^{
+        NSData *jsonData = [DetectorFetcher fetchSupportVectorsSyncForDetector:self.detector];
+        if(jsonData){
+            NSError *error;
+            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+            NSString *jsonString = [jsonDictionary objectForKey:SERVER_DETECTOR_SUPPORT_VECTORS];
+            self.detector.supportVectors = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{[_waitingView stopWatingViewWithMessage:@"Support Vectors downloaded!"];});
+        }else{
+            //handle communication error
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showAlertWithTitle:@"Connection Error" andDescription:@"SV not downloaded"];
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+    });
+
+}
+
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    if(!self.detector.supportVectors){
+        [_waitingView startWaitingViewWithMessage:@"Downloading support vectors..."];
+        [self getSupportVectors];
+    }
+}
 
 
 #pragma mark -
@@ -216,5 +265,8 @@
         
     return  images;
 }
+
+
+
 
 @end

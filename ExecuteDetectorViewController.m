@@ -294,7 +294,7 @@
     if(_scale) [screenLabelText appendString: [NSString stringWithFormat:@"scale: %d\n",_level]];
     [self.infoLabel performSelectorOnMainThread:@selector(setText:) withObject:[NSString stringWithString:screenLabelText] waitUntilDone:YES];
     
-    NSLog(@"%f", -1.0/[start timeIntervalSinceNow]);
+    //NSLog(@"%f", -1.0/[start timeIntervalSinceNow]);
 }
 
 #pragma mark -

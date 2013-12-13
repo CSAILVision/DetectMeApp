@@ -29,6 +29,7 @@
     ShareDetector *_shareDetector;
     Detector *_detector;
     NSUInteger _annotatedImagesSent;
+    NSString *_logBuffer;
 }
 
 @end
@@ -43,6 +44,7 @@
     self.doneButton.hidden = YES;
     [self.activityIndicator startAnimating];
     [self.progressView setProgress:0];
+    _logBuffer = @"";
     
     [self.detectorTrainer trainDetector];
     self.detectorTrainer.delegate = self;
@@ -98,9 +100,24 @@
     [self displayForFinishTraining];
 }
 
+- (void) trainFailed
+{
+    [self showAlertWithTitle:@"Error" andDescription:@"Train Failed"];
+    [self doneAction:self];
+}
+
 - (void) updateProgess:(float) progress
 {
     [self.progressView setProgress:progress];
+}
+
+- (void) updateMessage:(NSString *)message
+{
+
+    _logBuffer = [_logBuffer stringByAppendingString:[NSString stringWithFormat:@"%@\n", message]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.textView.text = _logBuffer;
+    });
 }
 
 #pragma mark -

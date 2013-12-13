@@ -2,7 +2,7 @@
 //  Detector.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 27/11/13.
+//  Created by Josep Marc Mingot Hidalgo on 12/12/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -29,10 +29,10 @@
 @dynamic supportVectors;
 @dynamic targetClass;
 @dynamic timeLearning;
+@dynamic trainingLog;
 @dynamic type;
 @dynamic updatedAt;
 @dynamic weights;
-@dynamic trainingLog;
 @dynamic annotatedImages;
 @dynamic multipleDetectors;
 @dynamic ratings;

@@ -129,6 +129,7 @@
     
     if(!self.trainingLog) self.trainingLog = @"";
     self.trainingLog = [self.trainingLog stringByAppendingString:[NSString stringWithFormat:@"%@\n",message]];
+    [self.delegate updateMessage:message];
 }
 
 - (void) updateProgress:(float) prog
