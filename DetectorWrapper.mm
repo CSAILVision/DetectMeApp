@@ -7,6 +7,7 @@
 //
 
 #include <opencv2/core/core.hpp>
+
 #include <opencv2/ml/ml.hpp>
 #include <stdlib.h>
 
@@ -22,13 +23,18 @@ using namespace cv;
 
 // training parameters
 #define MAX_QUOTA 100 //max negative examples (bb) per iteration
-#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*20 //max number of examples in buffer, (500neg + 200pos)*20images
-
-// training parameters
-#define MAX_HOG 8
+#define MAX_TEMPLATE_SIZE 8
 #define STOP_CRITERIA 0.01
-#define MAX_TRAINING_ITERATIONS 10
-#define NUM_TRAINING_PYRAMIDS 20
+#define MAX_TRAINING_ITERATIONS 20
+#define NUM_TRAINING_PYRAMIDS 10
+#define SVM_C 0.2
+#define POSITIVE_OVERLAP_AREA 0.7
+#define NEGATIVE_OVERLAP_AREA 0.5
+#define TRAINING_SCALE_FACTOR 0.5 //scale factor for detection on training images
+
+// alloc size
+#define MAX_TRAINING_IMAGES 35
+#define MAX_NUMBER_EXAMPLES (MAX_QUOTA + 200)*MAX_TRAINING_IMAGES //max number of examples in buffer, (500neg + 200pos)*20images
 
 //training results
 #define SUCCESS 1
@@ -212,7 +218,7 @@ using namespace cv;
         //Get Bounding Boxes from detection
         [self getBoundingBoxesForTrainingSet:trainingSet];
         
-        
+
         //The first time that not enough positive or negative bb have been generated (due to bb with different geometries), try to unify all the sizes of the bounding boxes. This solve the problem in most of the cases at the cost of losing accuracy. However if still not solved, give an error saying not possible training done due to the ground truth bouning boxes shape.
         if(self.numberOfPositives.intValue < 2 || self.numberOfPositives.intValue == _numberOfTrainingExamples){
             if(firstTimeError){
@@ -298,7 +304,7 @@ using namespace cv;
     if(_isLearning){
         
         //SCALE
-        initialScale = 0.9;
+        initialScale = TRAINING_SCALE_FACTOR;
         
         //pyramid limits
         _iniPyramid = 0; _finPyramid = numberPyramids;
@@ -594,7 +600,7 @@ using namespace cv;
                 groundTruthBB = [trainingSet.groundTruthBoundingBoxes objectAtIndex:i];
             
             //run the detector on the current image
-            NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:NUM_TRAINING_PYRAMIDS usingNms:YES deviceOrientation:UIImageOrientationUp learningImageIndex:i];
+            NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:NUM_TRAINING_PYRAMIDS usingNms:NO deviceOrientation:UIImageOrientationUp learningImageIndex:i];
             
             
             // max negative bounding boxes detected allowed per image
@@ -620,7 +626,7 @@ using namespace cv;
             }
             
             dispatch_sync(dispatch_get_main_queue(),^{
-                [self.delegate sendMessage:[NSString stringWithFormat:@"New bb obtained for image %zd: %d/%d", i, image_positives,detectedBoundingBoxes.count]];
+                [self.delegate sendMessage:[NSString stringWithFormat:@"BB for image %zd (positive/total): %d/%d", i, image_positives,detectedBoundingBoxes.count]];
             });
         }
     });
@@ -650,7 +656,7 @@ using namespace cv;
     CvSVMParams params;
     params.svm_type    = CvSVM::C_SVC;
     params.kernel_type = CvSVM::LINEAR;
-    params.C = 0.02;
+    params.C = SVM_C;
     params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 1000, 1e-6);
     
     CvSVM SVM;
