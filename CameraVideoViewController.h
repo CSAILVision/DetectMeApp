@@ -17,7 +17,9 @@
 }
 
 - (IBAction)switchCameras:(id)sender;
-
 - (void) processImage:(CGImageRef) imageRef;
+
+// Conversion between orientations
+- (void) adaptToPhoneOrientation:(UIDeviceOrientation) orientation;
 
 @end

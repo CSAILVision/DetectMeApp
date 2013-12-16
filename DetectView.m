@@ -79,6 +79,7 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
             CGContextFillRect(context, textBox);
             CGContextSetFillColorWithColor(context,[UIColor blackColor].CGColor);
             [[NSString stringWithFormat:@" %@", p.targetClass] drawInRect:textBox withFont:[UIFont systemFontOfSize:15]];
+//            [[NSString stringWithFormat:@" %@", p.targetClass] drawInRect:textBox withAttributes:<#(NSDictionary *)#>];
         }
         
     }

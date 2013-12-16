@@ -401,7 +401,7 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MultipleDetectorAction" id="qvW-aN-F1Y">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MultipleDetectorAction" id="qvW-aN-F1Y">
                                         <rect key="frame" x="0.0" y="219" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qvW-aN-F1Y" id="Bvf-AQ-nLT">
@@ -421,7 +421,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MultipleDetectorDetail" textLabel="27z-ml-q1G" detailTextLabel="36u-6k-5qZ" style="IBUITableViewCellStyleSubtitle" id="jeq-Vl-jjB">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MultipleDetectorDetail" textLabel="27z-ml-q1G" detailTextLabel="36u-6k-5qZ" style="IBUITableViewCellStyleSubtitle" id="jeq-Vl-jjB">
                                         <rect key="frame" x="0.0" y="263" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jeq-Vl-jjB" id="CKc-WM-hJO">
@@ -655,7 +655,7 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DetectorAction" id="uqg-yo-JQG">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="DetectorAction" id="uqg-yo-JQG">
                                         <rect key="frame" x="0.0" y="281" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uqg-yo-JQG" id="fYG-rw-8hm">
@@ -685,7 +685,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DetectorDetail" textLabel="52g-wt-TEP" detailTextLabel="LLj-It-M5g" rowHeight="67" style="IBUITableViewCellStyleSubtitle" id="OaV-Bv-PNO">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DetectorDetail" textLabel="52g-wt-TEP" detailTextLabel="LLj-It-M5g" rowHeight="67" style="IBUITableViewCellStyleSubtitle" id="OaV-Bv-PNO">
                                         <rect key="frame" x="0.0" y="325" width="320" height="67"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OaV-Bv-PNO" id="uKb-mq-RtF">
@@ -1334,7 +1334,7 @@
         <segue reference="UGB-w7-tpx"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="SfB-Sl-l8o"/>
-        <segue reference="rZB-t8-M3R"/>
+        <segue reference="ZhR-dT-EN5"/>
         <segue reference="SZr-VP-6Sq"/>
         <segue reference="zdo-hz-QnN"/>
     </inferredMetricsTieBreakers>

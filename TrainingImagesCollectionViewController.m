@@ -121,8 +121,10 @@
 {
     [super viewDidDisappear:animated];
     
-    // Undo if going back
-    [_undoManager endUndoGrouping];
+    // close undo grouping if open
+    if([_undoManager groupingLevel]>0) [_undoManager endUndoGrouping];
+    
+    // undo if going back
     if(_undo) [_undoManager undo];
 
 }

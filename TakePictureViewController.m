@@ -266,28 +266,6 @@
     }
 }
 
-#pragma mark -
-#pragma mark Rotation
-
-- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adaptToPhoneOrientation:toInterfaceOrientation];
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-}
-
-- (void) adaptToPhoneOrientation:(UIDeviceOrientation) orientation
-{
-    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationLandscapeLeft){
-        [CATransaction begin];
-        _prevLayer.orientation = orientation;
-        _prevLayer.frame = self.view.frame;
-        [CATransaction commit];
-    }
-}
-
-
-
-
 
 @end
 

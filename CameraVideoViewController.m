@@ -142,6 +142,51 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     //Process Image in the parent must be overriden!
 }
 
+#pragma mark -
+#pragma mark Orientation
 
+- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+//    [self adaptToPhoneOrientation:(UIDeviceOrientation) toInterfaceOrientation];
+//    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+- (void) adaptToPhoneOrientation:(UIDeviceOrientation) orientation
+{
+    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationLandscapeLeft){
+        [CATransaction begin];
+        //_prevLayer.orientation = orientation;
+        [_prevLayer.connection setVideoOrientation:[self convertOrientation:orientation]];
+        _prevLayer.frame = self.view.frame;
+        [CATransaction commit];
+    }
+}
+
+- (AVCaptureVideoOrientation) convertOrientation:(UIDeviceOrientation)orientation
+{
+    AVCaptureVideoOrientation videoOrientation;
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            videoOrientation = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+            break;
+            
+        default:
+            videoOrientation = AVCaptureVideoOrientationPortrait;
+            break;
+    }
+    
+    return videoOrientation;
+}
 
 @end
