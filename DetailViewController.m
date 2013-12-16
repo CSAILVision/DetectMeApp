@@ -40,10 +40,15 @@
 - (void) setDetectorProperties
 {
     
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM/dd/yyyy 'at' HH:mm"];
+    
+    
     NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@", _detector.averageRating]:@"null";
     NSString *numberOfImages = [NSString stringWithFormat:@"%d", _detector.annotatedImages.count];
-    NSString *createdAt = @"Null";
-    NSString *updatedAt = @"Null";
+    NSString *createdAt = [formatter stringFromDate:_detector.createdAt];
+    NSString *updatedAt = _detector.updatedAt ? [formatter stringFromDate:_detector.updatedAt] : createdAt;
+    
     
     _detectorValues = [NSArray arrayWithObjects:
                                             averageRating,

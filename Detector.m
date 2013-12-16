@@ -47,4 +47,12 @@
             [self.managedObjectContext deleteObject:md];
 }
 
+- (void)awakeFromInsert
+{
+    // create
+    [super awakeFromInsert];
+    self.createdAt = [NSDate date];
+}
+
+
 @end

@@ -21,7 +21,7 @@
 using namespace cv;
 
 // training parameters
-#define MAX_QUOTA 100 //max negative examples (bb) per iteration
+#define MAX_QUOTA 200 //max negative examples (bb) per iteration
 #define MAX_TEMPLATE_SIZE 8
 #define STOP_CRITERIA 0.01
 #define MAX_TRAINING_ITERATIONS 20
