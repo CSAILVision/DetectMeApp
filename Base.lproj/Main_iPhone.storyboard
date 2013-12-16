@@ -572,7 +572,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="ZA3-zN-saR">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="259.00000000000006"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="259"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="RfU-2c-lGT">
@@ -1193,7 +1193,7 @@
                                 <rect key="frame" x="83" y="168" width="154" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="D0w-8Z-7WU" id="gal-Wo-4tw"/>
                                 </connections>
@@ -1331,11 +1331,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="SZr-VP-6Sq"/>
         <segue reference="UGB-w7-tpx"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="SfB-Sl-l8o"/>
         <segue reference="rZB-t8-M3R"/>
-        <segue reference="b1e-7T-Bde"/>
+        <segue reference="SZr-VP-6Sq"/>
+        <segue reference="zdo-hz-QnN"/>
     </inferredMetricsTieBreakers>
 </document>
