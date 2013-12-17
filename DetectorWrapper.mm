@@ -135,7 +135,6 @@ using namespace cv;
             self.supportVectors = [NSMutableArray arrayWithArray:
                                    [SupportVector suppportVectorsFromJSON:supportVectorsString]];
             supportVectorsString = nil;
-                                
         }
     }
     

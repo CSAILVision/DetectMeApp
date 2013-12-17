@@ -601,9 +601,10 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="by Author" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kWQ-fa-YZB">
-                                            <rect key="frame" x="160" y="70" width="140" height="21"/>
+                                            <rect key="frame" x="160" y="62" width="140" height="21"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" id="LoU-Gx-SJ4">
@@ -1334,7 +1335,7 @@
         <segue reference="UGB-w7-tpx"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="SfB-Sl-l8o"/>
-        <segue reference="ZhR-dT-EN5"/>
+        <segue reference="rZB-t8-M3R"/>
         <segue reference="SZr-VP-6Sq"/>
         <segue reference="zdo-hz-QnN"/>
     </inferredMetricsTieBreakers>
