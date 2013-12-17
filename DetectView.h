@@ -27,7 +27,6 @@
 - (void) initializeInTheLayer:(AVCaptureVideoPreviewLayer *)prevLayer forObjectLabels:(NSArray *)labels;
 
 - (void) drawBoxes:(NSArray *)boxes;
-
 - (void) switchCameras;
 
 @end

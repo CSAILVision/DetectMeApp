@@ -121,13 +121,21 @@
 {
     [super viewDidDisappear:animated];
     
-    // close undo grouping if open
-    if([_undoManager groupingLevel]>0) [_undoManager endUndoGrouping];
-    
     // undo if going back
-    if(_undo) [_undoManager undo];
+    if(_undo){
+        [_undoManager endUndoGrouping];
+        [_undoManager undo];
+    }
 
 }
+
+- (void) dealloc
+{
+    // close undo grouping if open
+    if([_undoManager groupingLevel]>0)
+        [_undoManager endUndoGrouping];
+}
+
 
 #pragma mark -
 #pragma mark UICollectionView data source and delegate

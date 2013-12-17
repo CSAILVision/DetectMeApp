@@ -283,7 +283,6 @@ using namespace cv;
     minimumThreshold:(double) detectionThreshold
             pyramids:(int)numberPyramids
             usingNms:(BOOL)useNms
-   deviceOrientation:(int)orientation
   learningImageIndex:(int) imageIndex
 
 {
@@ -359,19 +358,6 @@ using namespace cv;
         _finPyramid = numberPyramids;
     }
     
-    // Change the resulting orientation of the bounding boxes if the phone orientation requires it
-    if(!_isLearning && UIInterfaceOrientationIsLandscape(orientation)){
-        for(int i=0; i<nmsArray.count; i++){
-            BoundingBox *boundingBox = [nmsArray objectAtIndex:i];
-            double auxXmin, auxXmax;
-            auxXmin = boundingBox.xmin;
-            auxXmax = boundingBox.xmax;
-            boundingBox.xmin = (1 - boundingBox.ymin);
-            boundingBox.xmax = (1 - boundingBox.ymax);
-            boundingBox.ymin = auxXmin;
-            boundingBox.ymax = auxXmax;
-        }
-    }
     return nmsArray;
 }
 
@@ -380,7 +366,6 @@ using namespace cv;
 - (NSArray *) detect:(Pyramid *) pyramid
     minimumThreshold:(double) detectionThreshold
             usingNms:(BOOL)useNms
-         orientation:(int)orientation
 {
     //get detections for each pyramid level (parallel processing)
     NSMutableArray *candidateBoundingBoxes = [[NSMutableArray alloc] init];    
@@ -424,21 +409,6 @@ using namespace cv;
         for(int i=_iniPyramid;i<_finPyramid;i++)
             [pyramid.levelsToCalculate addObject:[NSNumber numberWithInt:i]];
     });
-
-    
-    // Change the resulting orientation of the bounding boxes if the phone orientation requires it
-    if(!_isLearning && UIInterfaceOrientationIsLandscape(orientation)){
-        for(int i=0; i<nmsArray.count; i++){
-            BoundingBox *boundingBox = [nmsArray objectAtIndex:i];
-            double auxXmin, auxXmax;
-            auxXmin = boundingBox.xmin;
-            auxXmax = boundingBox.xmax;
-            boundingBox.xmin = (1 - boundingBox.ymin);
-            boundingBox.xmax = (1 - boundingBox.ymax);
-            boundingBox.ymin = auxXmin;
-            boundingBox.ymax = auxXmax;
-        }
-    }
     
     return nmsArray;
 }
@@ -453,7 +423,7 @@ using namespace cv;
     for(BoundingBox *groundTruthBoundingBox in testSet.groundTruthBoundingBoxes){
         bool found = NO;
         UIImage *selectedImage = [testSet.images objectAtIndex:groundTruthBoundingBox.imageIndex];
-        NSArray *detectedBoundingBoxes = [self detect:selectedImage minimumThreshold:detectionThreshold pyramids:10 usingNms:YES deviceOrientation:UIImageOrientationUp learningImageIndex:groundTruthBoundingBox.imageIndex];
+        NSArray *detectedBoundingBoxes = [self detect:selectedImage minimumThreshold:detectionThreshold pyramids:10 usingNms:YES learningImageIndex:groundTruthBoundingBox.imageIndex];
         for(BoundingBox *detectedBoundingBox in detectedBoundingBoxes)
             if ([detectedBoundingBox fractionOfAreaOverlappingWith:groundTruthBoundingBox]>0.5){
                 tp++;
@@ -599,7 +569,7 @@ using namespace cv;
                 groundTruthBB = [trainingSet.groundTruthBoundingBoxes objectAtIndex:i];
             
             //run the detector on the current image
-            NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:NUM_TRAINING_PYRAMIDS usingNms:NO deviceOrientation:UIImageOrientationUp learningImageIndex:i];
+            NSArray *detectedBoundingBoxes = [self detect:image minimumThreshold:-1 pyramids:NUM_TRAINING_PYRAMIDS usingNms:NO learningImageIndex:i];
             
             
             // max negative bounding boxes detected allowed per image

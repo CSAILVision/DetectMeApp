@@ -64,14 +64,12 @@
     minimumThreshold:(double) detectionThreshold
             pyramids:(int) numberPyramids
             usingNms:(BOOL)useNms
-   deviceOrientation:(int) orientation
   learningImageIndex:(int) imageIndex;
 
 //for multiple detection using a shared pyramid
 - (NSArray *) detect:(Pyramid *) hogFeaturePyramid
     minimumThreshold:(double) detectionThreshold
-            usingNms:(BOOL)useNms
-         orientation:(int)orientation;
+            usingNms:(BOOL)useNms;
 
 
 - (void) cancelTraining;

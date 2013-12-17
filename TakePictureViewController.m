@@ -101,24 +101,13 @@
     
     [self initializeManagers];
     
+    self.detectorTrainer = [[DetectorTrainer alloc] init];
+    self.title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
+    
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
 }
 
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.detectorTrainer = [[DetectorTrainer alloc] init];
-    
-    self.title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
-    
-//    //set the frame here after all the navigation tabs have been uploaded and we have the definite frame size
-//    _prevLayer.frame = self.detectView.frame;
-
-    
-    //Fix Orientation
-    [self adaptToPhoneOrientation:[[UIDevice currentDevice] orientation]];
-}
 
 - (void) viewWillDisappear:(BOOL)animated
 {
@@ -141,36 +130,29 @@
     if(_takePicture){
         _takePicture = NO;
         
-        //construct the image depending on the orientation
-        UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-        UIImage *image;
-        if(UIDeviceOrientationIsLandscape(orientation)){
-            image = [UIImage imageWithCGImage:imageRef];
-        }else image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight];
-        
-        image = [image fixOrientation];
+        // Correct image orientation from the camera
+        UIImage *image = [self adaptOrientationForImageRef:imageRef];
         
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
         
         AnnotatedImage *annotatedImage = [AnnotatedImage annotatedImageWithImage:image
-                                                                             box:[self convertBoxForView:self.tagView.box]
+                                                                             box:[self convertBoxForView:self.tagView.box onOrientation:[[UIDevice currentDevice] orientation]]
                                                                      forLocation:_currentLocation
                                                                        forMotion:_motionManager.deviceMotion
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
-        NSLog(@"box:%@", [self convertBoxForView:self.tagView.box]);
+        NSLog(@"tagview box: %@", self.tagView.box);
+        NSLog(@"box:%@", [self convertBoxForView:self.tagView.box onOrientation:[[UIDevice currentDevice] orientation]]);
         [_annotatedImages addObject:annotatedImage];
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
         [self performSelectorOnMainThread:@selector(setTitle:) withObject:title waitUntilDone:NO];
         
     }
-    //DETECTION
-//    NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];
 }
 
 
-- (Box *) convertBoxForView:(Box *) box
+- (Box *) convertBoxForView:(Box *) box onOrientation:(UIDeviceOrientation) orientation
 {
     // The image show in the camera is an "aspect fit" of the actual image taken
     // To solve it, we need to convert the box to the "camera" reference system
@@ -181,14 +163,37 @@
                                                                                       box.lowerRight.y*self.tagView.frame.size.height)];
     
     
-    // We have to rotate the output obtained 90 degrees
+    // We have to rotate the image acording to orientation
     CGPoint upperLeftRotated = CGPointZero;
     CGPoint lowerRightRotated = CGPointZero;
     
-    upperLeftRotated.x = 1 - upperLeft.y;
-    upperLeftRotated.y = upperLeft.x;
-    lowerRightRotated.x = 1 - lowerRight.y;
-    lowerRightRotated.y = lowerRight.x;
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            upperLeftRotated.x = 1 - upperLeft.y;
+            upperLeftRotated.y = upperLeft.x;
+            lowerRightRotated.x = 1 - lowerRight.y;
+            lowerRightRotated.y = lowerRight.x;
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            upperLeftRotated.x = upperLeft.x;
+            upperLeftRotated.y = upperLeft.y;
+            lowerRightRotated.x = lowerRight.x;
+            lowerRightRotated.y = lowerRight.y;
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            upperLeftRotated.x = 1 - upperLeft.x;
+            upperLeftRotated.y = 1 - upperLeft.y;
+            lowerRightRotated.x = 1 - lowerRight.x;
+            lowerRightRotated.y = 1 - lowerRight.y;
+            break;
+            
+            
+        default:
+            break;
+    }
+    
     
     Box *newBox = [[Box alloc] initWithUpperLeft:upperLeftRotated lowerRight:lowerRightRotated];
     
@@ -206,13 +211,8 @@
 - (IBAction)takePictureAction:(id)sender
 {
     //animation
-    [UIView animateWithDuration:0.2f
-                     animations:^{
-                         [self.view setAlpha:0.5f];
-                     }
-                     completion:^(BOOL finished){
-                         [self.view setAlpha:1];
-                     }
+    [UIView animateWithDuration:0.2f animations:^{[self.view setAlpha:0.5f];}
+                                    completion:^(BOOL finished){[self.view setAlpha:1];}
      ];
     
     //enable next button
@@ -265,7 +265,6 @@
         destinationVC.detectorTrainer = self.detectorTrainer;
     }
 }
-
 
 @end
 
