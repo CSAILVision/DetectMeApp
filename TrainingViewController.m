@@ -189,6 +189,8 @@
     
     self.label.text = @"Finished!";
     self.doneButton.hidden = NO;
+    
+    [self.navigationItem setHidesBackButton:YES animated:YES];
 }
 
 @end
