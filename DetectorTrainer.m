@@ -32,7 +32,6 @@
 @end
 
 @implementation DetectorTrainer
-
 - (void) trainDetector
 {
     //train in a different queue
@@ -51,7 +50,6 @@
 //        _boxes = [NSMutableArray arrayWithArray:[_boxes objectsAtIndexes:[[NSIndexSet alloc] initWithIndexSet:mutableIndexSet]]];
 //        _images = [NSMutableArray arrayWithArray:[_images objectsAtIndexes:[[NSIndexSet alloc] initWithIndexSet:mutableIndexSet]]];
         
-        
         TrainingSet *trainingSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];
         
         //obtain the image average of the groundtruth images
@@ -59,11 +57,11 @@
         self.averageImage = [UIImage imageAverageFromImages:listOfImages];
 
         // check if training from a previous one
-//        if(self.previousDetector){
-//            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.previousDetector];
-//        }else
-//            self.detectorWrapper = [[DetectorWrapper alloc] init];
-        self.detectorWrapper = [[DetectorWrapper alloc] init];
+        if(self.previousDetector){
+            self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.previousDetector];
+        }else
+            self.detectorWrapper = [[DetectorWrapper alloc] init];
+        
         
         self.detectorWrapper.delegate = self;
         

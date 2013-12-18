@@ -7,6 +7,7 @@
 //
 
 #include <opencv2/core/core.hpp>
+
 #include <opencv2/ml/ml.hpp>
 #include <stdlib.h>
 
@@ -124,13 +125,13 @@ using namespace cv;
         int numberOfWeights = _sizesP[0]*_sizesP[1]*_sizesP[2] + 1; //+1 for the bias
 
         // set _weightsP
-        free(_weightsP);
-        _weightsP = (double *) malloc(numberOfWeights*sizeof(double));
-        for(int i=0; i<numberOfWeights; i++)
-            _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
+//        free(_weightsP);
+//        _weightsP = (double *) malloc(numberOfWeights*sizeof(double));
+//        for(int i=0; i<numberOfWeights; i++)
+//            _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
         // support vectors
-        if(detector.supportVectors){
+        if(detector.supportVectors && detector.parentID>0){
             NSString *supportVectorsString = [[NSString alloc] initWithData:detector.supportVectors encoding:NSUTF8StringEncoding];
             self.supportVectors = [NSMutableArray arrayWithArray:
                                    [SupportVector suppportVectorsFromJSON:supportVectorsString]];
@@ -206,11 +207,13 @@ using namespace cv;
     BOOL firstTimeError = YES;
     
     // Used to train detectors from the server that just have the support vectors
-    //if(self.supportVectors) [self initializeDetectorWithSupportVectors];
+    
+    if(self.supportVectors) [self initializeDetectorWithSupportVectors];
     
     
     while(_diff > STOP_CRITERIA && iter<MAX_TRAINING_ITERATIONS && !_isTrainCancelled){
-
+        
+        
         [self.delegate sendMessage:[NSString stringWithFormat:@"\n******* Iteration %d *******", iter]];
         
         //Get Bounding Boxes from detection
@@ -632,11 +635,15 @@ using namespace cv;
     
     //update weights and store the support vectors
     _numSupportVectors = SVM.get_support_vector_count();
-    _numberOfTrainingExamples = _numSupportVectors;
+    
+    _numberOfTrainingExamples = _numSupportVectors+self.supportVectors.count;
+    
     const CvSVMDecisionFunc *dec = SVM.decision_func;
+    
     for(int i=0; i<_numOfFeatures+1; i++) _weightsP[i] = 0.0;
     
     for (int i=0; i<_numSupportVectors; i++){
+        
         float alpha = dec[0].alpha[i];
         const float *supportVector = SVM.get_support_vector(i);
         float *sv_aux = (float *) malloc(_numOfFeatures*sizeof(float));
@@ -645,9 +652,10 @@ using namespace cv;
         
         // Get the current label of the supportvector
         Mat supportVectorMat(_numOfFeatures,1,CV_32FC1, sv_aux);
-        _trainingImageLabels[i] = SVM.predict(supportVectorMat);
-        if(_trainingImageLabels[i]==1) positives++;
+        _trainingImageLabels[i+self.supportVectors.count] = SVM.predict(supportVectorMat);
+        if(_trainingImageLabels[i+self.supportVectors.count]==1) positives++;
         free(sv_aux);
+        
         //NSLog(@"label: %f   alpha: %f \n", _trainingImageLabels[i], alpha);
         
         for(int j=0;j<_numOfFeatures;j++){
@@ -655,15 +663,21 @@ using namespace cv;
             _weightsP[j] -= (double) alpha * supportVector[j];
             
             //store the support vector as the first features
-            _trainingImageFeatures[i*_numOfFeatures + j] = supportVector[j];
+            _trainingImageFeatures[(i+self.supportVectors.count)*_numOfFeatures + j] = supportVector[j];
         }
     }
+    
+    //Update the number of positives
+    for(int i=0; i<self.supportVectors.count; i++) if(_trainingImageLabels[i]==1) positives++;
+    
+    
     _weightsP[_numOfFeatures] = - (double) dec[0].rho; // The sign of the bias and rho have opposed signs.
     self.numberOfPositives = [[NSNumber alloc] initWithInt:positives];
     [self.delegate sendMessage:[NSString stringWithFormat:@"Finished training!"]];
     [self.delegate sendMessage:[NSString stringWithFormat:@"SV (positives/total): %d/%d", positives,_numSupportVectors]];
     [self.delegate sendMessage:[NSString stringWithFormat:@"bias: %f", _weightsP[_numOfFeatures]]];
 }
+
 
 -(double) computeDifferenceWithLastWeights:(double *) weightsPLast
 {
@@ -694,7 +708,9 @@ using namespace cv;
 {
     // Initialize the detector with the previous weights
     _numSupportVectors = self.supportVectors.count;
+    _numberOfTrainingExamples = _numSupportVectors;
     _numOfFeatures = [(SupportVector *)[self.supportVectors firstObject] weights].count;
+    
     _sizesP[0] = [(NSNumber *) [self.sizes objectAtIndex:0] intValue];
     _sizesP[1] = [(NSNumber *) [self.sizes objectAtIndex:1] intValue];
     _sizesP[2] = [(NSNumber *) [self.sizes objectAtIndex:2] intValue];
@@ -720,7 +736,7 @@ using namespace cv;
     
     self.supportVectors = [[NSMutableArray alloc] initWithCapacity:_numSupportVectors];
     
-    for (int i=0; i<_numSupportVectors; i++){
+    for (int i=self.supportVectors.count; i<_numSupportVectors; i++){
         float label = _trainingImageLabels[i];
         
         NSMutableArray *weights = [[NSMutableArray alloc] initWithCapacity:_numOfFeatures];
