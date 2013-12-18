@@ -67,8 +67,8 @@
 - (void) outputValuesForCurrentUser
 {
     self.usernameLabel.text = self.currentUser.username;
-    self.imageView.image = [UIImage imageWithData:self.currentUser.image];
-    if(!self.imageView.image) self.imageView.image = [UIImage imageNamed:@"no_image.jpg"];
+    if(self.currentUser.image)
+        self.imageView.image = [UIImage imageWithData:self.currentUser.image];
     [self.wifiOnlyButton setOn:self.currentUser.isWifiOnly.boolValue];
 }
 

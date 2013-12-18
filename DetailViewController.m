@@ -10,6 +10,7 @@
 #import "ExecuteDetectorViewController.h"
 #import "TrainingImagesCollectionViewController.h"
 #import "ConstantsServer.h"
+#import "DYRateView.h"
 #import "Box.h"
 #import "User.h"
 #import "Rating+Create.h"
@@ -88,6 +89,14 @@
         self.ratingControl.selectedSegmentIndex = _rating.rating.integerValue - 1;
 }
 
+- (void) initializeStarRating
+{
+    DYRateView *rateView = [[DYRateView alloc] initWithFrame:CGRectMake(0, 0, 100, 14)];
+    rateView.rate = 4.7;
+    rateView.alignment = RateViewAlignmentRight;
+    [self.view addSubview:rateView];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -104,6 +113,7 @@
     self.activityIndicator.hidden = YES;
     
     [self initializeRating];
+    [self initializeStarRating];
     [self setDetectorProperties];
 }
 

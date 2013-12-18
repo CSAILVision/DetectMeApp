@@ -45,8 +45,8 @@
 - (void) initializeUserProfile
 {
     self.usernameLabel.text = _currentUser.username;
-    self.profileImage.image = [UIImage imageWithData:_currentUser.image];
-    if(!self.profileImage.image) self.profileImage.image = [UIImage imageNamed:@"no_image.jpg"];
+    if(_currentUser.image)
+        self.profileImage.image = [UIImage imageWithData:_currentUser.image];
 }
 
 
