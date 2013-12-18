@@ -121,14 +121,6 @@ using namespace cv;
         _sizesP[0] = [(NSNumber *) [self.sizes objectAtIndex:0] intValue];
         _sizesP[1] = [(NSNumber *) [self.sizes objectAtIndex:1] intValue];
         _sizesP[2] = [(NSNumber *) [self.sizes objectAtIndex:2] intValue];
-
-        int numberOfWeights = _sizesP[0]*_sizesP[1]*_sizesP[2] + 1; //+1 for the bias
-
-        // set _weightsP
-//        free(_weightsP);
-//        _weightsP = (double *) malloc(numberOfWeights*sizeof(double));
-//        for(int i=0; i<numberOfWeights; i++)
-//            _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
         // support vectors
         if(detector.supportVectors && detector.parentID>0){
