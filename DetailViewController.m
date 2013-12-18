@@ -222,6 +222,8 @@
         case 0:
             cell = [tableView dequeueReusableCellWithIdentifier:@"DetectorProperties" forIndexPath:indexPath];
             cell.textLabel.text = [_detectorConfigurationDescription objectAtIndex:indexPath.row];
+            cell.textLabel.font = [UIFont systemFontOfSize:12];
+            cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
             cell.accessoryView = [_detectorConfigurationControl objectAtIndex:indexPath.row];
             break;
             

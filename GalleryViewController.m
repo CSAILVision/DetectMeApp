@@ -279,6 +279,19 @@
                 // Different label to show
                 UILabel *footerLabel = [footerView.subviews lastObject];
                 footerLabel.text = @"Scroll to refresh \n from the server.";
+                
+            }else if([self.filter isEqualToString:FILTER_MULTIPLE]){
+                
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
+                [request setIncludesSubentities:NO];
+                NSError *err;
+                NSUInteger count = [self.detectorDatabase.managedObjectContext countForFetchRequest:request error:&err];
+                
+                if(count==0){
+                    UILabel *footerLabel = [footerView.subviews lastObject];
+                    footerLabel.text = @"Create or download \n single detectors first.";
+                    self.addButton.enabled = NO;
+                }
             }
         }
         
