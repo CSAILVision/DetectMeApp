@@ -38,6 +38,17 @@
     dispatch_queue_t training_queue = dispatch_queue_create("training_queue", 0);
     dispatch_async(training_queue, ^{
         
+        //subselect ranom
+//        int num = 16;
+//        NSMutableIndexSet *mutableIndexSet = [[NSMutableIndexSet alloc] init];
+//
+//        while(mutableIndexSet.count < num)
+//            [mutableIndexSet addIndex: arc4random() % _boxes.count];
+//
+//        NSLog(@"mutable index set:%@", mutableIndexSet);
+//        
+//        _boxes = [NSMutableArray arrayWithArray:[_boxes objectsAtIndexes:[[NSIndexSet alloc] initWithIndexSet:mutableIndexSet]]];
+//        _images = [NSMutableArray arrayWithArray:[_images objectsAtIndexes:[[NSIndexSet alloc] initWithIndexSet:mutableIndexSet]]];
         
         TrainingSet *trainingSet = [[TrainingSet alloc] initWithBoxes:_boxes forImages:_images];
         
@@ -50,6 +61,7 @@
             self.detectorWrapper = [[DetectorWrapper alloc] initWithDetector:self.previousDetector];
         }else
             self.detectorWrapper = [[DetectorWrapper alloc] init];
+        
         
         self.detectorWrapper.delegate = self;
         
