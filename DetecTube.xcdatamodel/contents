@@ -26,6 +26,7 @@
         <attribute name="isPublic" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="isSent" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberRatings" optional="YES" attributeType="Integer 32" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="parentID" optional="YES" attributeType="Integer 32" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="precisionRecall" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="0.0" syncable="YES"/>
         <attribute name="serverDatabaseID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -67,7 +68,7 @@
     </entity>
     <elements>
         <element name="AnnotatedImage" positionX="-99" positionY="-27" width="128" height="283"/>
-        <element name="Detector" positionX="475" positionY="27" width="128" height="373"/>
+        <element name="Detector" positionX="475" positionY="27" width="128" height="388"/>
         <element name="MultipleDetector" positionX="108" positionY="-189" width="128" height="118"/>
         <element name="Rating" positionX="-135" positionY="297" width="117" height="103"/>
         <element name="User" positionX="126" positionY="545" width="128" height="163"/>

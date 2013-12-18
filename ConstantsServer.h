@@ -42,6 +42,7 @@
 #define SERVER_DETECTOR_PARENT @"parent"
 #define SERVER_DETECTOR_AVERAGE_RATING @"average_rating"
 #define SERVER_DETECTOR_TRAINING_LOG @"training_log"
+#define SERVER_DETECTOR_NUMBER_RATINGS @"number_ratings"
 
 // ANNOTATED IMAGE
 #define SERVER_AIMAGE_IMAGE @"image_jpeg"

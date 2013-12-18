@@ -2,7 +2,7 @@
 //  Detector.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 12/12/13.
+//  Created by Josep Marc Mingot Hidalgo on 18/12/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -33,6 +33,7 @@
 @dynamic type;
 @dynamic updatedAt;
 @dynamic weights;
+@dynamic numberRatings;
 @dynamic annotatedImages;
 @dynamic multipleDetectors;
 @dynamic ratings;
@@ -53,6 +54,5 @@
     [super awakeFromInsert];
     self.createdAt = [NSDate date];
 }
-
 
 @end

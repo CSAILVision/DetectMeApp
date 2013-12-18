@@ -34,6 +34,9 @@
     NSMutableArray *_detectorConfigurationDescription;
     
     BOOL _successDelete;
+    
+    int _numRatings;
+    float _averageRating;
 }
 
 @end
@@ -48,7 +51,7 @@
     [formatter setDateFormat:@"MM/dd/yyyy 'at' HH:mm"];
     
     
-    NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@", _detector.averageRating]:@"no ratings yet";
+    NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@ (%@)", _detector.averageRating, _detector.numberRatings]:@"no ratings yet";
     NSString *numberOfImages = [NSString stringWithFormat:@"%d", _detector.annotatedImages.count];
     NSString *createdAt = [formatter stringFromDate:_detector.createdAt];
     NSString *updatedAt = _detector.updatedAt ? [formatter stringFromDate:_detector.updatedAt] : createdAt;
@@ -61,7 +64,7 @@
                                             updatedAt,nil];
     
     _detectorKeys = [NSArray arrayWithObjects:
-                                            @"Average Rating",
+                                            @"Average Rating (Number ratings)",
                                             @"Number of images",
                                             @"Created at",
                                             @"Updated at",nil];
@@ -105,6 +108,8 @@
     self.nameLabel.text = [NSString stringWithFormat:@"%@ - %@",self.detector.name, self.detector.serverDatabaseID];
     self.authorLabel.text = [NSString stringWithFormat:@"by %@", self.detector.user.username];
     self.imageView.image =[UIImage imageWithData:self.detector.image];
+    _numRatings = self.detector.numberRatings.integerValue;
+    _averageRating = self.detector.numberRatings.integerValue;
 }
 
 - (void) initializeForOwner
@@ -279,8 +284,15 @@
 
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl
 {
+    // send the rating
     _rating.rating = @(ratingControl.selectedSegmentIndex + 1);
     [_shareDetector shareRating:_rating];
+    
+    // update the rating
+    self.detector.numberRatings = [NSNumber numberWithInt:_numRatings+1];
+    self.detector.averageRating = @((_averageRating*_numRatings + _rating.rating.integerValue)/(_numRatings + 1));
+    [self setDetectorProperties];
+    [self.tableview reloadData];
 }
 
 

@@ -44,8 +44,10 @@
     detector.user = [User userWithName:authorUsername inManagedObjectContext:context];
     detector.sizes = [detectorInfo objectForKey:SERVER_DETECTOR_SIZES];
     detector.weights = [detectorInfo objectForKey:SERVER_DETECTOR_WEIGHTS];
+    detector.numberRatings = [detectorInfo objectForKey:SERVER_DETECTOR_NUMBER_RATINGS];
     NSNumber *averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
     if(averageRating.integerValue>0) detector.averageRating = averageRating;
+    
     detector.parentID = @(0);
     id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
     if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
