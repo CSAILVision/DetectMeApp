@@ -117,8 +117,15 @@
     _logBuffer = [_logBuffer stringByAppendingString:[NSString stringWithFormat:@"%@\n", message]];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.textView.text = _logBuffer;
+        
+        //scroll to the bottom
+        if(self.textView.text.length > 0 ) {
+            NSRange bottom = NSMakeRange(self.textView.text.length - 1, 1);
+            [self.textView scrollRangeToVisible:bottom];
+        }
     });
 }
+
 
 #pragma mark -
 #pragma mark IBActions
@@ -182,6 +189,8 @@
     
     self.label.text = @"Finished!";
     self.doneButton.hidden = NO;
+    
+    [self.navigationItem setHidesBackButton:YES animated:YES];
 }
 
 @end

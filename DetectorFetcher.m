@@ -68,7 +68,10 @@
     NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     NSArray *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
-    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    if (error){
+        NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+        results = nil;
+    }
     
     return results;
 }

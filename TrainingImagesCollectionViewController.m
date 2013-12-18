@@ -22,10 +22,12 @@
 @interface TrainingImagesCollectionViewController ()
 {
     DetectorTrainer *_detectorTrainer;
-    UIManagedDocument *_detectorDatabase;
     NSMutableArray *_annotatedImages;
-    
     WaitingView *_waitingView;
+    
+    UIManagedDocument *_detectorDatabase;
+    NSUndoManager *_undoManager;
+    BOOL _undo; //flag, undoes all the changes when going back. Just stores if trained.
 }
 
 @end
@@ -42,6 +44,23 @@
     [self.view addSubview:_waitingView];
 }
 
+- (void) initializeUndoManager
+{
+    //create a undo manager for the current MOC (nil by default)
+    [_detectorDatabase.managedObjectContext setUndoManager:[[NSUndoManager alloc] init]];
+    
+    //get the undomanager
+    _undoManager = [_detectorDatabase.managedObjectContext undoManager];
+    [_undoManager beginUndoGrouping];
+}
+
+- (void) initializeSupportVectors
+{
+    if(!self.detector.supportVectors){
+        [_waitingView startWaitingViewWithMessage:@"Downloading support vectors..."];
+        [self getSupportVectors];
+    }
+}
 
 
 - (void)viewDidLoad
@@ -60,6 +79,8 @@
     _annotatedImages = [NSMutableArray arrayWithArray:[self.detector.annotatedImages allObjects]];
     
     [self initializeWaitingView];
+    [self initializeUndoManager];
+    [self initializeSupportVectors];
 }
 
 - (void) getSupportVectors
@@ -90,10 +111,29 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    if(!self.detector.supportVectors){
-        [_waitingView startWaitingViewWithMessage:@"Downloading support vectors..."];
-        [self getSupportVectors];
+    [super viewDidAppear:animated];
+    
+    // set undo flag
+    _undo = YES;
+}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    // undo if going back
+    if(_undo){
+        [_undoManager endUndoGrouping];
+        [_undoManager undo];
     }
+
+}
+
+- (void) dealloc
+{
+    // close undo grouping if open
+    if([_undoManager groupingLevel]>0)
+        [_undoManager endUndoGrouping];
 }
 
 
@@ -223,12 +263,17 @@
         TrainingViewController *trainingVC = segue.destinationViewController;
         trainingVC.detectorTrainer = _detectorTrainer;
         
+        [_detectorDatabase.managedObjectContext setUndoManager:nil];
+        
     }else if([[segue identifier] isEqualToString:@"TakePicture"]){
         TakePictureViewController *takePictureVC = (TakePictureViewController *) segue.destinationViewController;
         takePictureVC.delegate = self;
         takePictureVC.isRetraining = YES;
         
     }
+    
+    //set undo
+    _undo = NO;
 }
 
 #pragma mark -

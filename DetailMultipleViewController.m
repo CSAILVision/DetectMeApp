@@ -125,6 +125,7 @@
             cell.textLabel.font = [UIFont systemFontOfSize:17];
             cell.detailTextLabel.text = [NSString stringWithFormat:@"by %@", detector.user.username];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
+            cell.detailTextLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
             
             break;
             

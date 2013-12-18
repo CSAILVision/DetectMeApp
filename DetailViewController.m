@@ -40,10 +40,15 @@
 - (void) setDetectorProperties
 {
     
-    NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@", _detector.averageRating]:@"null";
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM/dd/yyyy 'at' HH:mm"];
+    
+    
+    NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@", _detector.averageRating]:@"no ratings yet";
     NSString *numberOfImages = [NSString stringWithFormat:@"%d", _detector.annotatedImages.count];
-    NSString *createdAt = @"Null";
-    NSString *updatedAt = @"Null";
+    NSString *createdAt = [formatter stringFromDate:_detector.createdAt];
+    NSString *updatedAt = _detector.updatedAt ? [formatter stringFromDate:_detector.updatedAt] : createdAt;
+    
     
     _detectorValues = [NSArray arrayWithObjects:
                                             averageRating,
@@ -176,6 +181,7 @@
             
             cell.textLabel.text = [_detectorKeys objectAtIndex:indexPath.row];
             cell.textLabel.font = [UIFont systemFontOfSize:12];
+            cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
             cell.detailTextLabel.text = [_detectorValues objectAtIndex:indexPath.row];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
             

@@ -78,7 +78,10 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
             CGRect textBox = CGRectMake(x - 2, y - 20 - 2, w/2.0, textBoxHeight);
             CGContextFillRect(context, textBox);
             CGContextSetFillColorWithColor(context,[UIColor blackColor].CGColor);
-            [[NSString stringWithFormat:@" %@", p.targetClass] drawInRect:textBox withFont:[UIFont systemFontOfSize:15]];
+            
+            UIFont *font = [UIFont systemFontOfSize:15];
+            NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys: font, NSFontAttributeName,nil];
+            [[NSString stringWithFormat:@" %@", p.targetClass] drawInRect:textBox withAttributes:attributes];
         }
         
     }
@@ -112,7 +115,6 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
 - (void) drawBoxes:(NSArray *)boxes
 {
     _boxes = boxes;
-    //usually invoked from different threads, so needs to be called from the main thread
     [self performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:NO];
 }
 
@@ -130,6 +132,7 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
     
     CGPoint upperLeft = [_prevLayer pointForCaptureDevicePointOfInterest:CGPointMake(cp.ymin, 1 - cp.xmin)];
     CGPoint lowerRight = [_prevLayer pointForCaptureDevicePointOfInterest:CGPointMake(cp.ymax, 1 - cp.xmax)];
+    
     
     newCP.xmin = upperLeft.x;
     newCP.ymin = upperLeft.y;

@@ -38,6 +38,7 @@
     NSMutableArray *_detectorWrappers;
     
     TestHelper *_testHelper;
+    
 }
 
 @property (strong, nonatomic) Pyramid *hogPyramid;
@@ -171,23 +172,13 @@
     [self.view.layer insertSublayer:_prevLayer atIndex:0];
 }
 
-- (void) viewWillAppear:(BOOL)animated
-{
-//    self.navigationController.navigationBarHidden = YES;
-}
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    //set the frame here after all the navigation tabs have been uploaded and we have the definite frame size
-    _prevLayer.frame = self.detectView.frame;
-    
     //reset the pyramid with the new detectors
     self.hogPyramid = [[Pyramid alloc] initWithDetectors:_detectorWrappers forNumPyramids:_numPyramids];
-    
-    //Fix Orientation
-    [self adaptToPhoneOrientation:[[UIDevice currentDevice] orientation]];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -210,7 +201,7 @@
 #pragma mark -
 #pragma mark Object Detection
 
-- (NSArray *) detectedBoxesForImage:(UIImage *)image withOrientation:(UIDeviceOrientation)orientation
+- (NSArray *) detectedBoxesForImage:(UIImage *)image
 {
     NSMutableArray *nmsArray = [[NSMutableArray alloc] init];
     
@@ -219,12 +210,16 @@
         DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:0];
         float detectionThreshold = -1 + 2*detectorWrapper.detectionThreshold.floatValue; //in [-1,1]
 
-        [nmsArray addObject:[detectorWrapper detect:image
-                                   minimumThreshold:detectionThreshold
-                                           pyramids:_numPyramids
-                                           usingNms:YES
-                                  deviceOrientation:orientation
-                                 learningImageIndex:0]];
+        NSArray *boxes = [detectorWrapper detect:image
+                                minimumThreshold:detectionThreshold
+                                        pyramids:_numPyramids
+                                        usingNms:YES
+                              learningImageIndex:0];
+        
+        [self adaptOrientationForBoxes:boxes];
+        [nmsArray addObject:boxes];
+         
+         
     //Multiclass detection
     }else{
         
@@ -236,7 +231,10 @@
         dispatch_apply(_detectorWrappers.count, detectorQueue, ^(size_t i) {
             DetectorWrapper *detectorWrapper = [_detectorWrappers objectAtIndex:i];
             float detectionThreshold = -1 + 2*detectorWrapper.detectionThreshold.floatValue;
-            candidatesForDetector = [detectorWrapper detect:self.hogPyramid minimumThreshold:detectionThreshold usingNms:YES orientation:orientation];
+            candidatesForDetector = [detectorWrapper detect:self.hogPyramid
+                                           minimumThreshold:detectionThreshold
+                                                   usingNms:YES];
+            [self adaptOrientationForBoxes:candidatesForDetector];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [nmsArray addObject:candidatesForDetector];
             });
@@ -252,14 +250,10 @@
     NSDate * start = [NSDate date];
     
     //construct the image depending on the orientation
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIImage *image;
-    if(UIDeviceOrientationIsLandscape(orientation)){
-        image = [UIImage imageWithCGImage:imageRef];
-    }else image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight];
+    UIImage *image = [self adaptOrientationForImageRef:imageRef];
     
     //DETECTION
-    NSArray *detectedBoxes = [self detectedBoxesForImage:image withOrientation:orientation];
+    NSArray *detectedBoxes = [self detectedBoxesForImage:image];
     
     //TEST
     [_testHelper receivedDetections:detectedBoxes onRealBox:self.tagView.box];
@@ -277,8 +271,8 @@
     
     //Put the HOG picture on screen
     if (_hog){
-        UIImage *image = [ [[UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight] scaleImageTo:230/480.0] convertToHogImage];
-        [self.HOGimageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
+        UIImage *imageHOG = [[image scaleImageTo:230/480.0] convertToHogImage];
+        [self.HOGimageView performSelectorOnMainThread:@selector(setImage:) withObject:imageHOG waitUntilDone:YES];
     }
     
     // Update the navigation controller title with some information about the detection
@@ -465,28 +459,6 @@
     return cell;
 }
 
-
-
-#pragma mark -
-#pragma mark Rotation
-
-- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adaptToPhoneOrientation:toInterfaceOrientation];
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-}
-
-- (void) adaptToPhoneOrientation:(UIDeviceOrientation) orientation
-{
-    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationLandscapeLeft){
-        [CATransaction begin];
-        _prevLayer.orientation = orientation;
-        _prevLayer.frame = self.view.frame;
-        [CATransaction commit];
-    }
-}
-
-
 #pragma mark -
 #pragma mark Private methods
 
@@ -499,6 +471,41 @@
         [self showSettingsAction:nil];
     }
 }
+
+
+- (void) adaptOrientationForBoxes:(NSArray *)boxes
+{
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    
+    
+    if(orientation == UIDeviceOrientationLandscapeRight){
+        for(BoundingBox *boundingBox in boxes){
+            double auxXmin, auxXmax;
+            auxXmin = boundingBox.xmin;
+            auxXmax = boundingBox.xmax;
+            boundingBox.xmin = boundingBox.ymin;
+            boundingBox.xmax = boundingBox.ymax;
+            boundingBox.ymin = 1 - auxXmin;
+            boundingBox.ymax = 1 - auxXmax;
+        }
+        
+    }else if(orientation == UIDeviceOrientationLandscapeLeft){
+        for(BoundingBox *boundingBox in boxes){
+            double auxXmin, auxXmax;
+            auxXmin = boundingBox.xmin;
+            auxXmax = boundingBox.xmax;
+            boundingBox.xmin = (1 - boundingBox.ymin);
+            boundingBox.xmax = (1 - boundingBox.ymax);
+            boundingBox.ymin = auxXmin;
+            boundingBox.ymax = auxXmax;
+        }
+        
+    }
+}
+
+
+
 
 @end
 

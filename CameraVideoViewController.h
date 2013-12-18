@@ -17,7 +17,13 @@
 }
 
 - (IBAction)switchCameras:(id)sender;
-
 - (void) processImage:(CGImageRef) imageRef;
+
+// Adapts prev layer to the current orientation
+// Used when the device rotates
+- (void) adaptOrientationForPrevLayer;
+
+// Adapts the image taken to the current orientation
+- (UIImage *) adaptOrientationForImageRef:(CGImageRef)imageRef;
 
 @end

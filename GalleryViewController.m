@@ -19,6 +19,7 @@
 #import "AnnotatedImage.h"
 #import "UIViewController+ShowAlert.h"
 #import "MultipleDetector+Create.h"
+#import "UIViewController+ShowAlert.h"
 
 
 
@@ -402,19 +403,30 @@
 //    dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
 //    dispatch_async(fetchQ, ^{
         NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
-        [document.managedObjectContext performBlock:^{
-            if (detectors.count>0) {
-                //[Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
-            }
-            for(NSDictionary *detectorInfo in detectors){
-                //start creating objects in document's context
-                [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
-            }
-        
+    
+        if(!detectors){
             
-            // when finished, present them on the screen
-            [self performSelectorOnMainThread:@selector(applyFilter) withObject:nil waitUntilDone:NO];
-        }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showAlertWithTitle:@"Connection Error" andDescription:@"Check that the wifi is enabled"];
+                
+            });
+            
+    
+        }else{
+            [document.managedObjectContext performBlock:^{
+                if (detectors.count>0) {
+                    //[Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
+                }
+                for(NSDictionary *detectorInfo in detectors){
+                    //start creating objects in document's context
+                    [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
+                }
+            
+                
+                // when finished, present them on the screen
+                [self performSelectorOnMainThread:@selector(applyFilter) withObject:nil waitUntilDone:NO];
+            }];
+        }
 //    });
 }
 

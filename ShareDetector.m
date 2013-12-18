@@ -273,13 +273,27 @@
 
 - (NSDictionary *) dictionaryFromDetector:(Detector *) detector
 {
+    //support vectors
     NSString *supportVectors = [[NSString alloc] initWithData:detector.supportVectors encoding:NSUTF8StringEncoding];
+    
+    //dates
+    //ISO 8601:'2013-01-29T12:34:56.000000Z' on UTC
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'.00000Z'"];
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+    NSString *createdAt = [formatter stringFromDate:detector.createdAt];
+    NSString *updatedAt = [formatter stringFromDate:detector.updatedAt];
+    //NSLog(@"created at: %@", createdAt);
+    //NSLog(@"updated at: %@", updatedAt);
+
+    
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:
                                  [NSArray arrayWithObjects:detector.name,
                                                            detector.targetClass,
                                                            detector.isPublic.boolValue ? @"True":@"False",
-                                                           //detector.createdAt,
-                                                           //detector.updatedAt,
+                                                           createdAt,
+                                                           updatedAt,
                                                            [NSString stringWithFormat:@"%@",detector.sizes],
                                                            [NSString stringWithFormat:@"%@",detector.weights],
                                                            supportVectors,
@@ -290,8 +304,8 @@
                                  [NSArray arrayWithObjects:SERVER_DETECTOR_NAME,
                                                            SERVER_DETECTOR_TARGET_CLASS,
                                                            SERVER_DETECTOR_PUBLIC,
-                                                           //SERVER_DETECTOR_CREATED_AT,
-                                                           //SERVER_DETECTOR_UPDATED_AT,
+                                                           SERVER_DETECTOR_CREATED_AT,
+                                                           SERVER_DETECTOR_UPDATED_AT,
                                                            SERVER_DETECTOR_SIZES,
                                                            SERVER_DETECTOR_WEIGHTS,
                                                            SERVER_DETECTOR_SUPPORT_VECTORS,

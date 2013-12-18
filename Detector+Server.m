@@ -79,7 +79,6 @@
     detector.parentID = isToUpdate? detector.parentID : detectorTrainer.previousDetector.serverDatabaseID;
     detector.isPublic = [NSNumber numberWithBool:detectorTrainer.isPublic];
     detector.image = UIImageJPEGRepresentation(detectorTrainer.averageImage, 0.5);
-    detector.createdAt = [NSDate date];
     detector.updatedAt = [NSDate date];
     detector.weights = [detectorTrainer.weights convertToJSON];
     detector.sizes = [detectorTrainer.sizes convertToJSON];

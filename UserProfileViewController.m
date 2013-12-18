@@ -15,11 +15,30 @@
 @interface UserProfileViewController ()
 {
     UIImagePickerController *_imagePicker;
+    
+    NSArray *_userValues;
+    NSArray *_userKeys;
+    
 }
 
 @end
 
 @implementation UserProfileViewController
+
+- (void) initializeUserProperties
+{
+
+    NSString *numberOfDetectors = [NSString stringWithFormat:@"%d",[self.currentUser.detectors count]];
+    NSString *numberOfAnnotatedImages = [NSString stringWithFormat:@"%d",[self.currentUser.annotatedImages count]];
+    
+    
+    _userValues = [NSArray arrayWithObjects:
+                       numberOfDetectors, numberOfAnnotatedImages, nil];
+    
+    _userKeys = [NSArray arrayWithObjects:
+                     @"Number of detectors",@"Number of annotated images", nil];
+}
+
 
 - (void) initializeImagePicker
 {
@@ -40,7 +59,7 @@
 {
     [super viewDidLoad];
     [self initializeImagePicker];
-    
+    [self initializeUserProperties];
     [self outputValuesForCurrentUser];
 }
 
@@ -49,6 +68,7 @@
 {
     self.usernameLabel.text = self.currentUser.username;
     self.imageView.image = [UIImage imageWithData:self.currentUser.image];
+    if(!self.imageView.image) self.imageView.image = [UIImage imageNamed:@"no_image.jpg"];
     [self.wifiOnlyButton setOn:self.currentUser.isWifiOnly.boolValue];
 }
 
@@ -113,13 +133,28 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return [_userKeys count];
 }
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell" forIndexPath:indexPath];
+            
+    cell.textLabel.text = [_userKeys objectAtIndex:indexPath.row];
+    cell.textLabel.font = [UIFont systemFontOfSize:12];
+    cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
+    cell.detailTextLabel.text = [_userValues objectAtIndex:indexPath.row];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+    
+    return cell;
+}
+
 
 
 

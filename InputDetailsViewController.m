@@ -72,4 +72,11 @@
     self.detectorTrainer.name = textField.text;
 }
 
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self performSegueWithIdentifier:@"showTraining" sender:self];
+    return YES;
+}
+
 @end

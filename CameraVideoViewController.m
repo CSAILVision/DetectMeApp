@@ -7,6 +7,7 @@
 //
 
 #import "CameraVideoViewController.h"
+#import "UIImage+Rotation.h"
 
 @interface CameraVideoViewController ()
 {
@@ -65,6 +66,8 @@
     //Start the capture
     [_captureSession startRunning];
     
+    // set here when the view has the correct size
+    _prevLayer.frame = self.view.frame;
 }
 
 
@@ -142,6 +145,78 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     //Process Image in the parent must be overriden!
 }
 
+#pragma mark -
+#pragma mark Orientation
 
+
+- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self adaptOrientationForPrevLayer];
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+- (void) adaptOrientationForPrevLayer
+{
+    // only allowed landscape left orientation
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    if(orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationLandscapeLeft){
+        [CATransaction begin];
+        [_prevLayer.connection setVideoOrientation:[self convertOrientation:orientation]];
+        _prevLayer.frame = self.view.frame;
+        [CATransaction commit];
+    }
+}
+
+- (AVCaptureVideoOrientation) convertOrientation:(UIDeviceOrientation)orientation
+{
+    AVCaptureVideoOrientation videoOrientation;
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            videoOrientation = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+            break;
+            
+        default:
+            videoOrientation = AVCaptureVideoOrientationPortrait;
+            break;
+    }
+    
+    return videoOrientation;
+}
+
+- (UIImage *) adaptOrientationForImageRef:(CGImageRef)imageRef;
+{
+    UIImage *image;
+    switch ([[UIDevice currentDevice] orientation]) {
+        case UIDeviceOrientationPortrait:
+            image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight];
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            image = [UIImage imageWithCGImage:imageRef];
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationDown];
+            break;
+            
+        default:
+            break;
+    }
+    
+    [image fixOrientation];
+    
+    return image;
+}
 
 @end
