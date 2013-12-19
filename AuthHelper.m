@@ -84,6 +84,22 @@
     
 }
 
+- (void) resetPasswordForEmail:(NSString *)email
+{
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/password/reset/",SERVER_ADDRESS];
+    
+    // initiate creation of the request
+    PostHTTPConstructor *requestConstructor = [[PostHTTPConstructor alloc] init];
+    
+    [requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
+    [requestConstructor addFieldWithTitle:SERVER_AUTH_EMAIL forValue:email];
+
+    // URL Connection
+    _responseData = [[NSMutableData alloc] init];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[requestConstructor getRequest] delegate:self];
+    [conn start];
+}
+
 #pragma mark -
 #pragma mark NSURLConnectionDataDelegate
 

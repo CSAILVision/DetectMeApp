@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) User *currentUser;
-@property (weak, nonatomic) IBOutlet UISwitch *wifiOnlyButton;
 
 
 - (IBAction)logOutAction:(id)sender;

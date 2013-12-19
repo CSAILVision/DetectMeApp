@@ -13,10 +13,7 @@
 @optional
 - (void) signInCompleted;
 - (void) signUpCompleted;
-
-
 - (void) forgetPasswordEndedWithResult:(BOOL) success andMessage:(NSString *)message;
-
 - (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 
 @end
@@ -40,5 +37,6 @@
 - (void) signInUsername:(NSString *)username forPassword:(NSString *) password;
 + (void) signOut;
 - (void) signUpUsername:(NSString *)username forEmail:(NSString *)email forPassword:(NSString *)password;
+- (void) resetPasswordForEmail:(NSString *)email;
 
 @end
