@@ -45,7 +45,6 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
         BoundingBox *p;
         CGFloat x,y,w,h; //xbox: x for the box position
     
-    
         for (int i=0; i<corners.count; i++){
         
             //convert the point from the device system of reference to the prevLayer system of reference
@@ -75,10 +74,29 @@ static inline double max(double x, double y) { return (x <= y ? y : x); }
                 w = abs(w);
             }
             
-            CGRect textBox = CGRectMake(x - 2, y - 20 - 2, w/2.0, textBoxHeight);
-            CGContextFillRect(context, textBox);
-            CGContextSetFillColorWithColor(context,[UIColor blackColor].CGColor);
+            switch([[UIDevice currentDevice] orientation]){
+
+                case UIDeviceOrientationLandscapeLeft:
+                    x = max(0,p.xmax);
+                    y = max(0,p.ymin);
+                    w = min(self.frame.size.width,p.xmin) - x;
+                    break;
+                    
+                case UIDeviceOrientationLandscapeRight:
+                    x = max(0,p.xmin);
+                    y = max(0,p.ymax);
+                    w = min(self.frame.size.width,p.xmax) - x;
+                    break;
+                    
+                default:
+                    break;
+        
+            }
             
+            CGRect textBox = CGRectMake(x-2, y - 20 - 2, w+4, textBoxHeight);
+            CGContextFillRect(context, textBox);
+        
+            CGContextSetFillColorWithColor(context,[UIColor blackColor].CGColor);
             UIFont *font = [UIFont systemFontOfSize:15];
             NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys: font, NSFontAttributeName,nil];
             [[NSString stringWithFormat:@" %@", p.targetClass] drawInRect:textBox withAttributes:attributes];

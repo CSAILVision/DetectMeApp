@@ -125,10 +125,10 @@ using namespace cv;
         int numberOfWeights = _sizesP[0]*_sizesP[1]*_sizesP[2] + 1; //+1 for the bias
 
         // set _weightsP
-//        free(_weightsP);
-//        _weightsP = (double *) malloc(numberOfWeights*sizeof(double));
-//        for(int i=0; i<numberOfWeights; i++)
-//            _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
+        free(_weightsP);
+        _weightsP = (double *) malloc(numberOfWeights*sizeof(double));
+       for(int i=0; i<numberOfWeights; i++)
+            _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
         // support vectors
         if(detector.supportVectors && detector.parentID>0){
@@ -136,6 +136,7 @@ using namespace cv;
             self.supportVectors = [NSMutableArray arrayWithArray:
                                    [SupportVector suppportVectorsFromJSON:supportVectorsString]];
             supportVectorsString = nil;
+                                
         }
     }
     
@@ -199,7 +200,7 @@ using namespace cv;
     //convergence loop
     free(_weightsP);
     _weightsP = (double *) calloc((_numOfFeatures + 1),sizeof(double));
-    for(int i=0; i<_numOfFeatures+1; i++) _weightsP[i] = 1;
+//    for(int i=0; i<_numOfFeatures+1; i++) _weightsP[i] = 1;
     double *weightsPLast = (double *) calloc((_numOfFeatures + 1),sizeof(double));
     _diff = 1;
     int iter = 0;
@@ -210,7 +211,7 @@ using namespace cv;
     
     if(self.supportVectors) [self initializeDetectorWithSupportVectors];
     
-    
+    for(int i=0; i<_numOfFeatures+1; i++) _weightsP[i] = 1;
     while(_diff > STOP_CRITERIA && iter<MAX_TRAINING_ITERATIONS && !_isTrainCancelled){
         
         
