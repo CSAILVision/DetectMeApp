@@ -19,6 +19,8 @@
     NSArray *_userValues;
     NSArray *_userKeys;
     
+    NSArray *_userConfigurationControl;
+    NSArray *_userConfigurationDescription;
 }
 
 @end
@@ -37,6 +39,21 @@
     
     _userKeys = [NSArray arrayWithObjects:
                      @"Number of detectors",@"Number of annotated images", nil];
+}
+
+
+- (void) initializeUserConfiguration
+{
+    
+    UISwitch *wifiSwitch = [[UISwitch alloc] init];
+    [wifiSwitch setOn:self.currentUser.isWifiOnly.boolValue];
+    [wifiSwitch targetForAction:@selector(wifiOnlyAction:) withSender:self];
+    
+    _userConfigurationControl = [NSArray arrayWithObjects:
+                   wifiSwitch, nil];
+    
+    _userConfigurationDescription = [NSArray arrayWithObjects:
+                 @"Wifi Only:", nil];
 }
 
 
@@ -60,6 +77,7 @@
     [super viewDidLoad];
     [self initializeImagePicker];
     [self initializeUserProperties];
+    [self initializeUserConfiguration];
     [self outputValuesForCurrentUser];
 }
 
@@ -69,11 +87,7 @@
     self.usernameLabel.text = self.currentUser.username;
     if(self.currentUser.image)
         self.imageView.image = [UIImage imageWithData:self.currentUser.image];
-    [self.wifiOnlyButton setOn:self.currentUser.isWifiOnly.boolValue];
 }
-
-
-
 
 
 
@@ -133,24 +147,65 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if(section == 0){
+        return @"Configuration";
+        
+    }else if(section == 1){
+        return @"Details";
+        
+    }else return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_userKeys count];
+    int rows;
+    switch (section) {
+        case 0:
+            rows = _userConfigurationControl.count;
+            break;
+            
+        case 1:
+            rows = _userKeys.count;
+            break;
+            
+    }
+    return rows;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell" forIndexPath:indexPath];
+    UITableViewCell *cell;
+    
+    switch (indexPath.section) {
+        case 0:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"UserConfiguration" forIndexPath:indexPath];
+            cell.textLabel.text = [_userConfigurationDescription objectAtIndex:indexPath.row];
+            cell.textLabel.font = [UIFont systemFontOfSize:12];
+            cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
+            cell.accessoryView = [_userConfigurationControl objectAtIndex:indexPath.row];
             
-    cell.textLabel.text = [_userKeys objectAtIndex:indexPath.row];
-    cell.textLabel.font = [UIFont systemFontOfSize:12];
-    cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
-    cell.detailTextLabel.text = [_userValues objectAtIndex:indexPath.row];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+            break;
+            
+        case 1:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"UserDetail" forIndexPath:indexPath];
+            cell.textLabel.text = [_userKeys objectAtIndex:indexPath.row];
+            cell.textLabel.font = [UIFont systemFontOfSize:12];
+            cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
+            cell.detailTextLabel.text = [_userValues objectAtIndex:indexPath.row];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:17];
+            
+            break;
+    }
+    
+    
+    
     
     return cell;
 }
