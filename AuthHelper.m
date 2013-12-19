@@ -86,7 +86,7 @@
 
 - (void) resetPasswordForEmail:(NSString *)email
 {
-    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/password/reset/",SERVER_ADDRESS];
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/password/reset/",SERVER_ADDRESS];
     
     // initiate creation of the request
     PostHTTPConstructor *requestConstructor = [[PostHTTPConstructor alloc] init];

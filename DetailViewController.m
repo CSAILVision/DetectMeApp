@@ -64,7 +64,7 @@
     
     _detectorKeys = [NSArray arrayWithObjects:
                                             @"Average Rating (Number ratings)",
-                                            @"Number of images",
+                                            @"Number of own images",
                                             @"Created at",
                                             @"Updated at",nil];
 }
