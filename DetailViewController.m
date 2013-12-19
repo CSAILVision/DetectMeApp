@@ -10,6 +10,7 @@
 #import "ExecuteDetectorViewController.h"
 #import "TrainingImagesCollectionViewController.h"
 #import "ConstantsServer.h"
+#import "DYRateView.h"
 #import "Box.h"
 #import "User.h"
 #import "Rating+Create.h"
@@ -29,7 +30,13 @@
     NSArray *_detectorKeys;
     NSArray *_detectorValues;
     
+    NSMutableArray *_detectorConfigurationControl;
+    NSMutableArray *_detectorConfigurationDescription;
+    
     BOOL _successDelete;
+    
+    int _numRatings;
+    float _averageRating;
 }
 
 @end
@@ -44,7 +51,7 @@
     [formatter setDateFormat:@"MM/dd/yyyy 'at' HH:mm"];
     
     
-    NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@", _detector.averageRating]:@"no ratings yet";
+    NSString *averageRating = _detector.averageRating ? [NSString stringWithFormat:@"%@ (%@)", _detector.averageRating, _detector.numberRatings]:@"no ratings yet";
     NSString *numberOfImages = [NSString stringWithFormat:@"%d", _detector.annotatedImages.count];
     NSString *createdAt = [formatter stringFromDate:_detector.createdAt];
     NSString *updatedAt = _detector.updatedAt ? [formatter stringFromDate:_detector.updatedAt] : createdAt;
@@ -57,19 +64,52 @@
                                             updatedAt,nil];
     
     _detectorKeys = [NSArray arrayWithObjects:
-                                            @"Average Rating",
+                                            @"Average Rating (Number ratings)",
                                             @"Number of images",
                                             @"Created at",
                                             @"Updated at",nil];
+}
+
+- (void) setDetectorConfiguration
+{
+    _detectorConfigurationControl = [[NSMutableArray alloc] init];
+    _detectorConfigurationDescription = [[NSMutableArray alloc] init];
+    
+    // sharing switch
+    if(_isOwner){
+        UISegmentedControl *shareSC = [[UISegmentedControl alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+        [shareSC addTarget:self action:@selector(isPublicAction:) forControlEvents:UIControlEventValueChanged];
+        [shareSC insertSegmentWithTitle:@"Public" atIndex:0 animated:YES];
+        [shareSC insertSegmentWithTitle:@"Private" atIndex:1 animated:YES];
+        shareSC.selectedSegmentIndex = self.detector.isPublic.boolValue ? 0:1;
+        
+        [_detectorConfigurationDescription addObject:@"Share:"];
+        [_detectorConfigurationControl addObject:shareSC];
+    }
+    
+    // rate switch
+    UISegmentedControl *ratingSC = [[UISegmentedControl alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
+    [ratingSC addTarget:self action:@selector(ratingAction:) forControlEvents:UIControlEventValueChanged];
+    [ratingSC insertSegmentWithTitle:@"1" atIndex:0 animated:YES];
+    [ratingSC insertSegmentWithTitle:@"2" atIndex:1 animated:YES];
+    [ratingSC insertSegmentWithTitle:@"3" atIndex:2 animated:YES];
+    [ratingSC insertSegmentWithTitle:@"4" atIndex:3 animated:YES];
+    [ratingSC insertSegmentWithTitle:@"5" atIndex:4 animated:YES];
+    _rating = [Rating ratingforDetector:self.detector inManagedObjectContext:_detectorDatabase.managedObjectContext];
+    if(_rating.rating.integerValue != 0)
+        ratingSC.selectedSegmentIndex = _rating.rating.integerValue - 1;
+    
+    [_detectorConfigurationDescription addObject:@"Rate:"];
+    [_detectorConfigurationControl addObject:ratingSC];
 }
 
 - (void) loadDetectorDetails
 {
     self.nameLabel.text = [NSString stringWithFormat:@"%@ - %@",self.detector.name, self.detector.serverDatabaseID];
     self.authorLabel.text = [NSString stringWithFormat:@"by %@", self.detector.user.username];
-    
     self.imageView.image =[UIImage imageWithData:self.detector.image];
-    self.isPublicControl.selectedSegmentIndex = self.detector.isPublic.boolValue ? 0:1;
+    _numRatings = self.detector.numberRatings.integerValue;
+    _averageRating = self.detector.numberRatings.integerValue;
 }
 
 - (void) initializeForOwner
@@ -77,22 +117,22 @@
     _isOwner = [self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]];
     if(!_isOwner){
         self.deleteButton.hidden = YES;
-        self.isPublicControl.hidden = YES;
     }
 }
 
-- (void) initializeRating
+
+- (void) initializeStarRating
 {
-    _rating = [Rating ratingforDetector:self.detector inManagedObjectContext:_detectorDatabase.managedObjectContext];
-    if(_rating.rating.integerValue != 0)
-        self.ratingControl.selectedSegmentIndex = _rating.rating.integerValue - 1;
+    DYRateView *rateView = [[DYRateView alloc] initWithFrame:CGRectMake(0, 0, 100, 14)];
+    rateView.rate = 4.7;
+    rateView.alignment = RateViewAlignmentRight;
+    [self.view addSubview:rateView];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self loadDetectorDetails];
-    
     [self initializeForOwner];
     
     _shareDetector = [[ShareDetector alloc] init];
@@ -103,8 +143,9 @@
     
     self.activityIndicator.hidden = YES;
     
-    [self initializeRating];
+    [self initializeStarRating];
     [self setDetectorProperties];
+    [self setDetectorConfiguration];
 }
 
 
@@ -150,12 +191,23 @@
     return 2;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if(section == 0){
+        return @"Configuration";
+        
+    }else if(section == 1){
+        return @"Details";
+        
+    }else return nil;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     int rows;
     switch (section) {
         case 0:
-            rows = 1;
+            rows = _detectorConfigurationControl.count;
             break;
             
         case 1:
@@ -173,7 +225,11 @@
     
     switch (indexPath.section) {
         case 0:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"DetectorAction" forIndexPath:indexPath];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"DetectorProperties" forIndexPath:indexPath];
+            cell.textLabel.text = [_detectorConfigurationDescription objectAtIndex:indexPath.row];
+            cell.textLabel.font = [UIFont systemFontOfSize:12];
+            cell.textLabel.textColor = [UIColor colorWithWhite:0.67 alpha:1];
+            cell.accessoryView = [_detectorConfigurationControl objectAtIndex:indexPath.row];
             break;
             
         case 1:
@@ -228,8 +284,15 @@
 
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl
 {
+    // send the rating
     _rating.rating = @(ratingControl.selectedSegmentIndex + 1);
     [_shareDetector shareRating:_rating];
+    
+    // update the rating
+    self.detector.numberRatings = [NSNumber numberWithInt:_numRatings+1];
+    self.detector.averageRating = @((_averageRating*_numRatings + _rating.rating.integerValue)/(_numRatings + 1));
+    [self setDetectorProperties];
+    [self.tableview reloadData];
 }
 
 
