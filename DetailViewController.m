@@ -54,17 +54,19 @@
     NSString *numberOfImages = [NSString stringWithFormat:@"%d", _detector.annotatedImages.count];
     NSString *createdAt = [formatter stringFromDate:_detector.createdAt];
     NSString *updatedAt = _detector.updatedAt ? [formatter stringFromDate:_detector.updatedAt] : createdAt;
-    
+    NSString *serverNumber = [NSString stringWithFormat:@"%@",_detector.serverDatabaseID];
     
     _detectorValues = [NSArray arrayWithObjects:
                                             averageRating,
                                             numberOfImages,
+                                            serverNumber,
                                             createdAt,
                                             updatedAt,nil];
     
     _detectorKeys = [NSArray arrayWithObjects:
                                             @"Average Rating (Number ratings)",
                                             @"Number of own images",
+                                            @"Server ID number",
                                             @"Created at",
                                             @"Updated at",nil];
 }
@@ -104,7 +106,7 @@
 
 - (void) loadDetectorDetails
 {
-    self.nameLabel.text = [NSString stringWithFormat:@"%@ - %@",self.detector.name, self.detector.serverDatabaseID];
+    self.nameLabel.text = [NSString stringWithFormat:@"%@",self.detector.name];
     self.authorLabel.text = [NSString stringWithFormat:@"by %@", self.detector.user.username];
     self.imageView.image =[UIImage imageWithData:self.detector.image];
     _numRatings = self.detector.numberRatings.integerValue;

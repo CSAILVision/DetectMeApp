@@ -19,7 +19,7 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     // default initial value
-    self.detectorTrainer.isPublic = YES;
+    self.detectorTrainer.isPublic = NO;
     [self displayExplanatoryText];
 }
 

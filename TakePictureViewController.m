@@ -141,13 +141,10 @@
                                                                        forMotion:_motionManager.deviceMotion
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
-        NSLog(@"tagview box: %@", self.tagView.box);
-        NSLog(@"box:%@", [self convertBoxForView:self.tagView.box onOrientation:[[UIDevice currentDevice] orientation]]);
         [_annotatedImages addObject:annotatedImage];
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
         [self performSelectorOnMainThread:@selector(setTitle:) withObject:title waitUntilDone:NO];
-        
     }
 }
 

@@ -10,7 +10,6 @@
 #import "ConstantsServer.h"
 #import "PostHTTPConstructor.h"
 #import "ManagedDocumentHelper.h"
-#import "User+Create.h"
 
 @interface AuthHelper()
 {

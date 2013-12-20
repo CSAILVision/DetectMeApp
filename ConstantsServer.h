@@ -15,7 +15,7 @@
 #define SERVER_IP @"128.52.128.116"
 #define SERVER_PORT_NODE 7000
 #define MOBILE_LISTENING_PORT 9000
-#define SERVER_ADDRESS @ "http://128.30.99.185:8000/"
+#define SERVER_ADDRESS @ "http://128.30.99.94:8000/"
 //#define SERVER_ADDRESS @ "http://detectme.csail.mit.edu/"
 #define SERVER_TOKEN @"token"
 
@@ -61,6 +61,8 @@
 
 // PROFILE
 #define SERVER_PROFILE_IMAGE @"mugshot"
+#define SERVER_PROFILE_USERNAME @"username"
+#define SERVER_PROFILE_NUM_IMAGES @"num_annotated_images"
 
 // RATING
 #define SERVER_RATING_DETECTOR @"detector"
