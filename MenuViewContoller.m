@@ -13,11 +13,13 @@
 #import "User+Create.h"
 #import "DetectorFetcher.h"
 #import "Detector+Server.h"
+#import "UIViewController+ShowAlert.h"
 
 @interface MenuViewContoller()
 {
     User *_currentUser;
     UIManagedDocument *_database;
+    UIActivityIndicatorView *_activityIndicator;
 }
 
 @end
@@ -36,10 +38,31 @@
     }
 }
 
+- (void) initializeTitle
+{
+    UIImageView *titleView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
+    titleView.image = [UIImage imageNamed:@"detectmeTitle.png"];
+    titleView.contentMode = UIViewContentModeScaleAspectFit;
+    self.navigationItem.titleView = titleView;
+}
+
+- (void) initializeActivityIndicator
+{
+    _activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [_activityIndicator startAnimating];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
+    
+    self.navigationItem.rightBarButtonItem = barButton;
+}
+
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
     [self initializeDataBase];
+    [self initializeTitle];
+    [self initializeActivityIndicator];
+    [self fetchDetectorsFromServerIntoDocument:_database];
 }
 
 - (void) initializeUserProfile
@@ -54,7 +77,15 @@
 {
     [super viewWillAppear:animated];
     [self loadDataOnTable];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:171.0/255 green:30.0/255 blue:52.0/255 alpha:1];
 }
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.barTintColor = nil;
+}
+
 
 - (void) loadDataOnTable
 {
@@ -120,6 +151,38 @@
     return count;
 }
 
+- (void) fetchDetectorsFromServerIntoDocument:(UIManagedDocument *) document
+{
+    // Populate the table if it was not.
+    // |document| as an argument for thread safe: someone could change the propertie in parallel
+    NSLog(@"Downloading...");
+    dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
+    dispatch_async(fetchQ, ^{
+        NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
+        
+        if(!detectors){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showAlertWithTitle:@"Error downloading server detectors" andDescription:@"Check that the wifi is enabled"];
+            });
+            
+        }else{
+            [document.managedObjectContext performBlock:^{
+                for(NSDictionary *detectorInfo in detectors){
+                    //start creating objects in document's context
+                    [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
+                }
+                
+                // when finished, present them on the screen and stop the activity indicator
+                [self performSelectorOnMainThread:@selector(setNumberOfDetectors) withObject:nil waitUntilDone:NO];
+                [self performSelectorOnMainThread:@selector(stopActivityIndicator) withObject:nil waitUntilDone:NO];
+            }];
+        }
+    });
+}
 
+- (void) stopActivityIndicator
+{
+    [_activityIndicator stopAnimating];
+}
 
 @end

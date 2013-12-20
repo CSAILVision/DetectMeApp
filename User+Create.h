@@ -10,7 +10,16 @@
 
 @interface User (Create)
 
-+ (User *) userWithName:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context;
+// creates a new user if it does not exist given the username
+// called when creating users for downloaded detectors
++ (User *) userWithName:(NSString *)name
+ inManagedObjectContext:(NSManagedObjectContext *)context;
+
+// creates a new user if it does not exists given the server info (json dict)
+// called for the sign in
++ (User *)userWithDictionaryInfo:(NSDictionary *)userInfo
+          inManagedObjectContext:(NSManagedObjectContext *)context;
+
 + (User *) getCurrentUserInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

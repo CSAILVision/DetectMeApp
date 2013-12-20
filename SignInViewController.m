@@ -9,6 +9,7 @@
 #import "SignInViewController.h"
 #import "ManagedDocumentHelper.h"
 #import "UIViewController+ShowAlert.h"
+#import "UserFetcher.h"
 
 @interface SignInViewController ()
 {
@@ -21,6 +22,16 @@
 
 @implementation SignInViewController
 
+- (void) initializeBackgroundImage
+{
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.frame];
+    [backgroundImage setImage:[UIImage imageNamed:@"launch-i5.png"]];
+    [backgroundImage setContentMode:UIViewContentModeScaleAspectFill];
+    [self.view insertSubview:backgroundImage atIndex:0];
+    
+    self.view.tintColor = [UIColor whiteColor];
+}
+
 
 - (void)viewDidLoad
 {
@@ -30,19 +41,20 @@
     _authHelper.delegate = self;
     
     self.activityIndicator.hidden = YES;
-    
-
+    [self initializeBackgroundImage];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
+    // Avoid asking the server if I had store the previous session
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"isUserStored"]){
         _username = [[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
         _password = [[NSUserDefaults standardUserDefaults] stringForKey:@"password"];
-        //[self signIn];
-        [self signInCompleted];
+        
+        [self stopAnimation];
+        [self performSegueWithIdentifier: @"SignInComplete" sender:self];
     }
 }
 
@@ -71,6 +83,9 @@
 {
     [self stopAnimation];
     [self performSegueWithIdentifier: @"SignInComplete" sender:self];
+    
+    UserFetcher *uf = [[UserFetcher alloc] init];
+    [uf getAndStoreUserWithUsername:_username];
 }
 
 
@@ -78,7 +93,6 @@
 {
     [self stopAnimation];
     [self showAlertWithTitle:title andDescription:message];
-    
 }
 
     

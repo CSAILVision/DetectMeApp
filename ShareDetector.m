@@ -197,7 +197,7 @@
     }
     _objective = OBJECTIVE_SEND_PROFILE;
 
-    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/update/%@/",SERVER_ADDRESS,username];
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/detail/%@/",SERVER_ADDRESS,username];
     
     [_requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"PUT"];
     [_requestConstructor addTokenAuthentication];

@@ -18,7 +18,8 @@
 
 @implementation Detector (Server)
 
-+ (Detector *)detectorWithDictionaryInfo:(NSDictionary *)detectorInfo inManagedObjectContext:(NSManagedObjectContext *)context
++ (Detector *)detectorWithDictionaryInfo:(NSDictionary *)detectorInfo
+                  inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Detector *detector;
     

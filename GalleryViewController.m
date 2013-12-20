@@ -89,6 +89,17 @@
     }
 }
 
+- (void) initializeFirstLaunch
+{
+    // First time open the app
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self showAlertWithTitle:@"Indication" andDescription:@"Scroll to refresh from the server."];
+    }
+
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -98,6 +109,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self initializeDataBase];
+    [self initializeFirstLaunch];
     [self initializeRefreshControl];
     
 }
@@ -211,9 +223,8 @@
     id element = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if([element isKindOfClass:[Detector class]]){
         Detector *detector = (Detector *)element;
-        [cell.label setText:[NSString stringWithFormat:@"%@-%@\n %@",detector.name,
-                                                                     detector.serverDatabaseID,
-                                                                     detector.user.username]];
+        [cell.label setText:[NSString stringWithFormat:@"%@\n %@",detector.name,
+                                                                  detector.user.username]];
         cell.imageView.image = [UIImage imageWithData:detector.image];
         
     }else if([element isKindOfClass:[MultipleDetector class]]){
@@ -268,8 +279,8 @@
     
     if (kind == UICollectionElementKindSectionFooter) {
         UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"CollectionFooterView" forIndexPath:indexPath];
+    
         
-
         if(self.fetchedResultsController.fetchedObjects.count>0){
             footerView.hidden = YES;
         }else{
@@ -360,7 +371,7 @@
         
     }else if([[segue identifier] isEqualToString:@"AddSingleDetector"]){
         // Set the title for the back button of the next controller
-        self.title = @"Dismiss";
+        self.title = @"Back";
     }
 }
 
@@ -418,18 +429,12 @@
         NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
     
         if(!detectors){
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self showAlertWithTitle:@"Connection Error" andDescription:@"Check that the wifi is enabled"];
-                
             });
-            
     
         }else{
             [document.managedObjectContext performBlock:^{
-                if (detectors.count>0) {
-                    //[Detector removePublicDetectorsInManagedObjectContext:document.managedObjectContext];
-                }
                 for(NSDictionary *detectorInfo in detectors){
                     //start creating objects in document's context
                     [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
@@ -509,5 +514,6 @@
     [self setCollectionView:nil];
     [super viewDidUnload];
 }
+
 
 @end

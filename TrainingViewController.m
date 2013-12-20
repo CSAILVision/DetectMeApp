@@ -46,6 +46,8 @@
     [self.progressView setProgress:0];
     _logBuffer = @"";
     
+    self.imageView.image = [UIImage imageNamed:@"appIcon.png"];
+    
     [self.detectorTrainer trainDetector];
     self.detectorTrainer.delegate = self;
 }

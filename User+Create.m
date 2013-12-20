@@ -18,7 +18,6 @@
     
     // look if the detector is already in the database
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    //TODO: look for the actual titles that have get.
     request.predicate = [NSPredicate predicateWithFormat:@"username = %@", name];
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
@@ -34,8 +33,40 @@
         user.username = name;
         
         
-    }else{
+    }else user = [matches lastObject];
+    
+    
+    return user;
+}
+
++ (User *)userWithDictionaryInfo:(NSDictionary *)userInfo
+          inManagedObjectContext:(NSManagedObjectContext *)context
+{
+    User *user;
+    
+    NSString *username = [userInfo objectForKey:SERVER_PROFILE_USERNAME];
+    NSString *mugshot = [userInfo objectForKey:SERVER_PROFILE_IMAGE];
+    NSString *imageURL = [NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,mugshot];
+    
+    // look if the user is already in the database
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    request.predicate = [NSPredicate predicateWithFormat:@"username = %@", username];
+    NSError *error;
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    if(!matches || matches.count>1){
+        //error!
+        
+    }else if (matches.count == 0){
+        NSLog(@"Creating user:%@", username);
+        user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
+        user.username = username;
+        user.image = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
+        
+        
+    }else{ //update user info
         user = [matches lastObject];
+        user.image = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
     }
     
     

@@ -62,6 +62,8 @@
 
 // PROFILE
 #define SERVER_PROFILE_IMAGE @"mugshot"
+#define SERVER_PROFILE_USERNAME @"username"
+#define SERVER_PROFILE_NUM_IMAGES @"num_annotated_images"
 
 // RATING
 #define SERVER_RATING_DETECTOR @"detector"
