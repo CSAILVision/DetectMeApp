@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ManagedDocumentHelper.h"
 
 @implementation AppDelegate
 
@@ -19,6 +20,8 @@
     // Tint color
     self.window.tintColor = [UIColor colorWithRed:171.0/255 green:30.0/255 blue:52.0/255 alpha:1];
     
+    // First call to the datase to load it.
+    [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
     
     return YES;
 }

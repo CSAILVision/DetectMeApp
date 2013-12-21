@@ -12,6 +12,8 @@
 #import "User+Create.h"
 #import "ShareDetector.h"
 
+static inline int max(int x, int y) { return (x <= y ? y : x); }
+
 @interface UserProfileViewController ()
 {
     UIImagePickerController *_imagePicker;
@@ -31,7 +33,8 @@
 {
 
     NSString *numberOfDetectors = [NSString stringWithFormat:@"%d",[self.currentUser.detectors count]];
-    NSString *numberOfAnnotatedImages = [NSString stringWithFormat:@"%d",[self.currentUser.annotatedImages count]];
+    int num = max(self.currentUser.numberServerImages.integerValue, self.currentUser.annotatedImages.count);
+    NSString *numberOfAnnotatedImages = [NSString stringWithFormat:@"%d",num];
     
     
     _userValues = [NSArray arrayWithObjects:

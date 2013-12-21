@@ -17,12 +17,21 @@
 
 @implementation ForgetPasswordViewController
 
-
+- (void) initializeBackgroundImage
+{
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.frame];
+    [backgroundImage setImage:[UIImage imageNamed:@"launch-i5.png"]];
+    [backgroundImage setContentMode:UIViewContentModeScaleAspectFill];
+    [self.view insertSubview:backgroundImage atIndex:0];
+    
+    self.view.tintColor = [UIColor whiteColor];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.textField.delegate = self;
+    [self initializeBackgroundImage];
     
     _forgotPasswordHandler = [[ForgotPasswordHandler alloc] init];
     _forgotPasswordHandler.delegate = self;

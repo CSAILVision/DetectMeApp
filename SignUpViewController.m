@@ -18,10 +18,21 @@
 @implementation SignUpViewController
 
 
+- (void) initializeBackgroundImage
+{
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.frame];
+    [backgroundImage setImage:[UIImage imageNamed:@"launch-i5.png"]];
+    [backgroundImage setContentMode:UIViewContentModeScaleAspectFill];
+    [self.view insertSubview:backgroundImage atIndex:0];
+    
+    self.view.tintColor = [UIColor whiteColor];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.activityIndicator.hidden = YES;
+    [self initializeBackgroundImage];
     
     _authHelper = [[AuthHelper alloc] init];
     _authHelper.delegate = self;

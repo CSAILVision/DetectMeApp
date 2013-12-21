@@ -618,7 +618,7 @@ using namespace cv;
     }
     
     [self.delegate sendMessage:[NSString stringWithFormat:@"added %d NEW positives", positives]];
-    [self.delegate sendMessage:[NSString stringWithFormat:@"positives/total (incl   uding previous SV): %d/%d", positius, _numberOfTrainingExamples]];
+    [self.delegate sendMessage:[NSString stringWithFormat:@"positives/total (including previous SV): %d/%d", positius, _numberOfTrainingExamples]];
     
     self.numberOfPositives = @(positives);
 }

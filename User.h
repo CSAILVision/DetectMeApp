@@ -2,7 +2,7 @@
 //  User.h
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 13/11/13.
+//  Created by Josep Marc Mingot Hidalgo on 21/12/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -15,8 +15,9 @@
 
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSData * image;
-@property (nonatomic, retain) NSString * username;
 @property (nonatomic, retain) NSNumber * isWifiOnly;
+@property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * numberServerImages;
 @property (nonatomic, retain) NSSet *annotatedImages;
 @property (nonatomic, retain) NSSet *detectors;
 @property (nonatomic, retain) NSSet *multipleDetectors;
