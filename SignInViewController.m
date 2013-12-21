@@ -9,7 +9,6 @@
 #import "SignInViewController.h"
 #import "ManagedDocumentHelper.h"
 #import "UIViewController+ShowAlert.h"
-#import "UserFetcher.h"
 
 @interface SignInViewController ()
 {
@@ -81,10 +80,9 @@
 
 - (void) signInCompleted
 {
-    [self stopAnimation];
-    [self performSegueWithIdentifier: @"SignInComplete" sender:self];
-    
+    // Once the login is accepted, get and update user information
     UserFetcher *uf = [[UserFetcher alloc] init];
+    uf.delegate = self;
     [uf getAndStoreUserWithUsername:_username];
 }
 
@@ -95,7 +93,20 @@
     [self showAlertWithTitle:title andDescription:message];
 }
 
-    
+#pragma mark -
+#pragma mark UserFetcherDelegate
+
+- (void) obtainedUser:(NSDictionary *)userJSON
+{
+    [self stopAnimation];
+    [self performSegueWithIdentifier: @"SignInComplete" sender:self];
+}
+
+- (void) downloadError:(NSString *)error
+{
+    [self showAlertWithTitle:@"Error" andDescription:error];
+}
+
 #pragma mark -
 #pragma mark UITextFieldDelegate
 

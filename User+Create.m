@@ -24,7 +24,7 @@
     
     if(!matches || matches.count>1){
         //handle error
-        NSLog(@"error!!");
+        NSLog(@"error: multiple users with the same username.");
         NSLog(@"username: %@", name);
         
     }else if (matches.count == 0){

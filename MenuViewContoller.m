@@ -31,10 +31,9 @@
 - (void) initializeDataBase
 {
     if(!_database){
-        _database = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){
-            _currentUser = [User getCurrentUserInManagedObjectContext:document.managedObjectContext];
-            [self performSelectorOnMainThread:@selector(loadDataOnTable) withObject:nil waitUntilDone:NO];
-        }];
+        _database = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document){}];
+        _currentUser = [User getCurrentUserInManagedObjectContext:_database.managedObjectContext];
+        [self performSelectorOnMainThread:@selector(loadDataOnTable) withObject:nil waitUntilDone:NO];
     }
 }
 

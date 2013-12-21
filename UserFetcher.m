@@ -28,7 +28,6 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestURLString]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:10];
-    
     [request setHTTPMethod: @"GET"];
     return request;
 }
@@ -82,9 +81,12 @@
     
     // update the detectorID field that stores the id of the detector on the webserver database
     if (error != nil) [self.delegate downloadError:@"Error parsing JSON."];
-    else [self.delegate obtainedUser:userJSON];
-    
-    if(_store) [self storeUserWithInfo:userJSON];
+    else{
+        if(_store)
+            [self storeUserWithInfo:userJSON];
+        else
+            [self.delegate obtainedUser:userJSON];
+    }
 }
 
 
@@ -95,6 +97,7 @@
 {
     UIManagedDocument *document = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];
     [User userWithDictionaryInfo:userJSON inManagedObjectContext:document.managedObjectContext];
+    [self.delegate obtainedUser:userJSON];
 }
 
 
