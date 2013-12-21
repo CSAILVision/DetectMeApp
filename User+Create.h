@@ -12,7 +12,7 @@
 
 // creates a new user if it does not exist given the username
 // called when creating users for downloaded detectors
-+ (User *) userWithName:(NSString *)name
++ (User *) userWithName:(NSString *)username
  inManagedObjectContext:(NSManagedObjectContext *)context;
 
 // creates a new user if it does not exists given the server info (json dict)

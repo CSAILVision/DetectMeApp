@@ -12,23 +12,23 @@
 
 @implementation User (Create)
 
-+ (User *) userWithName:(NSString *)name inManagedObjectContext:(NSManagedObjectContext *)context
++ (User *) userWithName:(NSString *)username inManagedObjectContext:(NSManagedObjectContext *)context
 {
     User *user;
     
     // look if the detector is already in the database
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    request.predicate = [NSPredicate predicateWithFormat:@"username = %@", name];
+    request.predicate = [NSPredicate predicateWithFormat:@"username = %@", username];
     NSError *error;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
     if(!matches || matches.count>1){
-        NSLog(@"[db error] username %@ is duplicated", name);
+        NSLog(@"[db error] username %@ is duplicated. Received error:%@", username,error.localizedDescription);
         
     }else if (matches.count == 0){
-        NSLog(@"Creating user:%@", name);
+        NSLog(@"Creating user:%@", username);
         user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
-        user.username = name;
+        user.username = username;
         
         
     }else user = [matches lastObject];
@@ -40,36 +40,14 @@
 + (User *)userWithDictionaryInfo:(NSDictionary *)userInfo
           inManagedObjectContext:(NSManagedObjectContext *)context
 {
-    User *user;
-    
     NSString *username = [userInfo objectForKey:SERVER_PROFILE_USERNAME];
     NSString *mugshot = [userInfo objectForKey:SERVER_PROFILE_IMAGE];
     NSString *imageURL = [NSString stringWithFormat:@"%@media/%@",SERVER_ADDRESS,mugshot];
     NSNumber *numberServerImages = [userInfo objectForKey:SERVER_PROFILE_NUM_IMAGES];
     
-    
-    // look if the user is already in the database
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
-    request.predicate = [NSPredicate predicateWithFormat:@"username = %@", username];
-    NSError *error;
-    NSArray *matches = [context executeFetchRequest:request error:&error];
-    
-    if(!matches || matches.count>1){
-        NSLog(@"[db error] username %@ is duplicated", username);
-        
-    }else if (matches.count == 0){
-        NSLog(@"Creating user:%@", username);
-        user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
-        user.username = username;
-        user.image = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
-        user.numberServerImages = numberServerImages;
-        
-    }else{ //update user info
-        user = [matches lastObject];
-        user.image = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
-        user.numberServerImages = numberServerImages;
-    }
-    
+    User *user = [User userWithName:username inManagedObjectContext:context];
+    user.image = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
+    user.numberServerImages = numberServerImages;
     
     return user;
 }
