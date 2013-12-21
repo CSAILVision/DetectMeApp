@@ -48,9 +48,7 @@
 - (void) initializeActivityIndicator
 {
     _activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    [_activityIndicator startAnimating];
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
-    
     self.navigationItem.rightBarButtonItem = barButton;
 }
 
@@ -61,7 +59,6 @@
     [self initializeDataBase];
     [self initializeTitle];
     [self initializeActivityIndicator];
-    [self fetchDetectorsFromServerIntoDocument:_database];
 }
 
 - (void) initializeUserProfile
@@ -135,6 +132,10 @@
     request = [NSFetchRequest fetchRequestWithEntityName:@"Detector"];
     number = [self resultsForRequest:request];
     self.numServer.text = [NSString stringWithFormat:@"%d", number];
+    if (number==0) {
+        [self fetchDetectorsFromServerIntoDocument:_database];
+        [_activityIndicator startAnimating];
+    }
     
     [self.tableView reloadData];
 }
@@ -162,6 +163,7 @@
         if(!detectors){
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self showAlertWithTitle:@"Error downloading server detectors" andDescription:@"Check that the wifi is enabled"];
+                [_activityIndicator stopAnimating];
             });
             
         }else{

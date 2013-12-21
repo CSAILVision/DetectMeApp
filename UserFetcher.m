@@ -80,7 +80,7 @@
     NSDictionary *userJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
     // update the detectorID field that stores the id of the detector on the webserver database
-    if (error != nil) [self.delegate downloadError:@"Error parsing JSON."];
+    if (error!=nil) [self.delegate downloadError:error.localizedDescription];
     else{
         if(_store)
             [self storeUserWithInfo:userJSON];

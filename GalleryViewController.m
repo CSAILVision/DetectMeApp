@@ -92,7 +92,7 @@
 - (void) initializeFirstLaunch
 {
     // First time open the app
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"] && [self.filter isEqualToString:FILTER_SERVER]){
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self showAlertWithTitle:@"Indication" andDescription:@"Scroll to refresh from the server."];

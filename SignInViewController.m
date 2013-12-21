@@ -118,7 +118,6 @@
     else if([textField.placeholder isEqualToString:@"password"])
         [self signInAction:self];
     
-    
     return YES;
 }
 

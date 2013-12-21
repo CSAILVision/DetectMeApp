@@ -13,10 +13,11 @@
 @protocol ForgotPasswordHandlerDelegate <NSObject>
     
 @optional
-    - (void) resetPassawordCompleted;
-    - (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
+- (void) resetPassawordCompleted;
+- (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 
 @end
+
 
 /*
  
