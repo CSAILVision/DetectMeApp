@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AuthHelper.h"
+#import "UserFetcher.h"
 
-
-@interface SignInViewController : UIViewController <AuthHelperDelegate, UITextFieldDelegate>
+@interface SignInViewController : UIViewController <AuthHelperDelegate, UITextFieldDelegate, UserFetcherDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
