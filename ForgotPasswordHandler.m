@@ -39,12 +39,6 @@
     }
     
     
-- (void) resetPassawordCompleted{
-    
-    
-}
-
-    
 #pragma mark -
 #pragma mark NSURLConnectionDataDelegate
     
@@ -52,10 +46,15 @@
     {
         NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
         NSDictionary *fields = [HTTPResponse allHeaderFields];
-        NSString *cookie = [fields valueForKey:@"Set-Cookie"];// It is your cookie
+        NSString *cookieAll = [fields valueForKey:@"Set-Cookie"];// It is your cookie
+        NSRange range = [cookieAll rangeOfString:@";"];
+        NSString *cookie_cut = [cookieAll substringToIndex:range.location];
+        range = [cookie_cut rangeOfString:@"="];
+        NSString *cookie = [cookie_cut substringFromIndex:range.location+1];
         
-        if(cookie!=nil){
-            NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/password/reset/",SERVER_ADDRESS];
+        
+        if(cookie){
+            NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/password/reset/",SERVER_ADDRESS];
         
             // initiate creation of the request
             PostHTTPConstructor *requestConstructor = [[PostHTTPConstructor alloc] init];
@@ -100,6 +99,7 @@
     
 #pragma mark -
 #pragma mark PrivateMethods
+    
 
     - (void) handleErrorForJSON:(NSDictionary *)errorJSON
     {

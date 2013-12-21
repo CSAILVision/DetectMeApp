@@ -11,7 +11,7 @@
 
 @interface ForgetPasswordViewController ()
 {
-    AuthHelper *_authHelper;
+     ForgotPasswordHandler *_forgotPasswordHandler;
 }
 @end
 
@@ -24,8 +24,8 @@
     [super viewDidLoad];
     self.textField.delegate = self;
     
-    _authHelper = [[AuthHelper alloc] init];
-    _authHelper.delegate = self;
+    _forgotPasswordHandler = [[ForgotPasswordHandler alloc] init];
+    _forgotPasswordHandler.delegate = self;
 }
 
 
@@ -41,7 +41,7 @@
 - (void) sendEmail
 {
     NSString *email = self.textField.text;
-    [_authHelper resetPasswordForEmail:email];
+    [_forgotPasswordHandler resetPasswordForEmail:email];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

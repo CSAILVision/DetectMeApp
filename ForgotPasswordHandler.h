@@ -10,7 +10,7 @@
 
 
 
-@protocol ForgotPasswordHandler <NSObject>
+@protocol ForgotPasswordHandlerDelegate <NSObject>
     
 @optional
     - (void) resetPassawordCompleted;
@@ -29,6 +29,10 @@
 
 @interface ForgotPasswordHandler : NSObject <NSURLConnectionDataDelegate>
     
-    @property (strong, nonatomic) id<ForgotPasswordHandler> delegate;
+@property (strong, nonatomic) id<ForgotPasswordHandlerDelegate> delegate;
+    
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
-    @end
+    
+- (void) resetPasswordForEmail:(NSString *)email;
+
+@end

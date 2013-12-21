@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AuthHelper.h"
+#import "ForgotPasswordHandler.h"
 
-@interface ForgetPasswordViewController : UIViewController <UITextFieldDelegate, AuthHelperDelegate>
+@interface ForgetPasswordViewController : UIViewController <UITextFieldDelegate, AuthHelperDelegate, ForgotPasswordHandlerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 

@@ -130,7 +130,8 @@ using namespace cv;
        for(int i=0; i<numberOfWeights; i++)
             _weightsP[i] = [(NSNumber *) [self.weights objectAtIndex:i] doubleValue];
         
-                
+        
+        
         // set _weightsP
         free(_weightsP);
         _weightsP = (double *) malloc(numberOfWeights*sizeof(double));
