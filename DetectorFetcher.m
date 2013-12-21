@@ -67,9 +67,10 @@
     NSURLResponse *response;
     NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
+    
     NSArray *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
     if (error){
-        NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+        NSLog(@"[%@ %@] Connection error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
         results = nil;
     }
     
@@ -90,7 +91,7 @@
     NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     NSArray *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
-    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    if (error) NSLog(@"[%@ %@] Connection error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
     
     return results;
 }
@@ -107,7 +108,7 @@
     NSURLResponse *response;
     NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
-    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    if (error) NSLog(@"[%@ %@] Connection error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
     
     return jsonData;
 }
@@ -118,21 +119,11 @@
 
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    if ([response isKindOfClass:[NSHTTPURLResponse class]]){
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
-        NSLog(@"httpresponse: %@", httpResponse);
-        
-        // TODO: sent error message correctly after seeing http header.
-    }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error ", @"")
-                                message:[error localizedDescription]
-                               delegate:nil
-                      cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                      otherButtonTitles:nil] show];
+    [self.delegate downloadError:error.localizedDescription];
 }
 
 -(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -142,11 +133,11 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSError *error = nil;
+    NSError *error;
     NSArray *detectorsJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
     // update the detectorID field that stores the id of the detector on the webserver database
-    if (error != nil) [self.delegate downloadError:@"Error parsing JSON."];
+    if (error != nil) [self.delegate downloadError:error.localizedDescription];
     else [self.delegate obtainedDetectors:detectorsJSON];
 }
 

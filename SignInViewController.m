@@ -80,10 +80,10 @@
 
 - (void) signInCompleted
 {
-    // Once the login is accepted, get and update user information
+    // Once the login is accepted, get and update user information from the server
     UserFetcher *uf = [[UserFetcher alloc] init];
     uf.delegate = self;
-    [uf getAndStoreUserWithUsername:_username];
+    [uf fetchAndStoreUserWithUsername:_username];
 }
 
 

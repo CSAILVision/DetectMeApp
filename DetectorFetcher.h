@@ -28,6 +28,8 @@
 
 // ASYNC
 - (void) fetchDetectorsASync;
+
+
 @property (strong, nonatomic) id<DetectorFetcherDelegate> delegate;
 
 @end

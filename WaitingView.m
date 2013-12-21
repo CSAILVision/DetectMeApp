@@ -31,7 +31,7 @@
         
         //view properties
         self.hidden = YES;
-        self.backgroundColor = [UIColor colorWithWhite:0.5 alpha:0.7];
+        self.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.8];
         
         //activity indicator
         _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -39,8 +39,8 @@
         [self addSubview:_activityIndicator];
         
         //text label
-        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
-        self.label.center = CGPointMake(self.center.x, self.center.y - 30);
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+        self.label.center = CGPointMake(self.center.x, self.center.y + 70);
         self.label.numberOfLines = 0;
         self.label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.label];

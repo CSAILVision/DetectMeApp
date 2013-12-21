@@ -20,11 +20,11 @@
 
 // request info from the server about the user
 // wait response on the delegate
-- (void) getUserWithUsername:(NSString *)username;
+- (void) fetchUserWithUsername:(NSString *)username;
 
 // same as above but when it finishes
 // stores the user in the db
-- (void) getAndStoreUserWithUsername:(NSString *) username;
+- (void) fetchAndStoreUserWithUsername:(NSString *) username;
 
 @property (strong, nonatomic) id<UserFetcherDelegate> delegate;
 

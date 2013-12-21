@@ -10,7 +10,7 @@
 #import "CoreDataCollectionViewController.h"
 #import "DetailViewController.h"
 #import "DetailMultipleViewController.h"
-
+#import "DetectorFetcher.h"
 
 #define FILTER_SINGLE @"MySingleDetectors"
 #define FILTER_MULTIPLE @"MyMultipleDetectors"
@@ -20,7 +20,7 @@
 #define FILTER_SELECTION @"Selection"
 
 
-@interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
+@interface GalleryViewController : CoreDataCollectionViewController<UICollectionViewDelegateFlowLayout, UISearchBarDelegate, DetectorFetcherDelegate>
 
 @property (strong, nonatomic) NSString *filter;
 @property (strong, nonatomic) UIManagedDocument *detectorDatabase;

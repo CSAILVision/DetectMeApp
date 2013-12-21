@@ -7,7 +7,6 @@
 //
 
 #import "GalleryViewController.h"
-#import "DetectorFetcher.h"
 #import "DetectorCell.h"
 #import "User.h"
 #import "Detector+Server.h"
@@ -129,15 +128,12 @@
 - (IBAction)refreshAction:(id)sender
 {
     // Update from server
-    [self fetchDetectorsFromServerIntoDocument:self.detectorDatabase];
-    [self fetchServer];
+    [self fetchDetectorsFromServer];
     
     // Try to send all the detectors/images/ratings that have not been send
     [self persistentSent:@"Detector"];
     [self persistentSent:@"AnnotatedImage"];
     [self persistentSent:@"Rating"];
-    
-    [_refreshControl endRefreshing];
 }
 
 
@@ -377,6 +373,25 @@
 
 
 #pragma mark -
+#pragma mark DetectorFetcherDelegate
+- (void) obtainedDetectors:(NSArray *)detectorsJSON
+{
+    for(NSDictionary *detectorInfo in detectorsJSON)
+        [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:self.detectorDatabase.managedObjectContext];
+    
+    // when finished, present them on the screen
+    [self fetchServer];
+    [_refreshControl endRefreshing];
+}
+
+- (void) downloadError:(NSString *)error
+{
+    [self showAlertWithTitle:@"Error" andDescription:error];
+    [_refreshControl endRefreshing];
+}
+
+
+#pragma mark -
 #pragma mark Private methods
 
 - (void) fetchResultsForPredicate:(NSPredicate *)predicate
@@ -416,37 +431,17 @@
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                         managedObjectContext:self.detectorDatabase.managedObjectContext
                                                                           sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
+                                                                                cacheName:nil];
 }
 
 
-- (void) fetchDetectorsFromServerIntoDocument:(UIManagedDocument *) document
+-(void) fetchDetectorsFromServer
 {
-    // Populate the table if it was not.
-    // |document| as an argument for thread safe: someone could change the propertie in parallel
-//    dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
-//    dispatch_async(fetchQ, ^{
-        NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
-    
-        if(!detectors){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self showAlertWithTitle:@"Connection Error" andDescription:@"Check that the wifi is enabled"];
-            });
-    
-        }else{
-            [document.managedObjectContext performBlock:^{
-                for(NSDictionary *detectorInfo in detectors){
-                    //start creating objects in document's context
-                    [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
-                }
-            
-                
-                // when finished, present them on the screen
-                [self performSelectorOnMainThread:@selector(applyFilter) withObject:nil waitUntilDone:NO];
-            }];
-        }
-//    });
+    DetectorFetcher *df = [[DetectorFetcher alloc] init];
+    df.delegate = self;
+    [df fetchDetectorsASync];
 }
+
 
 - (void) persistentSent:(NSString *)modelName
 {

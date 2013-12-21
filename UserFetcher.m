@@ -35,7 +35,7 @@
 #pragma mark -
 #pragma mark Public functions
 
-- (void) getUserWithUsername:(NSString *)username
+- (void) fetchUserWithUsername:(NSString *)username
 {
     if(![Reachability isNetworkReachable])
         return;
@@ -50,10 +50,10 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
-- (void) getAndStoreUserWithUsername:(NSString *) username
+- (void) fetchAndStoreUserWithUsername:(NSString *) username
 {
     _store = YES;
-    [self getUserWithUsername:username];
+    [self fetchUserWithUsername:username];
 }
 
 #pragma mark -

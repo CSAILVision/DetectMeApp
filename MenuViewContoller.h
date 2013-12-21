@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DetectorFetcher.h"
 
-
-@interface MenuViewContoller : UITableViewController
+@interface MenuViewContoller : UITableViewController <DetectorFetcherDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
