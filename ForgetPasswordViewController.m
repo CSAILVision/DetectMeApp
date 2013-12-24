@@ -20,7 +20,16 @@
 - (void) initializeBackgroundImage
 {
     UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.frame];
-    [backgroundImage setImage:[UIImage imageNamed:@"launch-i5.png"]];
+    BOOL isIPhone4 = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
+    BOOL isIPhone5 = isIPhone4 && ([[UIScreen mainScreen] bounds].size.height > 480.0);
+    if (isIPhone5) {
+        [backgroundImage setImage:[UIImage imageNamed:@"launch-i5.png"]];
+    } else if (isIPhone4) {
+        [backgroundImage setImage:[UIImage imageNamed:@"launch-iphone-hd.png"]];
+    }else{ // ipad
+        [backgroundImage setImage:[UIImage imageNamed:@"launch-ipad.png"]];
+    }
+    
     [backgroundImage setContentMode:UIViewContentModeScaleAspectFill];
     [self.view insertSubview:backgroundImage atIndex:0];
     

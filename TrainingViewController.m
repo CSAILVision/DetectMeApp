@@ -164,7 +164,7 @@
 
 - (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message;
 {
-    [self showAlertWithTitle:title andDescription:message];
+    //[self showAlertWithTitle:title andDescription:message];
 }
 
 #pragma mark -

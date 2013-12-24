@@ -31,7 +31,6 @@
     
 - (void) resetPasswordForEmail:(NSString *)email
 {
-    
     _email= email;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@accounts/password/reset/",SERVER_ADDRESS]]];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
@@ -44,30 +43,13 @@
     
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
-    NSDictionary *fields = [HTTPResponse allHeaderFields];
-    NSString *cookieAll = [fields valueForKey:@"Set-Cookie"];// It is your cookie
-    NSRange range = [cookieAll rangeOfString:@";"];
-    NSString *cookie_cut = [cookieAll substringToIndex:range.location];
-    range = [cookie_cut rangeOfString:@"="];
-    NSString *cookie = [cookie_cut substringFromIndex:range.location+1];
-    
-    
-    if(cookie){
-        NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/password/reset/",SERVER_ADDRESS];
-    
-        // initiate creation of the request
-        PostHTTPConstructor *requestConstructor = [[PostHTTPConstructor alloc] init];
-    
-        [requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
-        [requestConstructor addFieldWithTitle:SERVER_AUTH_EMAIL forValue:_email];
-        [requestConstructor addFieldWithTitle:SERVER_AUTH_CSRFCOOKIE forValue:cookie];
 
-        // URL Connection
-        _responseData = [[NSMutableData alloc] init];
-        NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[requestConstructor getRequest] delegate:self];
-        [conn start];
-    }
+    NSString *cookie = [self parseCookieFromResponse:response];
+    
+    if(cookie)
+        [self postRequestForEmailWithCookie:cookie];
+    else
+        [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Cookie not received!"];
 }
     
     
@@ -89,16 +71,16 @@
     // when there is a error, the value of the key-value pair is an array.
     id email = [responseJSON objectForKey:SERVER_AUTH_EMAIL];
     
-    if([email isKindOfClass:[NSString class]]){ //signup
+    if([email isKindOfClass:[NSString class]])
         [self.delegate resetPassawordCompleted];
-        
-    }else [self handleErrorForJSON:responseJSON];
+    else
+        [self handleErrorForJSON:responseJSON];
 
 }
     
     
 #pragma mark -
-#pragma mark PrivateMethods
+#pragma mark Private Methods
 
 - (void) handleErrorForJSON:(NSDictionary *)errorJSON
 {
@@ -112,5 +94,35 @@
     
     [self.delegate requestFailedWithErrorTitle:title errorMessage:message];
 }
+
+- (NSString *) parseCookieFromResponse:(NSURLResponse *)response
+{
+    NSHTTPURLResponse *HTTPResponse = (NSHTTPURLResponse *)response;
+    NSDictionary *fields = [HTTPResponse allHeaderFields];
+    NSString *cookieAll = [fields valueForKey:@"Set-Cookie"];// It is your cookie
+    NSRange range = [cookieAll rangeOfString:@";"];
+    NSString *cookie_cut = [cookieAll substringToIndex:range.location];
+    range = [cookie_cut rangeOfString:@"="];
+    NSString *cookie = [cookie_cut substringFromIndex:range.location+1];
     
+    return cookie;
+}
+
+- (void) postRequestForEmailWithCookie:(NSString *)cookie
+{
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/password/reset/",SERVER_ADDRESS];
+    
+    // initiate creation of the request
+    PostHTTPConstructor *requestConstructor = [[PostHTTPConstructor alloc] init];
+    
+    [requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
+    [requestConstructor addFieldWithTitle:SERVER_AUTH_EMAIL forValue:_email];
+    [requestConstructor addFieldWithTitle:SERVER_AUTH_CSRFCOOKIE forValue:cookie];
+    
+    // URL Connection
+    _responseData = [[NSMutableData alloc] init];
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[requestConstructor getRequest] delegate:self];
+    [conn start];
+}
+
 @end

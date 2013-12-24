@@ -239,7 +239,7 @@
     NSDictionary *objectJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
     
     if (error != nil){
-        [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Parsing JSON"];
+        [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:error.localizedDescription];
         NSLog(@"objectJSON %@", objectJSON);
     }else {
 

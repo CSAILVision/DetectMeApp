@@ -79,4 +79,11 @@
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // limit the number of characters
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 25) ? NO : YES;
+}
+
 @end

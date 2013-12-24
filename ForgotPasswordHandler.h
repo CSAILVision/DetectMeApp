@@ -32,8 +32,6 @@
     
 @property (strong, nonatomic) id<ForgotPasswordHandlerDelegate> delegate;
     
-- (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
-    
 - (void) resetPasswordForEmail:(NSString *)email;
 
 @end

@@ -13,10 +13,12 @@
 #import "AnnotatedImage+Create.h"
 #import "ManagedDocumentHelper.h"
 #import "UIImage+Rotation.h"
+#import "UIViewController+ShowAlert.h"
 
 @interface TakePictureViewController()
 {
     BOOL _takePicture;
+    BOOL _isCameraSwitched;
     NSMutableArray *_annotatedImages;
     UIManagedDocument *_detectorDatabase;
     CLLocationManager *_locationManager;
@@ -191,6 +193,10 @@
             break;
     }
     
+    if(_isCameraSwitched){
+        upperLeftRotated.x = 1 - upperLeftRotated.x;
+        lowerRightRotated.x = 1 - lowerRightRotated.x;
+    }
     
     Box *newBox = [[Box alloc] initWithUpperLeft:upperLeftRotated lowerRight:lowerRightRotated];
     
@@ -203,6 +209,7 @@
 - (IBAction)switchCameras:(id)sender
 {
     [super switchCameras:sender];
+    _isCameraSwitched = _isCameraSwitched ? NO:YES;
 }
 
 - (IBAction)takePictureAction:(id)sender
@@ -235,13 +242,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    NSLog(@"didFailWithError: %@", error);
-    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                         message:@"Failed to Get Your Location"
-                                                        delegate:nil
-                                               cancelButtonTitle:@"OK"
-                                               otherButtonTitles:nil];
-    [errorAlert show];
+    //[self showAlertWithTitle:@"Error" andDescription:@"Failed to get yout location"];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation

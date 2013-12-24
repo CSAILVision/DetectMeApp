@@ -178,36 +178,4 @@
     [df fetchDetectorsASync];
 }
 
-
-
-//- (void) fetchDetectorsFromServerIntoDocument:(UIManagedDocument *) document
-//{
-//    // Populate the table if it was not.
-//    // |document| as an argument for thread safe: someone could change the propertie in parallel
-//    dispatch_queue_t fetchQ = dispatch_queue_create("Detectors Fetcher", NULL);
-//    dispatch_async(fetchQ, ^{
-//        NSArray *detectors = [DetectorFetcher fetchDetectorsSync];
-//        
-//        if(!detectors){
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self showAlertWithTitle:@"Error downloading server detectors" andDescription:@"Check that the wifi is enabled"];
-//                [_activityIndicator stopAnimating];
-//            });
-//            
-//        }else{
-//            [document.managedObjectContext performBlock:^{
-//                for(NSDictionary *detectorInfo in detectors){
-//                    //start creating objects in document's context
-//                    [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:document.managedObjectContext];
-//                }
-//                
-//                // when finished, present them on the screen and stop the activity indicator
-//                [self performSelectorOnMainThread:@selector(setNumberOfDetectors) withObject:nil waitUntilDone:NO];
-//                [self performSelectorOnMainThread:@selector(stopActivityIndicator) withObject:nil waitUntilDone:NO];
-//            }];
-//        }
-//    });
-//}
-
-
 @end

@@ -62,28 +62,30 @@ static inline int max(int x, int y) { return (x <= y ? y : x); }
 
 - (void) initializeImagePicker
 {
-//    dispatch_queue_t queue = dispatch_queue_create("queue", NULL);
-//    dispatch_async(queue, ^{
-        _imagePicker = [[UIImagePickerController alloc] init];
-        _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        _imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-        _imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-        _imagePicker.navigationBarHidden = YES;
-        _imagePicker.delegate = self;
-//    });
-    
+    _imagePicker = [[UIImagePickerController alloc] init];
+    _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    _imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+    _imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    _imagePicker.navigationBarHidden = YES;
+    _imagePicker.delegate = self;
 }
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self initializeImagePicker];
     [self initializeUserProperties];
     [self initializeUserConfiguration];
     [self outputValuesForCurrentUser];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // slower method
+    [self initializeImagePicker];
+}
 
 - (void) outputValuesForCurrentUser
 {

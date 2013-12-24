@@ -107,6 +107,7 @@
 - (void) loadDetectorDetails
 {
     self.nameLabel.text = [NSString stringWithFormat:@"%@",self.detector.name];
+    [self.nameLabel sizeToFit];
     self.authorLabel.text = [NSString stringWithFormat:@"by %@", self.detector.user.username];
     self.imageView.image =[UIImage imageWithData:self.detector.image];
     _numRatings = self.detector.numberRatings.integerValue;
