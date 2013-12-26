@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-#define CORNER_RADIUS 3 //Factor that represents the touchable area of the box corners
+#define CORNER_RADIUS 6 //Factor that represents the touchable area of the box corners
 
 
 @interface Box : NSObject

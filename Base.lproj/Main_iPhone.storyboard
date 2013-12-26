@@ -969,10 +969,10 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="B8U-r0-Zeg">
-                                        <rect key="frame" x="139" y="459" width="42" height="42"/>
+                                        <rect key="frame" x="118" y="489" width="84" height="59"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" image="camera-icon_150.png">
+                                        <state key="normal" image="camera.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -980,7 +980,7 @@
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Vy6-ub-e92">
-                                        <rect key="frame" x="20" y="448" width="58" height="64"/>
+                                        <rect key="frame" x="20" y="484" width="58" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
@@ -1316,7 +1316,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="camera-icon_150.png" width="150" height="150"/>
+        <image name="camera.png" width="64" height="29"/>
         <image name="no_image.jpg" width="231" height="218"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

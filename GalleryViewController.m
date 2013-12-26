@@ -90,7 +90,7 @@
 
 - (void) initializeFirstLaunch
 {
-    // First time open the app
+    // First time open the app, show indication
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"] && [self.filter isEqualToString:FILTER_SERVER]){
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -110,15 +110,9 @@
     [self initializeDataBase];
     [self initializeFirstLaunch];
     [self initializeRefreshControl];
+        [self applyFilter];
     
 }
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self applyFilter];
-}
-
 
 
 #pragma mark -

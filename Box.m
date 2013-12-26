@@ -17,9 +17,9 @@
 #define kLowerRight 4
 #define kInteriorBox 5
 
-#define kMaxWidth 0.6
+#define kMaxWidth 0.5
 #define kMinWidth 0.3
-#define kMaxHeight 0.6
+#define kMaxHeight 0.5
 #define kMinHeight 0.3
 
 @interface Box()
