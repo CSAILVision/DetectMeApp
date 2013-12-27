@@ -40,6 +40,17 @@
             cp.ymin = box.upperLeft.y;///box.imageSize.height;
             cp.xmax = box.lowerRight.x;///box.imageSize.width;
             cp.ymax = box.lowerRight.y;///box.imageSize.height;
+            
+            if(cp.xmin>cp.xmax){
+                cp.xmax = box.upperLeft.x; ///box.imageSize.width;
+                cp.xmin = box.lowerRight.x;///box.imageSize.width;
+            }
+            
+            if(cp.ymin>cp.ymax){
+                cp.ymax = box.upperLeft.y;///box.imageSize.height;
+                cp.ymin = box.lowerRight.y;///box.imageSize.height;
+            }
+            
             cp.imageIndex = self.images.count;
             cp.label = 1;
             [self.groundTruthBoundingBoxes addObject:cp];
@@ -94,7 +105,6 @@
         averageSize.height += groundTruthBB.ymax - groundTruthBB.ymin;
         averageSize.width += groundTruthBB.xmax - groundTruthBB.xmin;
     }
-    
     return averageSize.width/averageSize.height;
 }
 
