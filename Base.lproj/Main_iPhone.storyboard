@@ -1376,7 +1376,6 @@
     <resources>
         <image name="camera.png" width="64" height="29"/>
         <image name="no_image.jpg" width="231" height="218"/>
-        <image name="no_image.jpg" width="231" height="218"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
