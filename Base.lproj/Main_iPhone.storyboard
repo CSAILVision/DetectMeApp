@@ -210,6 +210,63 @@
             </objects>
             <point key="canvasLocation" x="-501" y="89"/>
         </scene>
+        <!--Input Details Multiple View Controller-->
+        <scene sceneID="AFq-Ak-4KD">
+            <objects>
+                <viewController id="g9s-mj-2QR" customClass="InputDetailsMultipleViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8wg-Fx-HRw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" minimumFontSize="17" id="54E-oU-h8O">
+                                <rect key="frame" x="96" y="167" width="128" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="g9s-mj-2QR" id="0E9-gq-rcN"/>
+                                </connections>
+                            </textField>
+                            <view contentMode="scaleToFill" id="55w-Sg-BEr" userLabel="captureView">
+                                <rect key="frame" x="96" y="205" width="128" height="158"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="U1z-62-uMM">
+                                        <rect key="frame" x="0.0" y="0.0" width="60" height="75"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="uNF-Ym-QgF">
+                                        <rect key="frame" x="68" y="0.0" width="60" height="75"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Xqo-nQ-0rB">
+                                        <rect key="frame" x="0.0" y="83" width="60" height="75"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="64E-HU-ndb">
+                                        <rect key="frame" x="68" y="83" width="60" height="75"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="5if-KI-jnt"/>
+                    <connections>
+                        <outlet property="captureView" destination="55w-Sg-BEr" id="RD8-aI-xfN"/>
+                        <outlet property="imageView1" destination="U1z-62-uMM" id="rOQ-2q-3yw"/>
+                        <outlet property="imageView2" destination="uNF-Ym-QgF" id="2uM-nx-iWj"/>
+                        <outlet property="imageView3" destination="Xqo-nQ-0rB" id="6GM-Va-8Aj"/>
+                        <outlet property="imageView4" destination="64E-HU-ndb" id="pRr-y9-Nj9"/>
+                        <outlet property="textField" destination="54E-oU-h8O" id="DDd-OZ-QMp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bXV-Rj-lTj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1071" y="-700"/>
+        </scene>
         <!--Gallery View Controller - Gallery-->
         <scene sceneID="Mw1-Mo-pKm">
             <objects>
@@ -269,10 +326,10 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bog-Zq-85m">
-                                            <rect key="frame" x="246" y="64" width="54" height="30"/>
+                                            <rect key="frame" x="246" y="62" width="54" height="33"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <state key="normal" title="Done!">
+                                            <state key="normal" title="Next">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
@@ -337,6 +394,7 @@
                         <segue destination="eMG-ES-tQK" kind="push" identifier="ShowDetailSimple" id="wR7-vz-Yhe"/>
                         <segue destination="tjj-Hg-oo8" kind="push" identifier="ShowDetailMultiple" id="VFo-FV-Orz"/>
                         <segue destination="pkB-Kb-gbg" kind="push" identifier="AddSingleDetector" id="UpZ-xg-pQM"/>
+                        <segue destination="g9s-mj-2QR" kind="push" identifier="InputDetailsMultiple" id="uxL-QD-z4q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B08-Jl-9cB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -969,10 +1027,10 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="B8U-r0-Zeg">
-                                        <rect key="frame" x="139" y="459" width="42" height="42"/>
+                                        <rect key="frame" x="118" y="489" width="84" height="59"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <state key="normal" image="camera-icon_150.png">
+                                        <state key="normal" image="camera.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -980,7 +1038,7 @@
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Vy6-ub-e92">
-                                        <rect key="frame" x="20" y="448" width="58" height="64"/>
+                                        <rect key="frame" x="20" y="484" width="58" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
@@ -1316,7 +1374,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="camera-icon_150.png" width="150" height="150"/>
+        <image name="camera.png" width="64" height="29"/>
+        <image name="no_image.jpg" width="231" height="218"/>
         <image name="no_image.jpg" width="231" height="218"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

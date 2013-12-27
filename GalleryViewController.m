@@ -17,15 +17,15 @@
 #import "ShareDetector.h"
 #import "AnnotatedImage.h"
 #import "UIViewController+ShowAlert.h"
-#import "MultipleDetector+Create.h"
 #import "UIViewController+ShowAlert.h"
-
+#import "InputDetailsMultipleViewController.h"
 
 
 @interface GalleryViewController()
 {
     UIRefreshControl *_refreshControl;
     NSMutableArray *_selectedDetectors;
+    BOOL _isSearching;
 }
 @end
 
@@ -34,6 +34,11 @@
 
 #pragma mark -  
 #pragma mark Initialization
+
+- (void) initializeSelectedDetectors
+{
+    _selectedDetectors = [[NSMutableArray alloc] init];
+}
 
 - (void) initializeRefreshControl
 {
@@ -83,14 +88,12 @@
         // hide add and back button
         self.addButton.enabled = NO;
         self.navigationItem.hidesBackButton = YES;
-        
-        _selectedDetectors = [[NSMutableArray alloc] init];
     }
 }
 
 - (void) initializeFirstLaunch
 {
-    // First time open the app
+    // First time open the app, show indication
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"] && [self.filter isEqualToString:FILTER_SERVER]){
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -110,16 +113,18 @@
     [self initializeDataBase];
     [self initializeFirstLaunch];
     [self initializeRefreshControl];
-    
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-    [self applyFilter];
+    [super viewDidAppear:animated];
+    
+    // avoid losing the search results when going to a detector details
+    if(!_isSearching) [self applyFilter];
+    
+    // clear selected
+    if(![self.filter isEqualToString:FILTER_SELECTION]) [self initializeSelectedDetectors];
 }
-
-
 
 #pragma mark -
 #pragma mark IBActions
@@ -154,17 +159,11 @@
 
 - (IBAction)doneSelectingAction:(id)sender
 {
-    if(_selectedDetectors.count<2) [self showAlertWithTitle:@"Error" andDescription:@"You need at least 2 detectors."];
-    else{
-        [MultipleDetector multipleDetectorWithName:@"mulitple"
-                                      forDetectors:_selectedDetectors
-                            inManagedObjectContext:_detectorDatabase.managedObjectContext];
-        
-        
-        // Restore previous
-        self.filter = FILTER_MULTIPLE;
-        [self applyFilter];
-    }
+    if(_selectedDetectors.count<2)
+        [self showAlertWithTitle:@"Error" andDescription:@"You need at least 2 detectors."];
+    
+    else
+        [self performSegueWithIdentifier:@"InputDetailsMultiple" sender:self];
 }
 
 - (IBAction)cancelSelectingAction:(id)sender
@@ -188,10 +187,12 @@
     
     // The user clicked the [X] button or otherwise cleared the text.
     if([searchText length] == 0) {
-        [self applyFilter];
+        [self dismissSearch];
 
-    }else
+    }else{
         [self fetchResultsForPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@ OR targetClass CONTAINS[cd] %@", searchText, searchText]];
+        _isSearching = YES;
+    }
 
 }
 
@@ -199,6 +200,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     searchBar.showsCancelButton = NO;
+    [self dismissSearch];
     [searchBar resignFirstResponder];
     [self.view endEditing:YES];
 }
@@ -208,6 +210,13 @@
     searchBar.showsCancelButton = NO;
     [searchBar resignFirstResponder];
     [self.view endEditing:YES];
+}
+
+- (void) dismissSearch
+{
+    self.searchBar.text = @"";
+    [self applyFilter];
+    _isSearching = NO;
 }
 
 #pragma mark -
@@ -223,10 +232,16 @@
                                                                   detector.user.username]];
         cell.imageView.image = [UIImage imageWithData:detector.image];
         
+        // select or deselect cells
+        [self deselectCell:cell];
+        if([self.filter isEqualToString:FILTER_SELECTION] && [_selectedDetectors containsObject:detector])
+            [self selectCell:cell];
+        
+        
     }else if([element isKindOfClass:[MultipleDetector class]]){
         MultipleDetector *multipleDetector = (MultipleDetector *) element;
         cell.imageView.image = [UIImage imageWithData:multipleDetector.image];
-        cell.label.text = [NSString stringWithFormat:@"%@ %@", multipleDetector.name, [multipleDetector.uuid substringToIndex:3]];
+        cell.label.text = [NSString stringWithFormat:@"%@", multipleDetector.name];
         
         // hack to avoid keeping the cell selected after creating a new multiple detector
         [self deselectCell:cell];
@@ -368,6 +383,13 @@
     }else if([[segue identifier] isEqualToString:@"AddSingleDetector"]){
         // Set the title for the back button of the next controller
         self.title = @"Back";
+        
+    }else if([[segue identifier] isEqualToString:@"InputDetailsMultiple"]){        
+        InputDetailsMultipleViewController *vc = (InputDetailsMultipleViewController *) segue.destinationViewController;
+        vc.detectors = _selectedDetectors;
+        vc.detectorDatabase = _detectorDatabase;
+        _isSearching = NO;
+        
     }
 }
 

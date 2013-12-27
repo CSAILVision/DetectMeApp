@@ -2,7 +2,7 @@
 //  MultipleDetector.m
 //  DetectMe
 //
-//  Created by Josep Marc Mingot Hidalgo on 13/11/13.
+//  Created by Josep Marc Mingot Hidalgo on 26/12/13.
 //  Copyright (c) 2013 Josep Marc Mingot Hidalgo. All rights reserved.
 //
 
@@ -15,17 +15,7 @@
 
 @dynamic image;
 @dynamic name;
-@dynamic uuid;
 @dynamic author;
 @dynamic detectors;
-
-- (void)awakeFromInsert;
-{
-    // Store UUID for each MulitpleDetector to identify it
-    [super awakeFromInsert];
-    CFUUIDRef UUID = CFUUIDCreate(kCFAllocatorDefault);
-    CFStringRef UUIDString = CFUUIDCreateString(kCFAllocatorDefault,UUID);
-    [self setValue:(__bridge NSString *)UUIDString forKey:@"uuid"];
-}
 
 @end
