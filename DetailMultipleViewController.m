@@ -30,15 +30,13 @@
             UIImageView *imageView = [imageViews objectAtIndex:i];
             imageView.image = [UIImage imageWithData:[(Detector *)[_singleDetectors objectAtIndex:i] image]];
         }
-    
-    self.multipleDetector.image = UIImageJPEGRepresentation([self captureImageFromView:self.captureView], 0.5);
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.multipleDetector.name, [self.multipleDetector.uuid substringToIndex:3]];
+    self.nameLabel.text = [NSString stringWithFormat:@"%@", self.multipleDetector.name];
     
     if(!_detectorDatabase)
         _detectorDatabase = [ManagedDocumentHelper sharedDatabaseUsingBlock:^(UIManagedDocument *document) {}];
@@ -163,19 +161,6 @@
     
     
 }
-
-- (UIImage *) captureImageFromView:(UIView *) captureView
-{
-    CGRect rect = [captureView bounds];
-    UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [captureView.layer renderInContext:context];
-    UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return capturedImage;
-}
-
  
 
 @end
