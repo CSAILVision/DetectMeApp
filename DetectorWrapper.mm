@@ -30,7 +30,7 @@ using namespace cv;
 #define SVM_C 0.2
 #define POSITIVE_OVERLAP_AREA 0.7
 #define NEGATIVE_OVERLAP_AREA 0.5
-#define TRAINING_SCALE_FACTOR 0.5 //scale factor for detection on training images
+#define TRAINING_SCALE_FACTOR 0.6 //scale factor for detection on training images
 
 // alloc size
 #define MAX_TRAINING_IMAGES 35
@@ -208,7 +208,7 @@ using namespace cv;
     //convergence loop
     free(_weightsP);
     _weightsP = (double *) calloc((_numOfFeatures + 1),sizeof(double));
-//    for(int i=0; i<_numOfFeatures+1; i++) _weightsP[i] = 1;
+
     double *weightsPLast = (double *) calloc((_numOfFeatures + 1),sizeof(double));
     _diff = 1;
     int iter = 0;
@@ -220,6 +220,7 @@ using namespace cv;
     if(self.supportVectors) [self initializeDetectorWithSupportVectors];
     
     for(int i=0; i<_numOfFeatures+1; i++) _weightsP[i] = 1;
+    
     while(_diff > STOP_CRITERIA && iter<MAX_TRAINING_ITERATIONS && !_isTrainCancelled){
         
         
