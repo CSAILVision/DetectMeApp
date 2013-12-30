@@ -76,22 +76,26 @@
 - (void) unifyGroundTruthBoundingBoxes
 {
     //get max width and max height of the gt bb
-    float maxWidth=0, maxHeight=0;
+    float minWidth=10, minHeight=0;
     for(BoundingBox *groundTruthBB in self.groundTruthBoundingBoxes){
         float width = groundTruthBB.xmax - groundTruthBB.xmin;
+        if(width<0) width = - width;
+        
         float height = groundTruthBB.ymax - groundTruthBB.ymin;
-        maxWidth = maxWidth > width ? maxWidth : width;
-        maxHeight = maxHeight > height ? maxHeight : height;
+        if(height < 0) height = - height;
+        
+        minWidth = minWidth < width ? minWidth : width;
+        minHeight = minHeight < height ? minHeight : height;
     }
-    
+        
     //modify the actual bb
     for(BoundingBox *groundTruthBB in self.groundTruthBoundingBoxes){
         float xMidPoint = (groundTruthBB.xmax + groundTruthBB.xmin)/2;
         float yMidPoint = (groundTruthBB.ymax + groundTruthBB.ymin)/2;
-        groundTruthBB.xmin = xMidPoint - maxWidth/2;
-        groundTruthBB.xmax = xMidPoint + maxWidth/2;
-        groundTruthBB.ymin = yMidPoint - maxHeight/2;
-        groundTruthBB.ymax = yMidPoint + maxHeight/2;
+        groundTruthBB.xmin = xMidPoint - minWidth/2;
+        groundTruthBB.xmax = xMidPoint + minWidth/2;
+        groundTruthBB.ymin = yMidPoint - minHeight/2;
+        groundTruthBB.ymax = yMidPoint + minHeight/2;
     }
 }
 
