@@ -404,6 +404,11 @@
     // when finished, present them on the screen
     [self fetchServer];
     [_refreshControl endRefreshing];
+    
+    //store last successful downloaded time
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int time = (int)[[NSDate date] timeIntervalSince1970];
+    [defaults setInteger:time forKey:@"lastDownladTime"];
 }
 
 - (void) downloadError:(NSString *)error
@@ -461,7 +466,12 @@
 {
     DetectorFetcher *df = [[DetectorFetcher alloc] init];
     df.delegate = self;
-    [df fetchDetectorsASync];
+    
+    // get the time the last download was successful
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int lastDownloadTime = [defaults integerForKey:@"lastDownladTime"];
+    
+    [df fetchDetectorsASyncFromTimestamp:lastDownloadTime];
 }
 
 
