@@ -85,6 +85,7 @@
                 
             }else if(trainingState == FAIL){
                 NSLog(@"train failed");
+                [self.delegate trainFailed];
                 
             }else if(trainingState == INTERRUPTED){
                 NSLog(@"train interrupted");

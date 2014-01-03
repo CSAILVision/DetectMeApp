@@ -398,17 +398,19 @@
 #pragma mark DetectorFetcherDelegate
 - (void) obtainedDetectors:(NSArray *)detectorsJSON
 {
-    for(NSDictionary *detectorInfo in detectorsJSON)
-        [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:self.detectorDatabase.managedObjectContext];
+    if(detectorsJSON.count > 0){
+        for(NSDictionary *detectorInfo in detectorsJSON)
+            [Detector detectorWithDictionaryInfo:detectorInfo inManagedObjectContext:self.detectorDatabase.managedObjectContext];
     
-    // when finished, present them on the screen
-    [self fetchServer];
-    [_refreshControl endRefreshing];
+        // when finished, present them on the screen
+        [self fetchServer];
+        [_refreshControl endRefreshing];
     
-    //store last successful downloaded time
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    int time = (int)[[NSDate date] timeIntervalSince1970];
-    [defaults setInteger:time forKey:@"lastDownladTime"];
+        //store last successful downloaded time
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        int time = (int)[[NSDate date] timeIntervalSince1970];
+        [defaults setInteger:time forKey:@"lastDownladTime"];
+    }
 }
 
 - (void) downloadError:(NSString *)error
