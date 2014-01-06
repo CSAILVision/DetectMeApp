@@ -30,7 +30,7 @@ using namespace cv;
 #define SVM_C 0.2
 #define POSITIVE_OVERLAP_AREA 0.7
 #define NEGATIVE_OVERLAP_AREA 0.5
-#define TRAINING_SCALE_FACTOR 0.6 //scale factor for detection on training images
+#define TRAINING_SCALE_FACTOR 0.5 //scale factor for detection on training images
 
 // alloc size
 #define MAX_TRAINING_IMAGES 35
