@@ -104,7 +104,7 @@
 
 - (void) trainFailed
 {
-    [self showAlertWithTitle:@"Error" andDescription:@"Train Failed"];
+    [self showAlertWithTitle:@"Trainning Failed" andDescription:@"Try adding more pictures to the training set."];
     [self doneAction:self];
 }
 

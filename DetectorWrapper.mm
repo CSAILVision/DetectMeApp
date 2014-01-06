@@ -25,7 +25,7 @@ using namespace cv;
 #define MAX_QUOTA 200 //max negative examples (bb) per iteration
 #define MAX_TEMPLATE_SIZE 8
 #define STOP_CRITERIA 0.01
-#define MAX_TRAINING_ITERATIONS 20
+#define MAX_TRAINING_ITERATIONS 15
 #define NUM_TRAINING_PYRAMIDS 10
 #define SVM_C 0.2
 #define POSITIVE_OVERLAP_AREA 0.7

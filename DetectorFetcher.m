@@ -54,6 +54,22 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
+- (void) fetchDetectorsASyncFromTimestamp:(int)timestamp
+{
+    if(![Reachability isNetworkReachable])
+        return;
+    
+    NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/lastupdated/%d",SERVER_ADDRESS, timestamp];
+    NSURLRequest *request = [self.class createRequestForURLString:requestURLString];
+    
+    _responseData = [[NSMutableData alloc] init];
+    [NSURLConnection connectionWithRequest:request delegate:self];
+    
+    // show in the status bar that network activity is starting
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+
 + (NSArray *) fetchDetectorsSync
 {
     

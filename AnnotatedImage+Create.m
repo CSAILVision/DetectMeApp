@@ -20,8 +20,6 @@
 {
     AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
     
-
-    
     annotatedImage.image = UIImageJPEGRepresentation(image, 0.5);
     annotatedImage.imageHeight = @(image.size.height);
     annotatedImage.imageWidth = @(image.size.width);

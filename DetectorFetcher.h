@@ -28,6 +28,7 @@
 
 // ASYNC
 - (void) fetchDetectorsASync;
+- (void) fetchDetectorsASyncFromTimestamp:(int) timestamp;
 
 
 @property (strong, nonatomic) id<DetectorFetcherDelegate> delegate;

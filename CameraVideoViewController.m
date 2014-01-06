@@ -134,7 +134,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         //We unlock the  image buffer
         CVPixelBufferUnlockBaseAddress(imageBuffer,0);
         CGImageRelease(imageRef);
-        
     }
 }
 
@@ -214,7 +213,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             break;
     }
     
-    [image fixOrientation];
+    image = [image fixOrientation];
     
     return image;
 }
