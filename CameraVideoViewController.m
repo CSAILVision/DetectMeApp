@@ -134,7 +134,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         //We unlock the  image buffer
         CVPixelBufferUnlockBaseAddress(imageBuffer,0);
         CGImageRelease(imageRef);
-        
     }
 }
 
