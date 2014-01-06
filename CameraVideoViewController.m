@@ -213,7 +213,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             break;
     }
     
-    [image fixOrientation];
+    image = [image fixOrientation];
     
     return image;
 }

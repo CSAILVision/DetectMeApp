@@ -138,11 +138,12 @@
         [self.imageView performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:NO];
         
         AnnotatedImage *annotatedImage = [AnnotatedImage annotatedImageWithImage:image
-                                                                             box:[self convertBoxForView:self.tagView.box onOrientation:[[UIDevice currentDevice] orientation]]
+                                                                             box:[self convertBoxForView:self.tagView.box]
                                                                      forLocation:_currentLocation
                                                                        forMotion:_motionManager.deviceMotion
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
+        NSLog(@"%@", [self convertBoxForView:self.tagView.box]);
         [_annotatedImages addObject:annotatedImage];
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
@@ -151,16 +152,18 @@
 }
 
 
-- (Box *) convertBoxForView:(Box *) box onOrientation:(UIDeviceOrientation) orientation
+- (Box *) convertBoxForView:(Box *) box
 {
     // The image show in the camera is an "aspect fit" of the actual image taken
     // To solve it, we need to convert the box to the "camera" reference system
 
+    
     CGPoint upperLeft = [_prevLayer captureDevicePointOfInterestForPoint:CGPointMake(box.upperLeft.x*self.tagView.frame.size.width,
                                                                                      box.upperLeft.y*self.tagView.frame.size.height)];
     CGPoint lowerRight = [_prevLayer captureDevicePointOfInterestForPoint:CGPointMake(box.lowerRight.x*self.tagView.frame.size.width,
                                                                                       box.lowerRight.y*self.tagView.frame.size.height)];
     
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
     // We have to rotate the image acording to orientation
     CGPoint upperLeftRotated = CGPointZero;
@@ -176,15 +179,15 @@
             
         case UIDeviceOrientationLandscapeLeft:
             upperLeftRotated.x = upperLeft.x;
-            upperLeftRotated.y = upperLeft.y;
+            upperLeftRotated.y = lowerRight.y;
             lowerRightRotated.x = lowerRight.x;
-            lowerRightRotated.y = lowerRight.y;
+            lowerRightRotated.y = upperLeft.y;
             break;
             
         case UIDeviceOrientationLandscapeRight:
-            upperLeftRotated.x = 1 - upperLeft.x;
+            upperLeftRotated.x = 1 - lowerRight.x;
             upperLeftRotated.y = 1 - upperLeft.y;
-            lowerRightRotated.x = 1 - lowerRight.x;
+            lowerRightRotated.x = 1 - upperLeft.x;
             lowerRightRotated.y = 1 - lowerRight.y;
             break;
             

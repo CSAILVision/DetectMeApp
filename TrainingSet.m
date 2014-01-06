@@ -36,21 +36,11 @@
             // add box
             Box *box = [boxes objectAtIndex:i];
             BoundingBox *cp = [[BoundingBox alloc] init];
-            cp.xmin = box.upperLeft.x;///box.imageSize.width;
-            cp.ymin = box.upperLeft.y;///box.imageSize.height;
-            cp.xmax = box.lowerRight.x;///box.imageSize.width;
-            cp.ymax = box.lowerRight.y;///box.imageSize.height;
-            
-            if(cp.xmin>cp.xmax){
-                cp.xmax = box.upperLeft.x; ///box.imageSize.width;
-                cp.xmin = box.lowerRight.x;///box.imageSize.width;
-            }
-            
-            if(cp.ymin>cp.ymax){
-                cp.ymax = box.upperLeft.y;///box.imageSize.height;
-                cp.ymin = box.lowerRight.y;///box.imageSize.height;
-            }
-            
+            cp.xmin = box.upperLeft.x;
+            cp.ymin = box.upperLeft.y;
+            cp.xmax = box.lowerRight.x;
+            cp.ymax = box.lowerRight.y;
+        
             cp.imageIndex = self.images.count;
             cp.label = 1;
             [self.groundTruthBoundingBoxes addObject:cp];
@@ -59,12 +49,6 @@
             UIImage *image = [images objectAtIndex:i];
             [self.images addObject:image];
         }
-        
-        //Add abstract pictures to the training set to generate false positives when the bb is very big.
-        //guess the relationship with the artists...
-        //[self.images addObject:[UIImage imageNamed:@"picaso.jpg"]];
-        //[self.images addObject:[UIImage imageNamed:@"dali.jpg"]];
-        //[self.images addObject:[UIImage imageNamed:@"miro.jpg"]];
     }
     return self;
 }
