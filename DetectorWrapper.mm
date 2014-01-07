@@ -224,7 +224,7 @@ using namespace cv;
     while(_diff > STOP_CRITERIA && iter<MAX_TRAINING_ITERATIONS && !_isTrainCancelled){
         
         
-        [self.delegate sendMessage:[NSString stringWithFormat:@"\n******* Iteration %d *******", iter+1]];
+        [self.delegate sendMessage:[NSString stringWithFormat:@"\n******* Iteration %d (out of %d at most) *******", iter+1, MAX_TRAINING_ITERATIONS]];
         
         //Get Bounding Boxes from detection
         [self getBoundingBoxesForTrainingSet:trainingSet];
