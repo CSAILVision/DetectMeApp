@@ -143,7 +143,6 @@
                                                                        forMotion:_motionManager.deviceMotion
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
-        NSLog(@"%@", [self convertBoxForView:self.tagView.box]);
         [_annotatedImages addObject:annotatedImage];
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
@@ -157,7 +156,6 @@
     // The image show in the camera is an "aspect fit" of the actual image taken
     // To solve it, we need to convert the box to the "camera" reference system
 
-    
     CGPoint upperLeft = [_prevLayer captureDevicePointOfInterestForPoint:CGPointMake(box.upperLeft.x*self.tagView.frame.size.width,
                                                                                      box.upperLeft.y*self.tagView.frame.size.height)];
     CGPoint lowerRight = [_prevLayer captureDevicePointOfInterestForPoint:CGPointMake(box.lowerRight.x*self.tagView.frame.size.width,

@@ -27,7 +27,8 @@
     
     UIManagedDocument *_detectorDatabase;
     NSUndoManager *_undoManager;
-    BOOL _undo; //flag, undoes all the changes when going back. Just stores if trained.
+    BOOL _undo; //undoes all the changes when going back. Just stores if trained.
+    BOOL _modified; //true if the training set has changed (add, remove, modify images)
 }
 
 @end
@@ -81,6 +82,7 @@
     [self initializeWaitingView];
     [self initializeUndoManager];
     [self initializeSupportVectors];
+    [self setPageTitle];
 }
 
 - (void) getSupportVectors
@@ -182,7 +184,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
     
-    CGSize headerSize = _annotatedImages.count>0 ? CGSizeMake(collectionView.frame.size.width, 85):CGSizeMake(0, 0);
+    CGSize headerSize = _annotatedImages.count>0 && _modified ? CGSizeMake(collectionView.frame.size.width, 85):CGSizeMake(0, 0);
     return headerSize;
 }
 
@@ -195,7 +197,7 @@
     [_annotatedImages removeObjectAtIndex:sender.tag];
     [_detectorDatabase.managedObjectContext deleteObject:deleted];
 
-    [self.collectionView reloadData];
+    [self reloadData];
 }
 
 
@@ -230,7 +232,8 @@
 - (void) takenAnnotatedImages:(NSArray *) annotatedImages
 {
     [_annotatedImages addObjectsFromArray:annotatedImages];
-    [self.collectionView reloadData];
+    
+    [self reloadData];
 }
 
 #pragma mark -
@@ -240,6 +243,7 @@
 {
     [self updateBoxes:[NSArray arrayWithArray:boxes]];
     
+    [self reloadData];
 }
 
 
@@ -312,6 +316,17 @@
 }
 
 
+- (void) reloadData
+{
+    [self setPageTitle];
+    _modified = YES;
+    [self.collectionView reloadData];
+}
+
+- (void) setPageTitle
+{
+    self.title = [NSString stringWithFormat:@"%d images", _annotatedImages.count];
+}
 
 
 @end

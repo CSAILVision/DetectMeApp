@@ -1038,7 +1038,7 @@
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Vy6-ub-e92">
-                                        <rect key="frame" x="20" y="484" width="58" height="63.999999999999993"/>
+                                        <rect key="frame" x="20" y="484.00000000000006" width="58" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
@@ -1233,7 +1233,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="BR8-SW-T15" userLabel="wrapper">
-                                <rect key="frame" x="20" y="107" width="280" height="278"/>
+                                <rect key="frame" x="20" y="107" width="280" height="277.99999999999994"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Object" minimumFontSize="17" id="OrT-FB-QOB">
@@ -1383,11 +1383,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="XG3-vb-ACa"/>
-        <segue reference="obR-1V-epL"/>
-        <segue reference="UpZ-xg-pQM"/>
         <segue reference="wR7-vz-Yhe"/>
-        <segue reference="zdo-hz-QnN"/>
+        <segue reference="obR-1V-epL"/>
+        <segue reference="XG3-vb-ACa"/>
         <segue reference="iMa-zQ-BRS"/>
+        <segue reference="SZr-VP-6Sq"/>
+        <segue reference="b1e-7T-Bde"/>
     </inferredMetricsTieBreakers>
 </document>
