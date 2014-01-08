@@ -178,6 +178,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGSize cellSize = CGSizeMake(100, 200);
+    if([@"iPad" isEqualToString:[[UIDevice currentDevice] model]]) cellSize = CGSizeMake(180, 300);
     return cellSize;
 }
 

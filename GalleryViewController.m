@@ -110,6 +110,8 @@
     // Remove extra top margin
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    NSLog(@"%@", NSStringFromCGRect(self.view.frame));
+    
     [self initializeDataBase];
     [self initializeFirstLaunch];
     [self initializeRefreshControl];
@@ -332,6 +334,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGSize retval = CGSizeMake(100, 100);
+    if([@"iPad" isEqualToString:[[UIDevice currentDevice] model]]) retval = CGSizeMake(180, 180);
     return retval;
 }
 
