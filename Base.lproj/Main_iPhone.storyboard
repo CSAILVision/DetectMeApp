@@ -1037,8 +1037,8 @@
                                             <action selector="takePictureAction:" destination="pkB-Kb-gbg" eventType="touchUpInside" id="fpG-Oz-nFq"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Vy6-ub-e92">
-                                        <rect key="frame" x="20" y="484.00000000000006" width="58" height="64"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Vy6-ub-e92">
+                                        <rect key="frame" x="20" y="484" width="58" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
@@ -1233,8 +1233,8 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="BR8-SW-T15" userLabel="wrapper">
-                                <rect key="frame" x="20" y="107" width="280" height="277.99999999999994"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="20" y="107" width="280" height="278"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Object" minimumFontSize="17" id="OrT-FB-QOB">
                                         <rect key="frame" x="60" y="76" width="154" height="30"/>
@@ -1312,7 +1312,7 @@
                             </activityIndicatorView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="black" editable="NO" text=" " selectable="NO" id="wq6-wW-uR8">
                                 <rect key="frame" x="20" y="263" width="280" height="285"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1383,11 +1383,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="SZr-VP-6Sq"/>
         <segue reference="wR7-vz-Yhe"/>
         <segue reference="obR-1V-epL"/>
         <segue reference="XG3-vb-ACa"/>
         <segue reference="iMa-zQ-BRS"/>
-        <segue reference="SZr-VP-6Sq"/>
-        <segue reference="b1e-7T-Bde"/>
+        <segue reference="zdo-hz-QnN"/>
     </inferredMetricsTieBreakers>
 </document>

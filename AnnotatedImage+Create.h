@@ -19,6 +19,7 @@
                                          box:(Box *)box
                                  forLocation:(CLLocation *) location
                                    forMotion:(CMDeviceMotion *) motion
+                                     forUser:(User *)currentUser
                       inManagedObjectContext:(NSManagedObjectContext *)context;
 
 + (AnnotatedImage *) annotatedImageWithDictionaryInfo:(NSDictionary *)annotatedImageInfo

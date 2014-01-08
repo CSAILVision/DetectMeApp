@@ -16,6 +16,7 @@
                                          box:(Box *)box
                                  forLocation:(CLLocation *) location
                                    forMotion:(CMDeviceMotion *) motion
+                                     forUser:(User *)currentUser
                       inManagedObjectContext:(NSManagedObjectContext *)context
 {
     AnnotatedImage *annotatedImage = [NSEntityDescription insertNewObjectForEntityForName:@"AnnotatedImage" inManagedObjectContext:context];
@@ -26,7 +27,6 @@
     
     [annotatedImage setBox:box];
     
-    User *currentUser = [User getCurrentUserInManagedObjectContext:context];
     annotatedImage.user = currentUser;
     
     annotatedImage.locationLatitude = @(location.coordinate.latitude);
