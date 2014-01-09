@@ -210,6 +210,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             break;
             
         default:
+            image = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationRight];
             break;
     }
     

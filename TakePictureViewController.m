@@ -14,6 +14,7 @@
 #import "ManagedDocumentHelper.h"
 #import "UIImage+Rotation.h"
 #import "UIViewController+ShowAlert.h"
+#import "User+Create.h"
 
 @interface TakePictureViewController()
 {
@@ -24,6 +25,7 @@
     CLLocationManager *_locationManager;
     CMMotionManager *_motionManager;
     CLLocation *_currentLocation;
+    User *_currentUser;
 }
 
 @end
@@ -76,6 +78,11 @@
     self.nextButton.enabled = NO;
 }
 
+- (void) initializeUser
+{
+    _currentUser = [User getCurrentUserInManagedObjectContext:_detectorDatabase.managedObjectContext];
+}
+
 - (void) stopManagers
 {
     [_locationManager stopUpdatingLocation];
@@ -89,6 +96,8 @@
     [self initializeButtons];
     [self initializeTagView];
     [self initializeNextButton];
+    [self initializeUser];
+
     
     _annotatedImages = [[NSMutableArray alloc] init];
     
@@ -141,9 +150,12 @@
                                                                              box:[self convertBoxForView:self.tagView.box]
                                                                      forLocation:_currentLocation
                                                                        forMotion:_motionManager.deviceMotion
+                                                                         forUser:_currentUser
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
         [_annotatedImages addObject:annotatedImage];
+        NSLog(@"box: %@", [self convertBoxForView:self.tagView.box]);
+        NSLog(@"image: %@", image);
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
         [self performSelectorOnMainThread:@selector(setTitle:) withObject:title waitUntilDone:NO];
@@ -191,6 +203,10 @@
             
             
         default:
+            upperLeftRotated.x = 1 - upperLeft.y;
+            upperLeftRotated.y = upperLeft.x;
+            lowerRightRotated.x = 1 - lowerRight.y;
+            lowerRightRotated.y = lowerRight.x;
             break;
     }
     
