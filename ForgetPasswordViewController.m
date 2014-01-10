@@ -47,21 +47,25 @@
 }
 
 
-    
+
+#pragma mark -
+#pragma mark IBActions
+
+- (IBAction)resetPasswordAction:(id)sender
+{
+    NSString *email = self.textField.text;
+    [_forgotPasswordHandler resetPasswordForEmail:email];
+}
+
 #pragma mark -
 #pragma mark UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self sendEmail];
+    [self resetPasswordAction:self];
     return YES;
 }
 
-- (void) sendEmail
-{
-    NSString *email = self.textField.text;
-    [_forgotPasswordHandler resetPasswordForEmail:email];
-}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -70,13 +74,19 @@
     [super touchesBegan:touches withEvent:event];
 }
 
+
 #pragma mark -
-#pragma mark AuthHelperDelegate
+#pragma mark ForgotPasswordHandlerDelegate
+
+- (void) resetPassawordCompleted
+{
+    [self showAlertWithTitle:@"Completed" andDescription:@"Check your email to reset the password"];
+    [self performSegueWithIdentifier:@"backToLogin" sender:self];
+}
 
 - (void) requestFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message
 {
     [self showAlertWithTitle:title andDescription:message];
 }
-
 
 @end

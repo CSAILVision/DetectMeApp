@@ -16,7 +16,7 @@
 @interface ForgotPasswordHandler()
 {
     NSString *_email;
-    NSMutableData *_responseData;
+    BOOL _isGet;
 }
 
 @end
@@ -34,7 +34,9 @@
     _email= email;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@accounts/password/reset/",SERVER_ADDRESS]]];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
+    _isGet = YES;
     [connection start];
+    
 }
 
     
@@ -43,57 +45,47 @@
     
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-
-    NSString *cookie = [self parseCookieFromResponse:response];
+    if(_isGet){
+        NSString *cookie = [self parseCookieFromResponse:response];
+        NSString *cookieHeader = [NSString stringWithFormat:@"csrftoken=%@", cookie];
+        _isGet = NO;
+        
+        if(cookie)
+            [self postRequestForEmailWithCookie:cookie forCookieHeader:cookieHeader];
+        else
+            [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Cookie not received!"];
+        
+    }else{
     
-    if(cookie)
-        [self postRequestForEmailWithCookie:cookie];
-    else
-        [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Cookie not received!"];
+        NSString *url = [[(NSHTTPURLResponse *)response URL] absoluteString];
+        NSArray *array = [url componentsSeparatedByString:@"/"];
+        NSString *lastIndex = [array objectAtIndex:array.count-2];
+        NSLog(@"li: %@", lastIndex);
+        if([lastIndex isEqualToString:@"done"]){
+            [self.delegate resetPassawordCompleted];
+        }else{
+            [self.delegate requestFailedWithErrorTitle:@"Error" errorMessage:@"Incorrect email"];
+        }
+    }
 }
-    
+
     
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    
 }
     
 -(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    [_responseData appendData:data];
 }
     
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSError *error = nil;
-    NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:_responseData options:kNilOptions error:&error];
-    
-    // when there is a error, the value of the key-value pair is an array.
-    id email = [responseJSON objectForKey:SERVER_AUTH_EMAIL];
-    
-    if([email isKindOfClass:[NSString class]])
-        [self.delegate resetPassawordCompleted];
-    else
-        [self handleErrorForJSON:responseJSON];
-
 }
     
     
 #pragma mark -
 #pragma mark Private Methods
 
-- (void) handleErrorForJSON:(NSDictionary *)errorJSON
-{
-    NSArray *keys = [errorJSON allKeys];
-    NSArray *values = [errorJSON allValues];
-    
-    NSString *title = [keys firstObject];
-    NSString *message = [[values firstObject] firstObject];
-    
-    if([title isEqualToString:@"non_field_errors"]) title = @"Error";
-    
-    [self.delegate requestFailedWithErrorTitle:title errorMessage:message];
-}
 
 - (NSString *) parseCookieFromResponse:(NSURLResponse *)response
 {
@@ -108,19 +100,20 @@
     return cookie;
 }
 
-- (void) postRequestForEmailWithCookie:(NSString *)cookie
+- (void) postRequestForEmailWithCookie:(NSString *)cookie forCookieHeader:(NSString *)cookieHeader
 {
-    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/api/password/reset/",SERVER_ADDRESS];
+    NSString *urlWebServer = [NSString stringWithFormat:@"%@accounts/password/reset/",SERVER_ADDRESS];
     
     // initiate creation of the request
     PostHTTPConstructor *requestConstructor = [[PostHTTPConstructor alloc] init];
     
     [requestConstructor createRequestForURL:[NSURL URLWithString:urlWebServer] forHTTPMethod:@"POST"];
+    [requestConstructor addCookieHeader:cookieHeader];
     [requestConstructor addFieldWithTitle:SERVER_AUTH_EMAIL forValue:_email];
     [requestConstructor addFieldWithTitle:SERVER_AUTH_CSRFCOOKIE forValue:cookie];
     
+    
     // URL Connection
-    _responseData = [[NSMutableData alloc] init];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:[requestConstructor getRequest] delegate:self];
     [conn start];
 }

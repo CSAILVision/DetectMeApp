@@ -112,6 +112,9 @@
                                         <state key="normal" title="Reset password">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="resetPasswordAction:" destination="WIr-gc-Bfp" eventType="touchUpInside" id="L2L-kX-1qL"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gYc-KA-QRf">
                                         <rect key="frame" x="6" y="70" width="35" height="15"/>
@@ -120,7 +123,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="xO6-5e-Ij7" kind="modal" id="XG3-vb-ACa"/>
+                                            <segue destination="xO6-5e-Ij7" kind="modal" identifier="backToLogin" id="XG3-vb-ACa"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -333,7 +336,7 @@
                                     </collectionViewCell>
                                 </cells>
                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" reuseIdentifier="CollectionHeaderView" id="2Sl-Qw-XL1">
-                                    <rect key="frame" x="0.0" y="86" width="320" height="114"/>
+                                    <rect key="frame" x="0.0" y="64" width="320" height="114"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose single detectors to form a multiple detector that will execute them all simultaneously." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="a4v-UE-kEL">
@@ -368,7 +371,7 @@
                                     </subviews>
                                 </collectionReusableView>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionFooterView" id="rIY-3V-TEo">
-                                    <rect key="frame" x="0.0" y="544" width="320" height="86"/>
+                                    <rect key="frame" x="0.0" y="416" width="320" height="86"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No detectors yet. Add one with the &quot;+&quot;." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bbd-sP-95M">
                                             <rect key="frame" x="20" y="22" width="280" height="41"/>
@@ -842,7 +845,7 @@
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HeaderView" id="Y7D-6m-yJn">
-                            <rect key="frame" x="0.0" y="152" width="320" height="85"/>
+                            <rect key="frame" x="0.0" y="64" width="320" height="85"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gQZ-eC-WAL">
@@ -1054,7 +1057,7 @@
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Vy6-ub-e92">
-                                        <rect key="frame" x="20" y="483.99999915192251" width="58" height="64"/>
+                                        <rect key="frame" x="20" y="484" width="58" height="64.000000000000014"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                     </imageView>
                                 </subviews>
@@ -1249,7 +1252,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="BR8-SW-T15" userLabel="wrapper">
-                                <rect key="frame" x="20" y="107" width="280" height="277.99999999999994"/>
+                                <rect key="frame" x="20" y="107" width="280" height="278"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Object" minimumFontSize="17" id="OrT-FB-QOB">
@@ -1338,11 +1341,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="nzn-yf-vTY">
-                                <rect key="frame" x="20" y="108" width="280" height="2"/>
+                                <rect key="frame" x="20" y="108" width="279.99999999999994" height="2"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </progressView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aRK-l0-f8p">
-                                <rect key="frame" x="110" y="217" width="100" height="30"/>
+                                <rect key="frame" x="109.99999999999999" y="217" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <state key="normal" title="Done!">
@@ -1391,7 +1394,6 @@
     </scenes>
     <resources>
         <image name="camera.png" width="64" height="29"/>
-        <image name="no_image.jpg" width="231" height="218"/>
         <image name="no_image.jpg" width="231" height="218"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
