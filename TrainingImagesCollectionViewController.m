@@ -83,6 +83,41 @@
     [self initializeUndoManager];
     [self initializeSupportVectors];
     [self setPageTitle];
+    
+    self.navigationItem.hidesBackButton = YES;
+    UIBarButtonItem *bbtnBack = [[UIBarButtonItem alloc] initWithTitle:@"Back"
+                                                                 style:UIBarButtonItemStyleBordered
+                                                                target:self
+                                                                action:@selector(goBack:)];
+    
+    self.navigationItem.leftBarButtonItem = bbtnBack;
+
+}
+
+
+- (void)goBack:(UIBarButtonItem *)sender
+{
+    if(_modified){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+                                                    message:@"With this action, you will loose your changes. Do you want to proceed?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+        [alert show];
+    }else [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch(buttonIndex) {
+        case 0: //"No" pressed
+            //do something?
+            break;
+        case 1: //"Yes" pressed
+            //here you pop the viewController
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+    }
 }
 
 - (void) getSupportVectors

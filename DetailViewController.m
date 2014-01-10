@@ -174,6 +174,7 @@
     }else if([[segue identifier] isEqualToString:@"Retrain"]){
         TrainingImagesCollectionViewController *vc = (TrainingImagesCollectionViewController *)segue.destinationViewController;
         vc.detector = self.detector;
+        //
     }
 }
 

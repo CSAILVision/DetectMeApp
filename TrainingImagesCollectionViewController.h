@@ -11,7 +11,7 @@
 #import "TakePictureViewController.h"
 #import "TagViewController.h"
 
-@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate, TagViewControllerDelegate, UICollectionViewDelegateFlowLayout>
+@interface TrainingImagesCollectionViewController : UICollectionViewController <TakePictureViewControllerDelegate, TagViewControllerDelegate, UICollectionViewDelegateFlowLayout,UIAlertViewDelegate>
 
 @property (strong, nonatomic) Detector *detector;
 

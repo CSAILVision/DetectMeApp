@@ -29,7 +29,7 @@
     if(self.detectorTrainer.isPublic){
         self.textView.text = @"Public: this detector will be visible for all the other DetectMe users. They will be able to execute it and retrain it.";
     }else{
-        self.textView.text = @"Private: you will be the only one with access to the detecctor.";
+        self.textView.text = @"Private: you will be the only one with access to the detector.";
     }
 }
 
