@@ -10,8 +10,9 @@
 #import "AuthHelper.h"
 #import "ForgotPasswordHandler.h"
 
-@interface ForgetPasswordViewController : UIViewController <UITextFieldDelegate, AuthHelperDelegate, ForgotPasswordHandlerDelegate>
+@interface ForgetPasswordViewController : UIViewController <UITextFieldDelegate, ForgotPasswordHandlerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 
+- (IBAction)resetPasswordAction:(id)sender;
 @end

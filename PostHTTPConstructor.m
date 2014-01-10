@@ -71,7 +71,6 @@
 }
 
 
-
 #pragma mark -
 #pragma mark Public Methods
 
@@ -109,6 +108,11 @@
     [_postBody appendData:[contentType dataUsingEncoding:NSUTF8StringEncoding]];
     [_postBody appendData:data];
     [_postBody appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+}
+
+- (void) addCookieHeader:(NSString *)cookieHeader
+{
+    [_request setValue:cookieHeader forHTTPHeaderField:@"Cookie"];
 }
 
 

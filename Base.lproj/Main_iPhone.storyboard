@@ -112,6 +112,9 @@
                                         <state key="normal" title="Reset password">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="resetPasswordAction:" destination="WIr-gc-Bfp" eventType="touchUpInside" id="L2L-kX-1qL"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gYc-KA-QRf">
                                         <rect key="frame" x="6" y="70" width="35" height="15"/>
@@ -120,7 +123,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="xO6-5e-Ij7" kind="modal" id="XG3-vb-ACa"/>
+                                            <segue destination="xO6-5e-Ij7" kind="modal" identifier="backToLogin" id="XG3-vb-ACa"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1338,7 +1341,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="nzn-yf-vTY">
-                                <rect key="frame" x="20" y="108" width="280" height="2"/>
+                                <rect key="frame" x="20" y="108" width="279.99999999999994" height="2"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </progressView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aRK-l0-f8p">
