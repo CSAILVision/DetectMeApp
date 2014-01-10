@@ -60,7 +60,6 @@
         NSString *url = [[(NSHTTPURLResponse *)response URL] absoluteString];
         NSArray *array = [url componentsSeparatedByString:@"/"];
         NSString *lastIndex = [array objectAtIndex:array.count-2];
-        NSLog(@"li: %@", lastIndex);
         if([lastIndex isEqualToString:@"done"]){
             [self.delegate resetPassawordCompleted];
         }else{

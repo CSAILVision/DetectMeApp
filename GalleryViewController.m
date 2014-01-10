@@ -110,8 +110,6 @@
     // Remove extra top margin
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    NSLog(@"%@", NSStringFromCGRect(self.view.frame));
-    
     [self initializeDataBase];
     [self initializeFirstLaunch];
     [self initializeRefreshControl];

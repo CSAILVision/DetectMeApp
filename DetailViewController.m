@@ -148,7 +148,6 @@
     [super viewWillDisappear:animated];
     
     if(_detectorHasChanged){
-        NSLog(@"Updating detector to the server...");
         [_shareDetector shareDetector:self.detector toUpdate:YES];
     }
     

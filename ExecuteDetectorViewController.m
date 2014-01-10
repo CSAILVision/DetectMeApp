@@ -396,13 +396,11 @@
         _sendBoxesToServer = YES;
         [_boxSender openConnection];
         [senderButton setTitle:@"Stop" forState:UIControlStateNormal];
-        NSLog(@"Sending boxes!");
         
     }else{
         _sendBoxesToServer = NO;
         [_boxSender closeConnection];
         [senderButton setTitle:@"Send" forState:UIControlStateNormal];
-        NSLog(@"Not sending boxes!");
     }
 }
 

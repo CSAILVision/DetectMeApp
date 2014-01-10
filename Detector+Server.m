@@ -49,7 +49,7 @@
     NSNumber *averageRating = [detectorInfo objectForKey:SERVER_DETECTOR_AVERAGE_RATING];
     if(averageRating.integerValue>0) detector.averageRating = averageRating;
     
-    detector.parentID = @(0);
+    detector.parentID = detector.serverDatabaseID; // Provides info if the detector has been downloaded.
     id parentID = [detectorInfo objectForKey:SERVER_DETECTOR_PARENT];
     if ([parentID isKindOfClass:[NSNumber class]]) detector.parentID = parentID;
     

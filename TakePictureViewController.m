@@ -154,8 +154,6 @@
                                                           inManagedObjectContext:_detectorDatabase.managedObjectContext];
         
         [_annotatedImages addObject:annotatedImage];
-        NSLog(@"box: %@", [self convertBoxForView:self.tagView.box]);
-        NSLog(@"image: %@", image);
         
         NSString *title = [NSString stringWithFormat:@"%lu images", (unsigned long)_annotatedImages.count];
         [self performSelectorOnMainThread:@selector(setTitle:) withObject:title waitUntilDone:NO];

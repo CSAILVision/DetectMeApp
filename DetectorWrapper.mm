@@ -725,7 +725,6 @@ using namespace cv;
     _sizesP[1] = [(NSNumber *) [self.sizes objectAtIndex:1] intValue];
     _sizesP[2] = [(NSNumber *) [self.sizes objectAtIndex:2] intValue];
     
-    NSLog(@"Initial number of SV: %d", _numSupportVectors);
     
     for (int i=0; i<_numSupportVectors; i++){
         SupportVector *sv = (SupportVector *)[self.supportVectors objectAtIndex:i];
