@@ -99,7 +99,7 @@
 {
     if(_modified){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
-                                                    message:@"With this action, you will loose your changes. Do you want to proceed?"
+                                                    message:@"With this action you will loose your changes. Do you want to proceed?"
                                                    delegate:self
                                           cancelButtonTitle:@"No"
                                           otherButtonTitles:@"Yes", nil];
