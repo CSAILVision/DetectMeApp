@@ -10,9 +10,10 @@
 #import <UIKit/UIKit.h>
 #import "Detector.h"
 #import "ShareDetector.h"
+#import "SendReportHelper.h"
 
 
-@interface DetailViewController : UIViewController <UITableViewDataSource, UIActionSheetDelegate, ShareDectorDelegate, UIAlertViewDelegate>
+@interface DetailViewController : UIViewController <UITableViewDataSource, UIActionSheetDelegate, ShareDectorDelegate, UIAlertViewDelegate,SendReportHelperDelegate>
 
 
 @property (strong, nonatomic) Detector *detector;
@@ -29,6 +30,7 @@
 - (IBAction)deleteAction:(id)sender;
 - (IBAction)isPublicAction:(UISegmentedControl *) isPublicControl;
 - (IBAction)ratingAction:(UISegmentedControl *)ratingControl;
+- (IBAction)reportAction:(id)sender;
 
 
 @end

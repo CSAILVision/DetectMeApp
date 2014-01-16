@@ -69,6 +69,8 @@
 #define SERVER_RATING_DETECTOR @"detector"
 #define SERVER_RATING_RATING @"rating"
 
+//REPORT
+#define SERVER_REPORT_DETECTOR @"detector"
 
 // USER DEFAULTS
 #define USER_DEFAULTS_USERNAME @"username"
