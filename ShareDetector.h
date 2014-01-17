@@ -29,7 +29,6 @@
 - (void) shareAnnotatedImage:(AnnotatedImage *) annotatedImage;
 - (void) shareRating:(Rating *) rating;
 - (void) shareProfilePicture:(UIImage *) profilePicture forUsername:(NSString *)username;
-
 @property (strong, nonatomic) id<ShareDectorDelegate> delegate;
 
 

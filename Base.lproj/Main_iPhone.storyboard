@@ -726,6 +726,17 @@
                                                 <action selector="deleteAction:" destination="eMG-ES-tQK" eventType="touchUpInside" id="oqK-Jt-TQr"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="jWW-WD-gNo">
+                                            <rect key="frame" x="20" y="71" width="280" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <state key="normal" title="Report Abuse">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="reportAction:" destination="eMG-ES-tQK" eventType="touchUpInside" id="NCb-cY-rAE"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
@@ -1341,7 +1352,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="nzn-yf-vTY">
-                                <rect key="frame" x="20" y="108" width="279.99999999999994" height="2"/>
+                                <rect key="frame" x="20" y="108" width="280" height="2"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </progressView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aRK-l0-f8p">
@@ -1404,9 +1415,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="XG3-vb-ACa"/>
         <segue reference="obR-1V-epL"/>
-        <segue reference="UGB-w7-tpx"/>
+        <segue reference="wR7-vz-Yhe"/>
+        <segue reference="UpZ-xg-pQM"/>
         <segue reference="iMa-zQ-BRS"/>
-        <segue reference="SZr-VP-6Sq"/>
         <segue reference="b1e-7T-Bde"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -16,12 +16,14 @@
 #import "ManagedDocumentHelper.h"
 #import "UIViewController+ShowAlert.h"
 #import "AnnotatedImage.h"
+#import "SendReportHelper.h"
 
 
 @interface DetailViewController ()
 {
     BOOL _isOwner;
     BOOL _detectorHasChanged;
+    BOOL _abuseReported;
     ShareDetector *_shareDetector;
     UIManagedDocument *_detectorDatabase;
     Rating *_rating;
@@ -252,6 +254,22 @@
     }
 }
 
+#pragma mark -
+#pragma mark SendReportDelegate
+
+- (void) didSendReport
+{
+        [self showAlertWithTitle:@"Report sent" andDescription:@"The abuse report has been sent"];
+}
+
+
+
+- (void) requestForReportFailedWithErrorTitle:(NSString *)title errorMessage:(NSString *) message
+{
+    [self showAlertWithTitle:title andDescription:message];
+}
+
+
 
 #pragma mark -
 #pragma mark IBActions
@@ -287,6 +305,33 @@
     self.detector.averageRating = @((_averageRating*_numRatings + _rating.rating.integerValue)/(_numRatings + 1));
     [self setDetectorProperties];
     [self.tableview reloadData];
+}
+
+- (IBAction)reportAction:(id)sender
+{
+    _abuseReported = YES;
+    
+    if([self.detector.user.username isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:USER_DEFAULTS_USERNAME]]){
+        //show alert
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"This is your own detector, you cannot report an abuse on it."
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+            [alert show];
+        
+    }
+    else{
+
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+                                                            message:@"Do you want to report an abuse in this detector?"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"No"
+                                                  otherButtonTitles:@"Yes", nil];
+            [alert show];
+        
+    }
+    
 }
 
 
@@ -331,6 +376,16 @@
 {
     if(_successDelete)
         [self.navigationController popViewControllerAnimated:YES];
+    
+    if(_abuseReported && buttonIndex==1)
+    {
+        _abuseReported = NO;
+        SendReportHelper *report_helper = [[SendReportHelper alloc] init];
+        report_helper.delegate = self;
+        [report_helper sendReport:self.detector];
+    }
+    _abuseReported = NO;
+
 }
 
 #pragma mark -
