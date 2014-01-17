@@ -56,8 +56,10 @@
 
 - (void) fetchDetectorsASyncFromTimestamp:(int)timestamp
 {
-    if(![Reachability isNetworkReachable])
+    if(![Reachability isNetworkReachable]){
+        [self.delegate downloadError:@"Wifi is not activated"];
         return;
+    }
     
     NSString *requestURLString = [NSString stringWithFormat:@"%@detectors/api/lastupdated/%d",SERVER_ADDRESS, timestamp];
     NSURLRequest *request = [self.class createRequestForURLString:requestURLString];
